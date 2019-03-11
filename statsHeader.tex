@@ -1,0 +1,58 @@
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath}
+\usepackage{listings}
+\usepackage{graphicx}
+\usepackage{float}
+\usepackage{color}
+\definecolor{dkgreen}{rgb}{0,0.6,0}
+\definecolor{gray}{rgb}{0.5,0.5,0.5}
+\definecolor{mauve}{rgb}{0.58,0,0.82}
+
+\lstset{frame=tb,
+language=R,
+aboveskip=3mm,
+belowskip=3mm,
+showstringspaces=false,
+columns=flexible,
+numbers=none,
+keywordstyle=\color{blue},
+alsoletter={.},
+numberstyle=\tiny\color{gray},
+commentstyle=\color{dkgreen},
+stringstyle=\color{mauve},
+breaklines=true,
+breakatwhitespace=true,
+tabsize=3
+}
+
+\renewcommand{\vec}[1]{\mathbf{#1}}
+\newcommand{\problem}[1]{\subsection*{#1}}
+\newcommand{\TODO}[1]{\emph{#1}}
+\newcommand{\subproblem}[1]{\subsubsection*{#1)}}
+\newcommand{\subsubproblem}[1]{\paragraph*{#1}}
+\newcommand{\rscript}[1]{\lstinputlisting[language=R]{#1.r}}
+\newcommand{\xni}[1]{\bar{x}_{#1\cdot}}
+\newcommand{\Xni}[1]{\bar{X}_{#1\cdot}}
+\newcommand{\exfig}[1]{
+\begin{figure}[H]
+\includegraphics{#1}
+\end{figure}
+}
+\newcommand{\avg}[1]{\bar{#1}}
+\newcommand{\med}[1]{med{x}}
+\newcommand{\wave}[1]{\tilde{#1}}
+\newcommand{\dx}[0]{dx}
+
+\newcommand{\pardiff}[2]{\frac{\partial #1}{\partial #2}}
+\newcommand{\normd}[3]{\frac{1}{\sqrt{2\pi #3 }}e^{-(#1 - #2 )^2/2 #3 }}
+\newcommand{\cnormd}[2]{\frac{1}{\sqrt{2\pi #2 }}e^{- #1^2/2 #2 }}
+\newcommand{\snormd}[1]{\frac{1}{\sqrt{2\pi}}e^{- #1^2/2}}
+\newcommand{\invgamma}[3]{\frac{#3^#2}{\Gamma(#2)} #1^{-#2-1}e^{-#3/#1}}
+\newcommand{\tinvgamma}[0]{\text{Inv-Gamma}}
+\newcommand{\tlogit}[0]{\text{logit}}
+\newcommand{\prop}{=}
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-master: t
+%%% End:
