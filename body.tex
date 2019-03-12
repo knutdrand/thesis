@@ -48,6 +48,46 @@ In recent years, mapping reads to such sequence graphs have gathered much attent
 Downstream analysis
 The possiblity to map reads to a variation graph leads to possibilities for downstream analysis. The most natural is to call variants. The process of variant calling is using mapped reads to determine in which parts of the sequence of the sample differs from the sequence in the  reference. In this case, graph mapped reads can be advantageos
 
+\section{Formalism}
+We define a \emph{simple sequence graph} $SG = \set{G, s}$ over an alphabet $\alphabet$ is a graph $G=\set{V, E}$ and a label function $s: V \rightarrow \alphabet$ labeling each vertex with a letter from $\alphabet$. The set of all sequences in $SG$ is 
+$$\Sigma(SG) = \set{s(v_1), s(v_2), , , s(v_n) s.t. v_i \in V \wedge (v_i, v_{i+1}) \in E}$$
+
+Similarily a \emph{compacted sequence graph} $CG = \set{G, s}$ over alphabet $\alphabet$ is a graph $G$ and label function $s: V \rightarrow \Sigma^* / \epsilon$ labelling each vertex to a non-empty finite string over $\alphabet$. The set of all sequences in $SG$ is
+\begin{align*}
+  \Sigma(CG) &= \Sigma_0(CG) \cup \Sigma_1(CG)\\
+  \Sigma_0(CG) &=\set{s(v)_{a:b} s.t. v \in V \wedge 0<a<b\leq\size{s(v)}}\\
+  \Sigma_1(CG) &= \set{(s(v_1)_{a:}, s(v_2),,, s(v_n)_{:b}) s.t. v_i \in V \wedge (v_i, v_{i+1}) \in E \wedge a>0 \wedge b\leq \size{v_n}}
+\end{align*}
+
+For DNA-sequence graphs over the alphabet $\alphabet=\set{A, C, G, T}$ and the reverse compliment function $rc: \alphabet \rightarrow \alphabet$, we get all sequences reverse sequences by
+$$\Sigma_{rc}(SG) = \set{(rc(s_n), rc(s_{n-1}), , , rc(s_1)) \forall s=(s_1, s_2,,,s_n) \in \Sigma(SG)}.$$
+and the set of all possible sequences on either forward or reverse strand is given by $\Sigma_{all}(SG) = \Sigma(SG) \cup \Sigma_{rc}(SG)$. 
+
+In order to represent reversals succinctly one needs a generalization of the sequence graph as given in~\cite{vg}.
+A \emph{reversible sequence graph} is given by $RG = \set{V, E}$, where $E \subseteq {(V \times \set{-1, 1})^2}$.
+Here the possible sequences in the graph is represented by:
+\begin{align*}
+  \Sigma(RG) &= \set{s(v_1, d_1), s(v_2, d_2), , , s(v_n, d_n) s.t. v_i \in V \wedge ((v_i, d_i), (v_{i+1}, d_{i+1})) \in E}\\
+  s(v, d) &=\begin{cases} s(v_1), & \text{if} d = 1\\
+                        rc(s(v_1), & \text{if} d = -1\\
+\end{cases}
+\end{align*}
+  \section{The Importance for Non-Redundancy}
+The simplicity of working with acyclic sequence graphs compared to generalized sequcence graphs with possible cycles are big, both in terms of algorithmic effiency and inituitvity. Beacuse of this a compelling argument needs to be made for dealing with generalized sequence graphs. Here we will disucss the benefit of these more complex structuers, both in terms of mapping and interpreting intervals and locations on the graphs. 
+\subsection{Mapping}
+  A key element of the read mapping procedure is to filter out reads that map with similar scores to multiple places in the reference.
+  Repeats in the reference of the same subsequences is thus problematic, since often a read mapping to the subsequence, will have mathces in many of the repeats.
+  The result of this is that the read will get a low mapQ score.
+  This will however lead to a loss of information, since a read mapping to a reapeated subsequence can still give information about where in the genome it belongs, and it will also be possible to see if there is a variation in the read from the references subsequence. 
+  In this case, representing the repeated subsequences as a cycle in the graph is benefitial, since as much information as possible about the read mapping is kept.
+  A similar case can be made for representing reversals in generalized sequence graphs.
+  In a simple graph, the reversed sequence would need duplicated representation, yielding two matches for each read.
+  These multiple mapping issues could also be alieviated by including information in the mapping algorithm that specifies which regions are reversals and duplications of each other, akin to the alt-allele handling in BWA-mem. However representing the location of the resulting alignments would be problematic, which leads to the next benefit of genralized graph structures: representation.
+  \subsection{Representing locations and intervals}
+  The output from the read mapping is generally the location on the reference of the match, and a description of how the read sequence diverges from the reference sequences at that location.
+  The location of the mappings can be used in downstream analyis. It is then beneficial if the location of the read gives as much information about the whereabout of the mapping as possible. 
+
+
 %%% Local Variables:
 %%% mode: latex
 %%% TeX-master: main.tex
