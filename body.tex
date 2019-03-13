@@ -252,13 +252,41 @@ def count_extended(intervals, f):
 def get_p_values(pileup, background):
     indices = pileup.indices + background.indices
     indices.sort()
-    pileup_values = pileup.values[searchsorted(indices, pileup.indices)]
-    background_values = background.values[searchsorted(indices, background.indices)]
+    pileup_values = pileup.values[search_sorted(indices, pileup.indices)]
+    background_values = background.values[search_sorted(indices, background.indices)]
     p_values = poisson.sf(pileup_values, background_values)
     return Pileup(indices, p_values)
   \end{lstlisting}
+Which is done in $O(n)$ time.
+\begin{lstlisting}
+def get_q_values(p_values):
+    counts = diff(p_values.indices)
+    args = argsort(p_values.values)
+    values, idxs = unique(p_values, return_index=True)
+    N = cumsum(counts[args])[idxs]
+    q_values = N*values
+    all_q_values = zeros_like(p_values.values)
+    all_q_values[idxs] = diff(q_values)
+    all_q_values = cumsum(all_q_values)
+    restored = zeros_like(all_q_values)
+    restored[args] = all_q_values
+    return Pileup(p_values.indices, restored)
+  \end{lstlisting}
+  The thresholded values are obtained simply by \code{Pileup(q_values.indices, q_values.values>alpha)}.
 
-  
+The final peaks are called in two steps from the thresholded values. First, joining peak intervals that are separated by less than the estimated read length, and secondly removing peaks that are shorter than the estimated fragment length $f$. Both steps can be made using the same function.
+\begin{lstlisting}
+def remove_small(indices, size):
+    indices = indices.reshape((-1, 2))
+    lengths = indices[:, 1]-indices[:, 0]
+    big_enough = lengths>=size
+    return indices[big_enough].ravel()
+
+peaks = r_[indices[0], remove_small(indices[1:-1], read_length), indices[-1]]
+peaks = remove_small(peaks, fragment_length)
+\end{lstlisting}
+
+
 \chapter{Summary of Papers}
 In paper 1, we discussed the implications of using a graphical reference structure for representing and comparing genomic locations and intervals.
 The work focused on how to obtain succinct and interpretable representations that were robust against changes to the reference graph topology. 
