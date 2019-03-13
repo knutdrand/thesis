@@ -249,7 +249,7 @@ def count_extended(intervals, f):
   \code{s, v = count_extended(control_intervals, E)/E; v/=E}.
   Assuming that each count $P(i)$ are Poisson distributed as $P_i ~ Poisson(\lambda_i)$, a null hypothesis of $H_0^i: \lambda_i=C(i), H_a^i:\lambda_i>C(i)$ is made for each position and a p-value calcluated: $p_i = P(P_i>=P(i))$ \TODO{too many ps}. Too adjust for multiple testing, a final set of q values is calculated as $q_i = p_iN_i$ where $N_i = \size{\buildset{k\in\set{1, 2,,,\size{G}}}{p_k\leq p_i}}$. The q values are thresholded on a given significance level $\alpha$ so we get $T(i) = q_i\leq \alpha$. 
   \begin{lstlisting}
-    def get_p_values(pileup, background):
+def get_p_values(pileup, background):
     indices = pileup.indices + background.indices
     indices.sort()
     pileup_values = pileup.values[searchsorted(indices, pileup.indices)]
