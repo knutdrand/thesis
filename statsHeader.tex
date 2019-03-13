@@ -1,6 +1,7 @@
 \usepackage[T1]{fontenc}
 \usepackage[utf8]{inputenc}
 \usepackage{amsmath}
+\usepackage{amssymb}
 \usepackage{listings}
 \usepackage{graphicx}
 \usepackage{float}
@@ -27,6 +28,7 @@ tabsize=3
 }
 
 \renewcommand{\vec}[1]{\mathbf{#1}}
+\newcommand{\code}[1]{\lstinline{#1}}
 \newcommand{\problem}[1]{\subsection*{#1}}
 \newcommand{\size}[1]{\left|#1\right|}
 \newcommand{\alphabet}{\Gamma}
@@ -46,7 +48,7 @@ tabsize=3
 \newcommand{\med}[1]{med{x}}
 \newcommand{\wave}[1]{\tilde{#1}}
 \newcommand{\dx}[0]{dx}
-
+\renewcommand{\natural}[0]{\mathbb{N}}
 \newcommand{\pardiff}[2]{\frac{\partial #1}{\partial #2}}
 \newcommand{\normd}[3]{\frac{1}{\sqrt{2\pi #3 }}e^{-(#1 - #2 )^2/2 #3 }}
 \newcommand{\cnormd}[2]{\frac{1}{\sqrt{2\pi #2 }}e^{- #1^2/2 #2 }}

@@ -186,9 +186,18 @@ Graph Peak Caller suffered performance wise from these additional complexities. 
 
 GPC2 introduces some simplifications to the graph structure that allowed it to run much closer to MACS2 running times.
 Going away from \emph{vg}s data structure of nodes of maximum length of often $32$ and storing each variant as a separate node. 
-It is worth to note that a single SNP in that format increases the number of nodes by 3 the number of edges by 4. Coupled with the fact that the vast majority of variants are SNPs, this means that the majority of edges in the graph represents variants that does not affect the distance. It was therfore possible to reduce the number of edges, and therby the complexity of the graph $k$, by representing SNPs in a separate structure.
+It is worth to note that a single SNP in that format increases the number of nodes by 3 the number of edges by 4.
+Coupled with the fact that the vast majority of variants are SNPs, this means that the majority of edges in the graph represents variants that does not affect the distance.
+It was therefore possible to reduce the number of edges, and thereby the complexity of the graph $k$, by representing SNPs in a separate structure.
 
+Throughout the project two open source python libraries were developed and optimized, in order to work efficiently with sequence graphs. \emph{Offsetbased Graph} provides basic functionality while \emph{Graph Peak Caller} provides methods necessary for doing peak calling on sequence graphs. The final implementations and algorithms is described below. 
 
+\subsection{Sequence Graph}
+The main data structure provided is a full graph, having as members a \emph{Graph}, describing the topology of the sequence graph, a \emph{Sequences} object, giving access to the sequence on each node and a \emph{Path} object, describing the path the linear reference takes through the graph. 
+
+A \emph{Graph} object represents a graph $G = (V, E)$ and a node labelling $L: V \rightarrow \natural$ where the vertex set is assumed to be a dense set of integers starting at $1$, $V={1, 2, , , N)$, and the labeling $L$ describes the sequence length of each node.
+  The vertex set $V$ and vertex labeling $L$ is represented as an array of length $N$ where each element is the sequence length of the corresponding vertex.
+  The set of edges $E$ is described by a ragged array \code{adj_list} equivalent of an adjacency list so that \code{adj_list[i]}=$\set{v : v \in V \wedge (i, v) \in E}$
 
 \chapter{Summary of Papers}
 In paper 1, we discussed the implications of using a graphical reference structure for representing and comparing genomic locations and intervals.
