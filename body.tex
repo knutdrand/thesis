@@ -195,9 +195,28 @@ Throughout the project two open source python libraries were developed and optim
 \subsection{Sequence Graph}
 The main data structure provided is a full graph, having as members a \emph{Graph}, describing the topology of the sequence graph, a \emph{Sequences} object, giving access to the sequence on each node and a \emph{Path} object, describing the path the linear reference takes through the graph. 
 
-A \emph{Graph} object represents a graph $G = (V, E)$ and a node labelling $L: V \rightarrow \natural$ where the vertex set is assumed to be a dense set of integers starting at $1$, $V=\set{1, 2, , , N)$, and the labeling $L$ describes the sequence length of each node.
+A \emph{Graph} object represents a graph $G = (V, E)$ and a node labeling $L: V \rightarrow \natural$ where the vertex set is assumed to be a dense set of integers starting at $1$, $V=\set{1, 2, , , N}$, and the labeling $L$ describes the sequence length of each node. The Graph object also contains a representation of the positions and sequence of all SNPs in a \code{SNP} object. 
   The vertex set $V$ and vertex labeling $L$ is represented as an array of length $N$ where each element is the sequence length of the corresponding vertex.
-  The set of edges $E$ is described by a ragged array \code{adj_list} equivalent of an adjacency list so that \code{adj_list[i]}=$\set{v : v \in V \wedge (i, v) \in E}$
+  The set of edges $E$ is described by a ragged array \code{adj_list} equivalent of an adjacency list so that \code{adj_list[i]}=$\set{v : v \in V \wedge (i, v) \in E}$. For convenience the graph object also contains a reverse adjacency list such that: \code{adj_list[i]}=$\set{v : v \in V \wedge (v, i) \in E}$. The implementation of the ragged arrays are described later in this section.
+  The \code{SNP} class is a ragged array having as elements the location of all SNPs on all vertices. Such that $SNP[i] = \set{(p, i):} $ \TODO{describe SNP set}. 
+The \code{Sequences} class is a ragged array where each element is the sequence of that node. \code{Sequences[i]=s(i)}. 
+The \code{Path} class contains an array \code{node_ids} of length $n_p$ which describes which nodes the path traverses, and an array \code{distance_to_node} of length $n_p+1$ giving the distance along the reference path to each node in the path, such that \code{(distance_to_node[i], distance_to_node[i+1])} gives the interval vertex $i$ represents along the reference path.
+\subsection{Creating from Variants}
+We let $S \subset \integers _{<\size{G}} \times \alphabet $ be a set of SNPs  where $(i, c)$ represents a SNP at position $i$ to letter $c$. 
+A set of insertions $I \subset \integers _{<\size{G}} \times \alphabet^*$ where $(i, s) \in I$ represents an insertion at position $i$ with sequence $s$.
+A set of deletions $D \subset \integers _{<\size{G}} \times \natural^+$ where $(i, l) \in D$ represents an deletion at position $i$ with length $l$.
+
+From a variation set $V=(S, I, D)$ we create the graph by the following method.
+Breakpoints $B = \set{i : \exists s s.t. (i, s) \in I} \cup \set{i : \exists l s.t. (i, l) \in D \vee (i-l, l) \in D}$.
+Let $(b_1, b_2, ..., b_{n_r})$ be the ordered elements of $B \cup \set{0, \size{G}}$. We then get a reference graph as
+\begin{align*}
+  G_r &= (V_r, E_r)\\
+  V_r &= \set{1, 2,,, n_r}\\
+  E_r &= \set{(i, i+1) | i \in \set{1,2,,,n_r-1}}\\
+\end{align*}
+
+
+
 
 \chapter{Summary of Papers}
 In paper 1, we discussed the implications of using a graphical reference structure for representing and comparing genomic locations and intervals.
