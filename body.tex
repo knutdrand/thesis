@@ -4,99 +4,11 @@
 \input{formalism}
 \input{mapping}
 \input{peakcalling}
-  \section{The Importance of Non-Redundancy}
-  The simplicity of working with acyclic sequence graphs compared to generalized sequcence graphs with possible cycles are big, both in terms of algorithmic effiency and inituitvity.
-  Beacuse of this a compelling argument needs to be made for dealing with generalized sequence graphs.
-  Here we will disucss the benefit of these more complex structuers, both in terms of mapping and interpreting intervals and locations on the graphs. 
-\subsection{Mapping}
-  A key element of the read mapping procedure is to filter out reads that map with similar scores to multiple places in the reference.
-  Repeats in the reference of the same subsequences is thus problematic, since often a read mapping to the subsequence, will have mathces in many of the repeats.
-  The result of this is that the read will get a low mapQ score.
-  This will however lead to a loss of information, since a read mapping to a reapeated subsequence can still give information about where in the genome it belongs, and it will also be possible to see if there is a variation in the read from the references subsequence. 
-  In this case, representing the repeated subsequences as a cycle in the graph is benefitial, since as much information as possible about the read mapping is kept.
-  A similar case can be made for representing reversals in generalized sequence graphs.
-  In a simple graph, the reversed sequence would need duplicated representation, yielding two matches for each read.
-  These multiple mapping issues could also be alieviated by including information in the mapping algorithm that specifies which regions are reversals and duplications of each other, akin to the alt-allele handling in BWA-mem.
-  However representing the location of the resulting alignments would be problematic, which leads to the next benefit of genralized graph structures: representation.
-  \subsection{Representing locations and intervals}
-  The output from the read mapping is generally the location on the reference of the match, and a description of how the read sequence diverges from the reference sequences at that location.
-  The location of the mappings can be used in downstream analysis.
-  It is then beneficial if the location of the read gives as much information about the whereabout of the mapping as possible.
-  Without the possibility of cycles, reapeats and reversals would need to be represented as either the set of locations representing the sequences, or a random location from this set.
-\section{Data Structures and Algorithms}
-The focus of this thesis is on the representation and handling of intervals and positions in compressed sequence graphs.
-The nonlinearity of sequence graphs means that the complexity of interval representation and handling becomes an issue.
-In a linear genome both representation and handling of intervals can usually be done in constant complexity.
-An interval can be represented as simply a start and end position along with a specifier of direction $(s, e, d)$.
-Similarily distances between two in intervals can be computed in constant time by
-$$D(I_1, I_2) = \max(0, s_1-e_2, s_2-e_2)$$
-and the overlap between two intervals by
-$$\size{I_1 \cap I_2} = \max(\min(e_1, e_2) - \max(s_1, s_2), 0)$$.
-Paper 1 discussed the implication of breaking this inherent simplicty when having a graphical and not linear reference.
-
-In the general case a position on the graph needs to be represented by a tuple specifying the id of the node and the offset, and an interval needs a start position, 
-an end position and the specification of each node covered by the interval.
-This means that the memory cost of representing an interval grows linearly with the interval length.
-Also, the distance between two positions is not uniquely defined, but depends on which path through the graph is taken between the two points.
-And finding specific distances, such as the shortest or longest possible distance, does not in the general case have constant complexity, but rather depends on both the distance itself, and the complexity of the graph.
-
-Also off particular importance to Graph Peak Caller was the operation of finding all positions within a distance $d$ from a position $P$. On a linear coordinate system, this is imply represented by the range $\left[P, P+d\right)$. However on a graph this constitutes finding each position reachable by a path of length $<d$ starting on $P$. Using a breadth first search, this can be on average obtained in $O(kd)$ time.
-
-Graph Peak Caller suffered performance wise from these additional complexities. Where MACS2 can call peaks on \TODO{n} reads in the time frame of a couple of minutes on a standard laptop, GPC used close to a day on several CPUs and used more memory than available on a standard laptop. 
-
-GPC2 introduces some simplifications to the graph structure that allowed it to run much closer to MACS2 running times.
-Going away from \emph{vg}s data structure of nodes of maximum length of often $32$ and storing each variant as a separate node. 
-It is worth to note that a single SNP in that format increases the number of nodes by 3 the number of edges by 4.
-Coupled with the fact that the vast majority of variants are SNPs, this means that the majority of edges in the graph represents variants that does not affect the distance.
-It was therefore possible to reduce the number of edges, and thereby the complexity of the graph $k$, by representing SNPs in a separate structure.
-
-Throughout the project two open source python libraries were developed and optimized, in order to work efficiently with sequence graphs. \emph{Offsetbased Graph} provides basic functionality while \emph{Graph Peak Caller} provides methods necessary for doing peak calling on sequence graphs. The final implementations and algorithms is described below. 
-
-\subsection{Sequence Graph}
-The main data structure provided is a full graph, having as members a \emph{Graph}, describing the topology of the sequence graph, a \emph{Sequences} object, giving access to the sequence on each node and a \emph{Path} object, describing the path the linear reference takes through the graph. 
-
-A \emph{Graph} object represents a graph $G = (V, E)$ and a node labeling $L: V \rightarrow \natural$ where the vertex set is assumed to be a dense set of integers starting at $1$, $V=\set{1, 2, , , N}$, and the labeling $L$ describes the sequence length of each node. The Graph object also contains a representation of the positions and sequence of all SNPs in a \code{SNP} object. 
-  The vertex set $V$ and vertex labeling $L$ is represented as an array of length $N$ where each element is the sequence length of the corresponding vertex.
-  The set of edges $E$ is described by a ragged array \code{adj_list} equivalent of an adjacency list so that \code{adj_list[i]}=$\set{v : v \in V \wedge (i, v) \in E}$. For convenience the graph object also contains a reverse adjacency list such that: \code{adj_list[i]}=$\set{v : v \in V \wedge (v, i) \in E}$. The implementation of the ragged arrays are described later in this section.
-  The \code{SNP} class is a ragged array having as elements the location of all SNPs on all vertices. Such that $SNP[i] = \set{(p, i):} $ \TODO{describe SNP set}. 
-The \code{Sequences} class is a ragged array where each element is the sequence of that node. \code{Sequences[i]=s(i)}. 
-The \code{Path} class contains an array \code{node_ids} of length $n_p$ which describes which nodes the path traverses, and an array \code{distance_to_node} of length $n_p+1$ giving the distance along the reference path to each node in the path, such that \code{(distance_to_node[i], distance_to_node[i+1])} gives the interval vertex $i$ represents along the reference path.
-\subsection{Creating from Variants}
-We start with a reference sequence $G \in \alphabet^*$ and a set of variants described in the following.
-
-We let $S \subset \integers _{<\size{G}} \times \alphabet $ be a set of SNPs  where $(i, c)$ represents a SNP at position $i$ to letter $c$. 
-A set of insertions $I \subset \integers _{<\size{G}} \times \alphabet^*$ where $(i, s) \in I$ represents an insertion at position $i$ with sequence $s$.
-A set of deletions $D \subset \integers _{<\size{G}} \times \natural^+$ where $(i, l) \in D$ represents an deletion at position $i$ with length $l$.
-
-From a variation set $V=(S, I, D)$ we create the graph by the following method.
-Breakpoints $B = \buildset{i}{\est{s}{(i, s) \in I}} \cup \buildset{i}{\est{l}{(i, l) \in D \vee (i-l, l) \in D}}$.
-Let $(b_1, b_2, ..., b_{n_r+2})$ be the ordered elements of $B \cup \set{0, \size{G}}$. We then get a reference graph as
-\begin{align*}
-  G_r &= (V_r, E_r)\\
-  V_r &= \set{1, 2,,, n_r}\\
-  E_r &= \set{(i, i+1) | i \in \set{1,2,,,n_r-1}}\\
-  s(i) &= G[b_i:b_{i+1}]
-\end{align*}
-The set of deletion edges is $E_d=\set{(i, j) | (b_i, (b_j-b_i)) \in D}$. 
-Letting $I_s = (i_1, i_2,,, i_{\size{I}})$ be the sorted elements of $I$, the set of insertion vertices and edges are given by:
-  \begin{align*}
-    V_i &= \set{n_r+1, n_r+2,,, n_r+\size{I}}\\
-    E_{-1} &= \buildset{(r-1, k)}{k \in \set{1, 2,,,\size{I}} \wedge b_r=i_k}\\
-    E_{1} &= \buildset{(k, r)}{k \in \set{1, 2,,,\size{I}} \wedge b_r=i_k+}\\
-    E_i &= E_{-1} \cup E_1\\
-  \end{align*}
-\TODO{Properly describe insertions.}
-The full graph can then be made by $G = (V_r \cup V_i, E_r \cup E_i \cup E_d)$.
-SNPs is then represented such that $SNP_i = \buildset{(p-b_i, c)}{(p, c) \in S \wedge b_i\leq p < b_{i+1}}$. \TODO{vertex labels}
+\input{papersummary}
+\clearpage
+\input{remains}
 
 
-\chapter{Summary of Papers}
-In paper 1, we discussed the implications of using a graphical reference structure for representing and comparing genomic locations and intervals.
-The work focused on how to obtain succinct and interpretable representations that were robust against changes to the reference graph topology. 
-Paper 2 developed a new method of calling ChIP-seq peaks using a sequence graph as reference.
-The method is an adaptation of MACS2 that uses the benefits of read-mapping to a variation graph to obtain more accurate peak calling of potential transctription factor binding sites. 
-Paper 3 further developed the method of paper 2 to perform better on graphs constructed solely from SNPs and indels from a VCF-file. Introducing a new succinct data structure for variation graphs and obtaining similar speeds to MACS2.
-Paper 4 looked into the potential for using a two step approach for read mapping using the benefits of mapping to a graph for estimating a genotype for the sample, before using a linear mapper to obtain a final mapping that is not suffer from the too big search space of graph mapping. 
 
 
 %%% Local Variables:
