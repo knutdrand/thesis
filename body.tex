@@ -309,11 +309,15 @@ X_k^+ &= \buildset{((v, o) \in \graphcoord}{\shortestpath{(v, o)}{s_k}=f}\\
 \end{align*}
 From this we can get the sparse pileup as
 \begin{align*}
-  \delta(LP((v, o))) &= N_s-N_e+D_E\\
-  N_s &= \size{\buildset{(X_s, E, X_e) \in Ext}{(v, o) \in X_s}}\\
-  N_e &= \size{\buildset{(X_s, E, X_e) \in Ext}{(v, o) \in X_s}}\\
-  D_E &= \size{\buildset{(X_s, E, X_e) \in Ext}{\est{v_0 \in V}{(v_0, v) \in E}}}\\
-&\, -\size{\buildset{(X_s, E, X_e) \in Ext}{\est{v_2 \in V}{(v, v_2) \in E}}}
+  \delta(LP((v, o))) &= \begin{cases}
+    N_s((v, o))-N_e((v, o))+D_E((v,o)), & \text{if} \, o=0\\
+    0, \text{else} \end{cases}
+  \\
+                         \\
+  N_s((v, o)) &= \size{\buildset{(X_s, E, X_e) \in Ext}{(v, o) \in X_s}}\\
+  N_e((v, o)) &= \size{\buildset{(X_s, E, X_e) \in Ext}{(v, o) \in X_s}}\\
+  D_E((v, o)) &=\size{\buildset{(X_s, E, X_e) \in Ext}{\est{v_0 \in V}{(v_0, v) \in E}}}\\
+&\, -\size{\buildset{(X_s, E, X_e) \in Ext}{\est{v_2 \in V}{(v-1, v_2) \in E}}}
 \end{align*}
 \chapter{Summary of Papers}
 In paper 1, we discussed the implications of using a graphical reference structure for representing and comparing genomic locations and intervals.
