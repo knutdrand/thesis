@@ -285,8 +285,36 @@ def remove_small(indices, size):
 peaks = r_[indices[0], remove_small(indices[1:-1], read_length), indices[-1]]
 peaks = remove_small(peaks, fragment_length)
 \end{lstlisting}
+\subsection{Graph Peak Caller}
+The following is a brief description of the algorithms and data structures used in the adatptation of MACS2 to graph genomes. 
+It is assumed here that the sequence graph is a compressed simple sequence graph, and therefore also acyclic. We also assume that the node ids are sorted according to a topological sort of the graph.
 
+The fundamental data structure in for graph peak caller is the linear representation that converts coordinates from $LR: \natural_{\size{V}} \times \integers \rightarrow \natural_{N}$, where $N=\sum_{i=0}^{\size{V}-1}L(i)$ is the number of positions in the graph.
+This linear mapping is represented in the \code{LinearRepr} class, which has an array \code{node_offsets} where \code{node_offsets[i]}=$\sum_{k=0}^i L(k)$ such that a coordinate $(v, o) \in \graphcoord$ is converted to $i \in \linearcoord$ by \code{node_offsets[v]+o}. The inverse conversion of a coordinate $i \in \linearcoord$ is done by \code{v=searchsorted(node_offset, i); o = i-node_offsets[v])}
 
+A pileup is created in the linear coordinate space by the following method. 
+For each interval $(s, e, v, d)$ we define the extended interval as a tuple 
+\[ext(I_k, f) = 
+  \begin{cases}
+    (\set{s_k}, E_k^+, X_k^+) , & \text{if} \, d = 1\\
+    X_k^-, E_k^-, \set{e_k}), & \text{if} \, d = -1\\
+                      \end{cases}
+                    \]
+ where 
+\begin{align*}
+E_k^+ &= \buildset{(v_1, v_2) \in E}{\shortestpath{e_k}{(v_2, 0)}\leq f} \cup \set{(v_1, v_2), (v_2, v_3),,,(v_{k-1}, v_{k})}\\
+  X_k^+ &= \buildset{((v, o) \in \graphcoord}{\shortestpath{e_k}{(v, o)}=f}\\
+  E_k^+ &= \buildset{(v_1, v_2) \in E}{\shortestpath{(v_2, 0), s_k}\leq f} \cup \set{(v_1, v_2), (v_2, v_3),,,(v_{k-1}, v_{k})}\\
+X_k^+ &= \buildset{((v, o) \in \graphcoord}{\shortestpath{(v, o)}{s_k}=f}\\
+\end{align*}
+From this we can get the sparse pileup as
+\begin{align*}
+  \delta(LP((v, o))) &= N_s-N_e+D_E\\
+  N_s &= \size{\buildset{(X_s, E, X_e) \in Ext}{(v, o) \in X_s}}\\
+  N_e &= \size{\buildset{(X_s, E, X_e) \in Ext}{(v, o) \in X_s}}\\
+  D_E &= \size{\buildset{(X_s, E, X_e) \in Ext}{\est{v_0 \in V}{(v_0, v) \in E}}}-
+        \size{\buildset{(X_s, E, X_e) \in Ext}{\est{v_2 \in V}{(v, v_2) \in E}}}
+\end{align*}
 \chapter{Summary of Papers}
 In paper 1, we discussed the implications of using a graphical reference structure for representing and comparing genomic locations and intervals.
 The work focused on how to obtain succinct and interpretable representations that were robust against changes to the reference graph topology. 
