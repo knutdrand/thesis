@@ -1,0 +1,26 @@
+\documentclass{article}
+\usepackage{colortbl}
+\begin{document}
+\begin{table}
+\begin{tabular}{|r|>{\columncolor[gray]{0.8}}r|rrrrrrrrrr|>{\columncolor[gray]{0.8}}r| r |rrrr|}
+\hline
+SA & &  &   &   &   &   &   &   &   &   &   &    BWT & OCC & A & C & G & T \\
+\hline
+11 & \$ & A & T & G & T & C & A & T & T & G & G & A&&0&0&0&0\\
+ \hline
+10 & A & \$ & A & T & G & T & C & A & T & T & G & G&&1&0&0&0\\
+0 & A & T & G & T & C & A & T & T & G & G & A & \$&&1&0&1&0\\
+5 & A & T & T & G & G & A & \$ & A & T & G & T & C&&1&0&1&0\\
+ \hline
+4 & C & A & T & T & G & G & A & \$ & A & T & G & T&&1&1&1&0\\
+ \hline
+9 & G & A & \$ & A & T & G & T & C & A & T & T & G&&1&1&1&1\\
+8 & G & G & A & \$ & A & T & G & T & C & A & T & T&&1&1&2&1\\
+2 & G & T & C & A & T & T & G & G & A & \$ & A & T&&1&1&2&2\\
+ \hline
+3 & T & C & A & T & T & G & G & A & \$ & A & T & G&&1&1&2&3\\
+7 & T & G & G & A & \$ & A & T & G & T & C & A & T&&1&1&3&3\\
+1 & T & G & T & C & A & T & T & G & G & A & \$ & A&&1&1&3&4\\
+6 & T & T & G & G & A & \$ & A & T & G & T & C & A&&2&1&3&4\\
+ \hline
+\end{tabular}\end{table}\end{document}

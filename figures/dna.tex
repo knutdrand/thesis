@@ -1,0 +1,25 @@
+\documentclass[tikz]{standalone}
+\usepackage{tikz}
+\begin{document}
+
+%  x = r * cos(t); 
+%  y = r * sin(t); 
+%  z = k * t;
+
+\begin{tikzpicture}
+  \def{\k}{1}
+  \draw[->] (-3,0) -- (4.2,0) node[right] {$x$};
+  \draw[->] (0,-3) -- (0,4.2) node[above] {$y$};
+  % \draw[scale=0.5,domain=-3:3,smooth,variable=\x,blue] plot ({\x},{\x*\x});
+  % \draw[scale=0.5,domain=-3:3,smooth,variable=\y,red]  plot ({\y*\y},{\y});
+  \draw[ultra thick, red] (0, 0, \k) sin (1, 1, ) cos (2, 0, 0) sin (3, 1, 0), 
+  % \draw[ultra thick, red] (0, 0, 0) sin (1, 1, 0);
+\end{tikzpicture}
+
+  \end{document}
+
+  
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-master: t
+%%% End:

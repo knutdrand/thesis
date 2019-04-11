@@ -1,0 +1,50 @@
+\documentclass[convert={density=300,outext=.png}]{standalone}
+\usepackage{tikz}
+\begin{document}
+\begin{tikzpicture}[shorten >=1pt,->]
+  \def\f{1.2};
+  \def\fy{1}
+
+\tikzstyle{vertex}=[circle,fill=black!25,minimum size=17*\f pt,inner sep=0pt]
+ACGGAC-GTCCGT
+\node[vertex][] (P1) at (0*\f,0) {A};
+\node[vertex][] (P2) at (1*\f,0) {C};
+\draw (P1) -- (P2);
+\draw (P1) -- (P2);
+\node[vertex][] (P3) at (2*\f,0) {G};
+\draw (P2) -- (P3);
+\draw (P2) -- (P3);
+\node[vertex][] (P4) at (3*\f,0) {G};
+\draw (P3) -- (P4);
+\node[vertex][] (P5) at (3*\f,1) {T};
+\draw (P3) -- (P5);
+\node[vertex][] (P6) at (4*\f,0) {A};
+\draw (P4) -- (P6);
+\draw (P5) -- (P6);
+\node[vertex][] (P7) at (5*\f,0) {C};
+\draw (P6) -- (P7);
+\draw (P6) -- (P7);
+\node[vertex][] (P8) at (6*\f,0) {C};
+\draw (P7) -- (P8);
+\node[vertex][] (P9) at (7*\f,0) {G};
+\path [->] (P7) edge[bend right=60] node {} (P9);
+\draw (P8) -- (P9);
+\node[vertex][] (P10) at (8*\f,0) {T};
+\draw (P9) -- (P10);
+\draw (P9) -- (P10);
+\node[vertex][] (P11) at (9*\f,0) {C};
+\draw (P10) -- (P11);
+\node[vertex][] (P12) at (9*\f,1) {A};
+\draw (P10) -- (P12);
+\node[vertex][] (P13) at (10*\f,0) {C};
+\draw (P11) -- (P13);
+\node[vertex][] (P14) at (10*\f,1) {G};
+\draw (P12) -- (P14);
+\node[vertex][] (P15) at (11*\f,0) {G};
+\draw (P13) -- (P15);
+\draw (P14) -- (P15);
+\node[vertex][] (P16) at (12*\f,0) {T};
+\draw (P15) -- (P16);
+\draw (P15) -- (P16);
+\end{tikzpicture}
+\end{document}
