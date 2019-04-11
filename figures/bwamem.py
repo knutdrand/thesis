@@ -1,18 +1,21 @@
 import numpy as np
 import subprocess
+from collections import namedtuple
 
 
 lookup = {"A": 0, "C": 1, "G": 2, "T": 3}
+rev_c = {"A": "T", "C": "G", "G": "C", "T": "A", "$": "$"}
+
+BiInt = namedtuple("BiInt", ["k", "l", "s"])
 
 
 class FMIndex:
     def __init__(self, offsets, occ, idxs):
-        self._offsets = offsets+1
-        self._occ = occ
+        self._offsets = np.asanyarray(offsets+1, dtype="int")
+        self._occ = np.asanyarray(occ, dtype="int")
         self._idxs = idxs
 
     def backward(self, s, e, c):
-        print(s, e, c)
         idx = lookup[c]
         new_s = self._occ[s, idx]
         new_e = self._occ[e, idx]
@@ -25,6 +28,62 @@ class FMIndex:
         for c in seq[1:]:
             s, e = self.backward(s, e, c)
         return self._idxs[s:e]
+
+    def backward_ext(self, bint, char):
+        rev_char = rev_c[char]
+        idx = lookup[char]
+        ks = self._offsets[:-1] + self._occ[bint.k, :]
+        ss = self._occ[bint.k + bint.s, :]-self._occ[bint.k, :]
+        rev_idx = lookup[rev_char]
+        new_l = bint.l+bint.s - np.sum(ss[:4-rev_idx])
+        return BiInt(ks[idx], new_l, ss[idx])
+
+    def forward_ext(self, bint, char):
+        rev_bint = BiInt(bint.l, bint.k, bint.s)
+        new_rev_bint = self.backward_ext(rev_bint, rev_c[char])
+        return BiInt(new_rev_bint.l, new_rev_bint.k, new_rev_bint.s)
+
+    def get_bint(self, c):
+        idx = lookup[c]
+        rev_idx = lookup[rev_c[c]]
+        k = self._offsets[idx]
+        s = self._offsets[idx+1]-k
+        l = self._offsets[rev_idx]
+        return BiInt(k, l, s)
+
+    def find_smem(self, P, i):
+        bint = self.get_bint(P[i])
+        longest_bints = []
+        for j in range(1, i+1):
+            new_bint = self.backward_ext(bint, P[i-j])
+            if new_bint.s != bint.s:
+                longest_bints.append(bint)
+            bint = new_bint
+            if bint.s == 0:
+                break
+        else:
+            longest_bints.append(bint)
+        smems = []
+        prev = longest_bints[::-1]
+        for j in range(i+1, len(P)):
+            curr = []
+            longer_found = False
+            for bint in prev:
+                new_bint = self.forward_ext(bint, P[j])
+                if new_bint.s == 0:
+                    if not longer_found:
+                        smems.append(bint)
+                        longer_found = True
+                else:
+                    curr.append(new_bint)
+                    longer_found = True
+            prev = curr
+            if not prev:
+                break
+        else:
+            smems.append(prev[0])
+        print(smems)
+        return smems
 
 
 def sort_suffices(seq):
@@ -74,19 +133,24 @@ SA & &  %s BWT & OCC & A & C & G & T \\
     return header + "\n" + body + "\n" + footer
 
 if __name__ == "__main__":
-    seq = "ATGTCATTGGA$"
+    # seq = "ATGTCATTGGA"
+    seq = "ATTGAC"
+    seq = seq+"$" + "".join(rev_c[c] for c in seq[::-1]) + "$"
     idxs, suffices = sort_suffices(seq)
-    print(format_table(suffices))
+    # print(format_table(suffices))
 
     bwt = [s[-1] for s in suffices]
     occ = get_occurance_matrix(bwt)
     counts = get_char_counts([s[0] for s in suffices] + ["$"])
     table = table1(idxs, suffices, occ, counts)
-    open("fm.tex", "w").write(table)
-    subprocess.call(["pdflatex", "fm.tex"])
-    print(counts)
+    # open("fm.tex", "w").write(table)
+    # subprocess.call(["pdflatex", "fm.tex"])
+    # print(counts)
     fm = FMIndex(counts, occ, np.array(idxs))
-    print fm.find_seq("ACGT")
-    print fm.find_seq("CG")
-    for s in suffices:
-        print s
+    for i in range(6):
+        fm.find_smem("ATTCAC", i)
+    # 
+    # print fm.find_seq("ACGT")
+    # print fm.find_seq("CG")
+    # for s in suffices:
+    #     print s

@@ -2,25 +2,27 @@
 \usepackage{colortbl}
 \begin{document}
 \begin{table}
-\begin{tabular}{|r|>{\columncolor[gray]{0.8}}r|rrrrrrrrrr|>{\columncolor[gray]{0.8}}r| r |rrrr|}
+\begin{tabular}{|r|>{\columncolor[gray]{0.8}}r|rrrrrrrrrrrr|>{\columncolor[gray]{0.8}}r| r |rrrr|}
 \hline
-SA & &  &   &   &   &   &   &   &   &   &   &    BWT & OCC & A & C & G & T \\
+SA & &  &   &   &   &   &   &   &   &   &   &   &   &    BWT & OCC & A & C & G & T \\
 \hline
-11 & \$ & A & T & G & T & C & A & T & T & G & G & A&&0&0&0&0\\
+13 & \$ & A & T & T & G & A & C & \$ & G & T & C & A & A & T&&0&0&0&0\\
+6 & \$ & G & T & C & A & A & T & \$ & A & T & T & G & A & C&&0&0&0&1\\
  \hline
-10 & A & \$ & A & T & G & T & C & A & T & T & G & G&&1&0&0&0\\
-0 & A & T & G & T & C & A & T & T & G & G & A & \$&&1&0&1&0\\
-5 & A & T & T & G & G & A & \$ & A & T & G & T & C&&1&0&1&0\\
+10 & A & A & T & \$ & A & T & T & G & A & C & \$ & G & T & C&&0&1&0&1\\
+4 & A & C & \$ & G & T & C & A & A & T & \$ & A & T & T & G&&0&2&0&1\\
+11 & A & T & \$ & A & T & T & G & A & C & \$ & G & T & C & A&&0&2&1&1\\
+0 & A & T & T & G & A & C & \$ & G & T & C & A & A & T & \$&&1&2&1&1\\
  \hline
-4 & C & A & T & T & G & G & A & \$ & A & T & G & T&&1&1&1&0\\
+5 & C & \$ & G & T & C & A & A & T & \$ & A & T & T & G & A&&1&2&1&1\\
+9 & C & A & A & T & \$ & A & T & T & G & A & C & \$ & G & T&&2&2&1&1\\
  \hline
-9 & G & A & \$ & A & T & G & T & C & A & T & T & G&&1&1&1&1\\
-8 & G & G & A & \$ & A & T & G & T & C & A & T & T&&1&1&2&1\\
-2 & G & T & C & A & T & T & G & G & A & \$ & A & T&&1&1&2&2\\
+3 & G & A & C & \$ & G & T & C & A & A & T & \$ & A & T & T&&2&2&1&2\\
+7 & G & T & C & A & A & T & \$ & A & T & T & G & A & C & \$&&2&2&1&3\\
  \hline
-3 & T & C & A & T & T & G & G & A & \$ & A & T & G&&1&1&2&3\\
-7 & T & G & G & A & \$ & A & T & G & T & C & A & T&&1&1&3&3\\
-1 & T & G & T & C & A & T & T & G & G & A & \$ & A&&1&1&3&4\\
-6 & T & T & G & G & A & \$ & A & T & G & T & C & A&&2&1&3&4\\
+12 & T & \$ & A & T & T & G & A & C & \$ & G & T & C & A & A&&2&2&1&3\\
+8 & T & C & A & A & T & \$ & A & T & T & G & A & C & \$ & G&&3&2&1&3\\
+2 & T & G & A & C & \$ & G & T & C & A & A & T & \$ & A & T&&3&2&2&3\\
+1 & T & T & G & A & C & \$ & G & T & C & A & A & T & \$ & A&&3&2&2&4\\
  \hline
 \end{tabular}\end{table}\end{document}
