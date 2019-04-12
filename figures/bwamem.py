@@ -57,31 +57,31 @@ class FMIndex:
         for j in range(1, i+1):
             new_bint = self.backward_ext(bint, P[i-j])
             if new_bint.s != bint.s:
-                longest_bints.append(bint)
+                longest_bints.append((i-j+1, bint))
             bint = new_bint
             if bint.s == 0:
                 break
         else:
-            longest_bints.append(bint)
+            longest_bints.append((0, bint))
         smems = []
         prev = longest_bints[::-1]
         for j in range(i+1, len(P)):
             curr = []
             longer_found = False
-            for bint in prev:
+            for start, bint in prev:
                 new_bint = self.forward_ext(bint, P[j])
                 if new_bint.s == 0:
                     if not longer_found:
-                        smems.append(bint)
+                        smems.append((start, j, bint))
                         longer_found = True
                 else:
-                    curr.append(new_bint)
+                    curr.append((start, new_bint))
                     longer_found = True
             prev = curr
             if not prev:
                 break
         else:
-            smems.append(prev[0])
+            smems.append((prev[0][0], len(P), prev[0][1]))
         print(smems)
         return smems
 
@@ -147,8 +147,8 @@ if __name__ == "__main__":
     # subprocess.call(["pdflatex", "fm.tex"])
     # print(counts)
     fm = FMIndex(counts, occ, np.array(idxs))
-    for i in range(6):
-        fm.find_smem("ATTCAC", i)
+    smems = {smem for i in range(6) for smem in fm.find_smem("ATTCAC", i)}
+    print(smems)
     # 
     # print fm.find_seq("ACGT")
     # print fm.find_seq("CG")
