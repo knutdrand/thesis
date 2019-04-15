@@ -6,7 +6,7 @@ def body(rows):
 
 
 def tikz_matrix(name, body, args=""):
-    return r"\matrix (%s) [matrix of math nodes, align=right, row sep=0.1em,column sep=0.1em, minimum width=1em, minimum height=1em, nodes={align=right}, %s]{%s};" % (name, args, body)
+    return r"\matrix (%s) [matrix of math nodes, align=right, row sep=0.5em,column sep=0.5em, minimum width=1em, minimum height=1em, nodes={align=right}, %s]{%s};" % (name, args, body)
 
 class Figure:
     def __init__(self, name, master):

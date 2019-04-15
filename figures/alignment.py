@@ -1,10 +1,13 @@
 from Bio.pairwise2 import align
+import numpy as np
 import subprocess
+from pylatex import tikz_matrix, body
 
 
 class AlignmentGraph:
     header = r"""\documentclass[convert={density=300,outext=.png}]{standalone}
 \usepackage{tikz}
+\usetikzlibrary{matrix}
 \begin{document}
 \begin{tikzpicture}[shorten >=1pt,->]
   \def\f{1.2};
@@ -22,23 +25,25 @@ class AlignmentGraph:
         self._y = y
         self.lines = []
         self._node_idx = node_id
-        self.generate_tikz()
+        self._matrix = np.array([[""]*len(row_a)]*2)
 
     def node(self, c, x, y):
         line = r"""\node[vertex][] (P%s) at (%s*\f,%s) {%s};""" % (self._node_idx+1, self._x+x, -self._y + y, c)
         self._node_idx += 1
-        self.lines.append(line)
-        return self._node_idx
+        # self.lines.append(line)
+        self._matrix[y, x] = c
+        return "%s-%s-%s" % (self.name, y+1, x+1) #self._node_idx
 
     def edge(self, i, j):
-        line = r"\draw (P%s) -- (P%s);" % (i, j)
+        line = r"\draw (%s) -- (%s);" % (i, j)
         self.lines.append(line)
 
     def del_edge(self, i, j):
-        line = r"\path [->] (P%s) edge[bend right=60] node {} (P%s);" % (i, j)
+        line = r"\path [->] (%s) edge[bend right=60] node {} (%s);" % (i, j)
         self.lines.append(line)
 
-    def generate_tikz(self):
+    def generate_tikz(self, name, args=""):
+        self.name = name
         prev_a_id = None
         prev_b_id = None
         del_a = False
@@ -71,11 +76,14 @@ class AlignmentGraph:
                 del_b = False
             else:
                 del_b = True
+        return tikz_matrix(name, body(self._matrix), args) + "\n" + "\n".join(self.lines)
+
 
     def to_file(self, filename):
         f = open(filename, "w")
         f.write(self.header + "\n")
-        f.write(self._row_a + "\n")
+        # f.write(self._row_a + "\n")
+        f.write(tikz_matrix("seq", body(self._matrix))+"\n")
         for line in self.lines:
             f.write(line+"\n")
         f.write(self.footer)
@@ -83,8 +91,12 @@ class AlignmentGraph:
         subprocess.call(["pdflatex", filename])
 
 if __name__ == "__main__":
-    seq_a = "ACGGTGTACAT"
-    seq_b = "ACCGGTAAGGT"
+    seq_a = "ACGGG"
+    seq_b = "ATGG"
+    # seq_b = "ACCGGTAAGGT"
+    # seq_a = "ACGGTGTACAT"
+    # seq_b = "ACCGGTAAGGT"
+
     row_a, row_b, _, _, _ =  align.globalms(seq_a, seq_b, 0, -1, -1, -1)[0]
     print(row_a)
     print(row_b)

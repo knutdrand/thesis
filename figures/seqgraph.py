@@ -1,5 +1,6 @@
 import numpy as np
 from pylatex import body, tikz_matrix, Figure
+from alignment import AlignmentGraph
 GAP = -1
 
 
@@ -125,9 +126,11 @@ class SeqGraph:
 
 if __name__ == "__main__":
     labels = "#ACTGGG"
+    align2 = AlignmentGraph("#ACG-G", "#ATGGG")
     edges = dict(enumerate([[1], [2, 3], [4], [4], [5, 6], [6]]))
     seq_graph2 = SeqGraph(labels, edges)
     labels2 = "#ATAG"
+    align1 = AlignmentGraph("#ATAG", "#AT-G")
     edges2 = dict(zip(range(4), ([i] for i in range(1, 5))))
     edges2[1].append(3)
     seq_graph = SeqGraph(labels2, edges2)
@@ -147,7 +150,13 @@ if __name__ == "__main__":
 
     A, B = get_alignment(seq_graph._labels, seq_graph2._labels, path)
     alignment_matrix = tikz_matrix("am", body([A, B]), "below=of m")
-    content = "\n".join([tikz_matrix("m", body(elems)), edges, edges2, path_edges, alignment_matrix])
+    init = align2.generate_tikz("ga", "")
+    init2 = align1.generate_tikz("gb", "below=of ga,")
+    content = "\n".join([
+        init, init2,
+        tikz_matrix("m", body(elems), "below=of gb,"),
+        edges, edges2, path_edges,
+        alignment_matrix])
     content = content.replace("#", r"\#")
     figure.write(content)
     # figure.write(seq_graph.to_tikz(False))
