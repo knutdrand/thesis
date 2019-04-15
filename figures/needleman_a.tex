@@ -1,0 +1,33 @@
+\matrix (m) [matrix of math nodes, align=right, row sep=0.1em,column sep=0.1em, minimum width=1em, minimum height=1em, nodes={align=right}, ]{\textcolor{red}{0} & \textcolor{black!25}{-1} & \textcolor{black!25}{-2} & \textcolor{black!25}{-3} & \textcolor{black!25}{-4} & \textcolor{black!25}{-5} & \textcolor{black!25}{-6}\\ 
+\textcolor{black!25}{-1} & \textcolor{red}{0} & \textcolor{black!25}{-1} & \textcolor{black!25}{-2} & \textcolor{black!25}{-3} & \textcolor{black!25}{-4} & \textcolor{black!25}{-5}\\ 
+\textcolor{black!25}{-2} & \textcolor{black!25}{-1} & \textcolor{red}{0} & \textcolor{black!25}{-1} & \textcolor{black!25}{-2} & \textcolor{black!25}{-3} & \textcolor{black!25}{-4}\\ 
+\textcolor{black!25}{-3} & \textcolor{black!25}{-2} & \textcolor{red}{-1} & \textcolor{black!25}{-1} & \textcolor{black!25}{-2} & \textcolor{black!25}{-2} & \textcolor{black!25}{-3}\\ 
+\textcolor{black!25}{-4} & \textcolor{black!25}{-3} & \textcolor{black!25}{-2} & \textcolor{red}{-1} & \textcolor{black!25}{-1} & \textcolor{black!25}{-2} & \textcolor{black!25}{-3}\\ 
+\textcolor{black!25}{-5} & \textcolor{black!25}{-4} & \textcolor{black!25}{-3} & \textcolor{black!25}{-2} & \textcolor{red}{-1} & \textcolor{red}{-2} & \textcolor{black!25}{-3}\\ 
+\textcolor{black!25}{-6} & \textcolor{black!25}{-5} & \textcolor{black!25}{-4} & \textcolor{black!25}{-3} & \textcolor{black!25}{-2} & \textcolor{black!25}{-2} & \textcolor{red}{-2}\\ 
+\textcolor{black!25}{-7} & \textcolor{black!25}{-6} & \textcolor{black!25}{-5} & \textcolor{black!25}{-4} & \textcolor{black!25}{-3} & \textcolor{black!25}{-3} & \textcolor{red}{-3}\\};
+\path[-stealth] (m-1-1) edge [draw=none] node [left=0.5em] {A} (m-2-1);
+\path[-stealth] (m-2-1) edge [draw=none] node [left=0.5em] {C} (m-3-1);
+\path[-stealth] (m-3-1) edge [draw=none] node [left=0.5em] {G} (m-4-1);
+\path[-stealth] (m-4-1) edge [draw=none] node [left=0.5em] {T} (m-5-1);
+\path[-stealth] (m-5-1) edge [draw=none] node [left=0.5em] {T} (m-6-1);
+\path[-stealth] (m-6-1) edge [draw=none] node [left=0.5em] {A} (m-7-1);
+\path[-stealth] (m-7-1) edge [draw=none] node [left=0.5em] {C} (m-8-1);
+\path[-stealth] (m-1-1) edge [draw=none] node [above=0.5em] {A} (m-1-2);
+\path[-stealth] (m-1-2) edge [draw=none] node [above=0.5em] {C} (m-1-3);
+\path[-stealth] (m-1-3) edge [draw=none] node [above=0.5em] {T} (m-1-4);
+\path[-stealth] (m-1-4) edge [draw=none] node [above=0.5em] {T} (m-1-5);
+\path[-stealth] (m-1-5) edge [draw=none] node [above=0.5em] {G} (m-1-6);
+\path[-stealth] (m-1-6) edge [draw=none] node [above=0.5em] {A} (m-1-7);
+\path[-stealth] (m-8-7) edge[color=red] (m-7-7);
+\path[-stealth] (m-7-7) edge[color=red] (m-6-6);
+\path[-stealth] (m-6-6) edge[color=red] (m-6-5);
+\path[-stealth] (m-6-5) edge[color=red] (m-5-4);
+\path[-stealth] (m-5-4) edge[color=red] (m-4-3);
+\path[-stealth] (m-4-3) edge[color=red] (m-3-3);
+\path[-stealth] (m-3-3) edge[color=red] (m-2-2);
+\path[-stealth] (m-2-2) edge[color=red] (m-1-1);
+\matrix (block) [matrix of math nodes, align=right, row sep=0.1em,column sep=0.1em, minimum width=1em, minimum height=1em, nodes={align=right}, below=of m]{A & C & G & T & T & - & A & C\\ 
+A & C & - & T & T & G & A & -\\};
+\matrix (seqs) [matrix of math nodes, align=right, row sep=0.1em,column sep=0.1em, minimum width=1em, minimum height=1em, nodes={align=right}, above=of m]{A & C & G & T & T & A & C\\ 
+A & C & T & T & G & A\\};
