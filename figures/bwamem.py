@@ -1,5 +1,7 @@
 import numpy as np
-import subprocess
+from pylatex import Figure
+# import subprocess
+from memfig import create_figure
 from collections import namedtuple
 
 
@@ -7,6 +9,18 @@ lookup = {"A": 0, "C": 1, "G": 2, "T": 3}
 rev_c = {"A": "T", "C": "G", "G": "C", "T": "A", "$": "$"}
 
 BiInt = namedtuple("BiInt", ["k", "l", "s"])
+
+
+class SuffixArray:
+    def __init__(self, sa):
+        self._array = np.asanyarray(sa, dtype="int")
+        self.length = self._array.size/2
+
+    def get_intervals(self, bint, length):
+        idxs = self._array[bint.k:bint.k+bint.s]
+        forward = idxs[idxs < self.length]
+        backward = idxs[idxs >= self.length]-self.length
+        return [(start, start+length) for start in forward], [(start, start+length) for start in backward]
 
 
 class FMIndex:
@@ -50,6 +64,30 @@ class FMIndex:
         s = self._offsets[idx+1]-k
         l = self._offsets[rev_idx]
         return BiInt(k, l, s)
+
+    def find_mems(self, P):
+        P = P[::-1]
+        mems = []
+        prev_j = 0
+        prev_s = 0
+        for i, c in enumerate(P):
+            prev_bint = self.get_bint(c)
+            for j, c2 in enumerate(P[i+1:]):
+                bint = self.backward_ext(prev_bint, c2)
+                if bint.s == 0:
+                    if j > prev_j-1 or prev_bint.s > prev_s:
+                        mems.append((len(P)-i-j-1, len(P)-i, prev_bint))
+                    prev_j = j
+                    prev_s = prev_bint.s
+                    break
+                prev_bint = bint
+            else:
+                mems.append((0, len(P)-i,  prev_bint))
+                prev_j = j
+                prev_s = prev_bint.s
+                break
+
+        return mems
 
     def find_smem(self, P, i):
         bint = self.get_bint(P[i])
@@ -134,8 +172,9 @@ SA & &  %s BWT & OCC & A & C & G & T \\
 
 if __name__ == "__main__":
     # seq = "ATGTCATTGGA"
-    seq = "ATTGAC"
-    seq = seq+"$" + "".join(rev_c[c] for c in seq[::-1]) + "$"
+    orig_seq = "ACgtgCCGTTAGccagtggGTTAGAGTatcgatACaACtaTAGAGTCAGagca".upper()
+    # orig_seq = "ATTGTTCGTCAGCAA"
+    seq = orig_seq+"$" + "".join(rev_c[c] for c in orig_seq[::-1]) + "$"
     idxs, suffices = sort_suffices(seq)
     # print(format_table(suffices))
 
@@ -147,10 +186,24 @@ if __name__ == "__main__":
     # subprocess.call(["pdflatex", "fm.tex"])
     # print(counts)
     fm = FMIndex(counts, occ, np.array(idxs))
-    smems = {smem for i in range(6) for smem in fm.find_smem("ATTCAC", i)}
+    # query = "ATTCAA"
+    query = "ACCGTTAGAGTCAG"
+    smems = {smem for i in range(6) for smem in fm.find_smem(query, i)}
+    mems = fm.find_mems(query)
+    sa = SuffixArray(idxs)
     print(smems)
+    matches = {(t[0], t[1]): sa.get_intervals(t[2], t[1]-t[0]) for t in smems}
+    print(matches)
+    print(mems)
+    fig = Figure("memfig", "memfigs")
+    fig.write(create_figure(orig_seq, matches, query))
+
     # 
     # print fm.find_seq("ACGT")
     # print fm.find_seq("CG")
     # for s in suffices:
     #     print s
+"""
+ATTGAC
+ATTCAC
+"""
