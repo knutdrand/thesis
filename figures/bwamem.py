@@ -1,6 +1,7 @@
 import numpy as np
 from pylatex import Figure
 # import subprocess
+from pylatex import tikz_matrix, body, Figure
 from memfig import create_figure
 from collections import namedtuple
 
@@ -170,25 +171,66 @@ SA & &  %s BWT & OCC & A & C & G & T \\
     footer = r"\end{tabular}\end{table}\end{document}"
     return header + "\n" + body + "\n" + footer
 
+
+def matrix1(idxs, suffices, occ, counts):
+    # counts = np.concatenate(([0], counts))
+    suffices = [row.replace("$", "#") for row in suffices]
+    occ = np.asanyarray(occ, dtype="int")
+    F = ["$%s_%s$" % (suffix[0], i-counts[lookup[suffix[0]]]) if suffix[0] != "#" else "#" for i, suffix in enumerate(suffices)]
+    L = ["$%s_%s$" % (suffix[-1], o[lookup[suffix[-1]]]) if suffix[-1] != "#" else "#" for o, suffix in zip(occ, suffices)]
+    elements = [[str(i), f, suffix[1:-1], l]+[str(o) for o in row] for i, f, suffix, l, row in zip(idxs, F, suffices, L, occ)]
+    print(elements)
+    return tikz_matrix("fm", body(elements), "below=of ref")
+
+
+    rows = [" & ".join([str(i)] + [f] + [suffix[1:-1]]) + [l] for i, f, suffix, l in zip(idxs, F, suffices, L)]
+    # rows = [str(i)+ "&".join(row[0], row[1:-1], row[-1]) for i, row in zip(idxs, suffices)]
+    # " & " + " & ".join(str(c) for c in row) for i, row in zip(idxs, suffices)]
+    occ_rows = ["&&" + "&".join(str(n) for n in row)+"\\\\" for row in occ]
+    rows = [row + occ_row for row, occ_row in zip(rows, occ_rows)]
+    rows = [row+"\n \\hline" if i in counts else row for i, row in enumerate(rows)]
+
+
+def create_fm_figure(reference, query):
+    ref_mat = [list(reference), [str(i) for i in range(len(reference))]]
+    ref_fig = tikz_matrix("ref",  body(ref_mat))
+    reference = reference+"$"
+    idxs, suffices = sort_suffices(reference)
+    bwt = [s[-1] for s in suffices]
+    occ = get_occurance_matrix(bwt)
+    counts = get_char_counts([s[0] for s in suffices])+1
+    matrix = matrix1(idxs, suffices, occ, counts).replace("#", "\$")
+    query_fig = tikz_matrix("query", body([query]), "below=of fm")
+
+    Figure("fma", "fm").write("\n".join((ref_fig, matrix, query_fig)))
+
+
 if __name__ == "__main__":
-    # seq = "ATGTCATTGGA"
-    orig_seq = "ACgtgCCGTTAGccagtggGTTAGAGTatcgatACaACtaTAGAGTCAGagca".upper()
+    orig_seq = "CTAGCTGCATG"
+    # create_fm_figure(orig_seq, "CTG")
+    # exit()
+    # orig_seq = "ACgtgCCGTTAGccagtggGTTAGAGTatcgatACaACtaTAGAGTCAGagca".upper()
     # orig_seq = "ATTGTTCGTCAGCAA"
     seq = orig_seq+"$" + "".join(rev_c[c] for c in orig_seq[::-1]) + "$"
+    # seq = orig_seq
     idxs, suffices = sort_suffices(seq)
     # print(format_table(suffices))
 
     bwt = [s[-1] for s in suffices]
     occ = get_occurance_matrix(bwt)
     counts = get_char_counts([s[0] for s in suffices] + ["$"])
-    table = table1(idxs, suffices, occ, counts)
+    # matrix = matrix1(idxs, suffices, occ, counts)
+    # Figure("fma", "fm").write(matrix.replace("#", "\$"))
+    # table = table1(idxs, suffices, occ, counts)
+
+
     # open("fm.tex", "w").write(table)
     # subprocess.call(["pdflatex", "fm.tex"])
     # print(counts)
     fm = FMIndex(counts, occ, np.array(idxs))
-    # query = "ATTCAA"
-    query = "ACCGTTAGAGTCAG"
-    smems = {smem for i in range(6) for smem in fm.find_smem(query, i)}
+    query = "TACTGATG"
+    # query = "ACCGTTAGAGTCAG"
+    smems = {smem for i in range(len(query)) for smem in fm.find_smem(query, i)}
     mems = fm.find_mems(query)
     sa = SuffixArray(idxs)
     print(smems)

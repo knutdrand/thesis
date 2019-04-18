@@ -1,0 +1,11 @@
+\matrix (seq) [matrix of math nodes, align=right, row sep=0.5em,column sep=0.5em, minimum width=1em, minimum height=1em, nodes={align=right}, ]{C & T & A & G & C & T & G & C & A & T & G\\ 
+G & A & T & C & G & A & C & G & T & A & C\\};
+\matrix (q) [matrix of math nodes, align=right, row sep=0.5em,column sep=0.5em, minimum width=1em, minimum height=1em, nodes={align=right}, below=of seq]{T & A & C & T & G & A & T & G\\};
+\node[color=red, draw, dashed, rounded corners, fit=(q-1-3) (q-1-5)] {};
+\node[color=red, draw, dashed, rounded corners, fit=(seq-1-5) (seq-1-7)] {};
+\node[color=green, draw, dashed, rounded corners, fit=(q-1-1) (q-1-2)] {};
+\node[color=green, draw, dashed, rounded corners, fit=(seq-1-2) (seq-1-3)] {};
+\node[color=green, draw, dashed, rounded corners, fit=(seq-2-2) (seq-2-3)] {};
+\node[color=blue, draw, dashed, rounded corners, fit=(q-1-6) (q-1-8)] {};
+\node[color=blue, draw, dashed, rounded corners, fit=(seq-1-9) (seq-1-11)] {};
+\node[color=blue, draw, dashed, rounded corners, fit=(seq-2-8) (seq-2-10)] {};

@@ -1,0 +1,46 @@
+\matrix (seq) [matrix of math nodes, align=right, row sep=0.5em,column sep=0.5em, minimum width=1em, minimum height=1em, nodes={align=right}, ]{G & C & A & C & G\\ 
+ &  & T &  & \\};
+\draw (seq-1-1) -- (seq-1-2);
+\draw (seq-1-1) -- (seq-1-2);
+\draw (seq-1-2) -- (seq-1-3);
+\draw (seq-1-2) -- (seq-2-3);
+\draw (seq-1-3) -- (seq-1-4);
+\draw (seq-2-3) -- (seq-1-4);
+\draw (seq-1-4) -- (seq-1-5);
+\draw (seq-1-4) -- (seq-1-5);
+
+\matrix (seqe) [matrix of math nodes, align=right, row sep=0.5em,column sep=0.5em, minimum width=1em, minimum height=1em, nodes={align=right},right=of seq]{
+G & C  & A & C & G\\ 
+  & C  & T &   &  \\};
+\draw (seqe-1-1) -- (seqe-1-2);
+\draw (seqe-1-1) -- (seqe-2-2);
+\draw (seqe-1-2) -- (seqe-1-3);
+\draw (seqe-2-2) -- (seqe-2-3);
+\draw (seqe-1-3) -- (seqe-1-4);
+\draw (seqe-2-3) -- (seqe-1-4);
+\draw (seqe-1-4) -- (seqe-1-5);
+\draw (seqe-1-4) -- (seqe-1-5);
+\matrix (gcsa) [matrix of math nodes, align=right, row sep=0.5em,column sep=0.5em, minimum width=1em, minimum height=1em, nodes={align=right},below=of seq]{
+SA &  & BWT\\
+  & $\$$ & $G_0$ \\
+2 & $A_0$ & $C_0$ \\
+1 & $C_{0,1}$ & $G_1$ \\
+4 & $C_{2}$ & $A_0, T_0$ \\
+6 & $G_{0}$ & $C_1$ \\
+0 & $G_{1}$ & $\$$ \\
+3 & $T_0$ & $C_2$\\
+};
+\draw[dotted] (gcsa-5-2) -- (gcsa-5-3) -- (gcsa-8-2) -- (gcsa-8-3);\\
+
+\matrix (gcsag) [matrix of math nodes, align=right, row sep=0.5em,column sep=0.5em, minimum width=1em, minimum height=1em, nodes={align=right},below=of seqe]{
+SA &  & BWT\\
+  & $\$$ & $G_0$ \\
+2 & $A_0$ & $C_0$ \\
+1 & $C_0$ & $G_1$ \\
+5 & $C_1$ & $A_0, T_0$ \\
+3  & $C_2$ & $G_1$ \\
+7 & $G_{0}$ & $C_1$ \\
+0 & $G_{1,2}$ & $\$$ \\
+4 & $T_0$ & $C_2$\\
+};
+\draw[dotted] (gcsa-5-2) -- (gcsa-5-3) -- (gcsa-8-2) -- (gcsa-8-3);\\

@@ -1,0 +1,21 @@
+\documentclass{standalone}
+\usepackage{tikz}
+\usetikzlibrary{fit, matrix, positioning, shapes}
+\begin{document}
+\tikzpicture
+% \node at (0,0) (A) {A};
+%  \node at (0,1) (B) {A};
+%  \node at (0,2) (C) {A};
+%  \node[color=red, draw, fit=(A) (C)] {};
+\input{memfig.tex}
+\node[left=of seq-1-1] {$R:$};
+\node[left=of seq-2-1] {$\bar{R}:$};
+\node[left=of q-1-1] {$Q:$};
+\endtikzpicture
+\end{document}
+
+
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-master: t
+%%% End:
