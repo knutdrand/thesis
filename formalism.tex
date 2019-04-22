@@ -1,0 +1,29 @@
+\section{Formalism}
+We define a \emph{simple sequence graph} $SG = \set{G, s}$ over an alphabet $\alphabet$ is a graph $G=\set{V, E}$ and a label function $s: V \rightarrow \alphabet$ labeling each vertex with a letter from $\alphabet$. The set of all sequences in $SG$ is 
+$$\Sigma(SG) = \set{s(v_1), s(v_2), , , s(v_n) s.t. v_i \in V \wedge (v_i, v_{i+1}) \in E}$$
+
+Similarily a \emph{compacted sequence graph} $CG = \set{G, s}$ over alphabet $\alphabet$ is a graph $G$ and label function $s: V \rightarrow \Sigma^* / \epsilon$ labelling each vertex to a non-empty finite string over $\alphabet$. The set of all sequences in $SG$ is
+\begin{align*}
+  \Sigma(CG) &= \Sigma_0(CG) \cup \Sigma_1(CG)\\
+  \Sigma_0(CG) &=\set{s(v)_{a:b} s.t. v \in V \wedge 0<a<b\leq\size{s(v)}}\\
+  \Sigma_1(CG) &= \set{(s(v_1)_{a:}, s(v_2),,, s(v_n)_{:b}) s.t. v_i \in V \wedge (v_i, v_{i+1}) \in E \wedge a>0 \wedge b\leq \size{v_n}}
+\end{align*}
+
+For DNA-sequence graphs over the alphabet $\alphabet=\set{A, C, G, T}$ and the reverse compliment function $rc: \alphabet \rightarrow \alphabet$, we get all sequences reverse sequences by
+$$\Sigma_{rc}(SG) = \set{(rc(s_n), rc(s_{n-1}), , , rc(s_1)) \forall s=(s_1, s_2,,,s_n) \in \Sigma(SG)}.$$
+and the set of all possible sequences on either forward or reverse strand is given by $\Sigma_{all}(SG) = \Sigma(SG) \cup \Sigma_{rc}(SG)$. 
+
+In order to represent reversals succinctly one needs a generalization of the sequence graph as given in~\cite{vg}.
+A \emph{reversible sequence graph} is given by $RG = \set{V, E}$, where $E \subseteq {(V \times \set{-1, 1})^2}$.
+Here the possible sequences in the graph is represented by:
+\begin{align*}
+  \Sigma(RG) &= \set{s(v_1, d_1), s(v_2, d_2), , , s(v_n, d_n) s.t. v_i \in V \wedge ((v_i, d_i), (v_{i+1}, d_{i+1})) \in E}\\
+  s(v, d) &=\begin{cases} s(v_1), & \text{if} d = 1\\
+                        rc(s(v_1), & \text{if} d = -1\\
+\end{cases}
+\end{align*}
+
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-master: "main"
+%%% End:

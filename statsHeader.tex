@@ -1,5 +1,6 @@
 \usepackage[T1]{fontenc}
 \usepackage[utf8]{inputenc}
+\usepackage{subcaption}
 \usepackage{amsmath}
 \usepackage{amssymb}
 \usepackage{listings}
@@ -8,7 +9,8 @@
 \usepackage{color}
 \usepackage{tikz}
 \usepackage{colortbl}
-\usetikzlibrary{matrix, positioning, fit}
+\usepackage{xcolor, soul}
+\usetikzlibrary{matrix, positioning, fit, decorations.pathmorphing, shapes}
 \definecolor{dkgreen}{rgb}{0,0.6,0}
 \definecolor{gray}{rgb}{0.5,0.5,0.5}
 \definecolor{mauve}{rgb}{0.58,0,0.82}
@@ -74,6 +76,11 @@ tabsize=3
 \newcommand{\tinvgamma}[0]{\text{Inv-Gamma}}
 \newcommand{\tlogit}[0]{\text{logit}}
 \newcommand{\prop}{=}
+\newcommand{\dT}[0]{\setulcolor{red}{\ul{T}}}
+\newcommand{\dG}[0]{\setulcolor{green}{\ul{G}}}
+\newcommand{\dC}[0]{\setulcolor{yellow}{\ul{C}}}
+\newcommand{\dA}[0]{\setulcolor{blue}{\ul{A}}}
+
 %%% Local Variables:
 %%% mode: latex
 %%% TeX-master: t

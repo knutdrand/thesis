@@ -1,0 +1,71 @@
+Since it can be assumed that the genomic DNA-sequences from individuals of the same population is highly similar, it is possible to use one DNA-sequence as a \emph{reference genome} for the population.
+Such reference genomes serves two main purposes.
+They make the deduction of the DNA-sequence from a sample a simpler problem through mapping, and they make it possible to represent the outcome of a range of biological experiments as intervals or coordinates on the coordinate system induced by the reference genome. The process of mapping is covered in section~\ref{sec:mapping}, while the representation of different experiment outputs are illustrated in figure~\ref{fig:refpos}.
+
+\begin{figure}
+  \includegraphics{figures/refgenomes}
+  \label{fig:refpos}
+  \caption{Figure showing the locations of several genomic elements on the same coordinate system.
+    Locations of genes (red), transcription factor binding sites (blue), and methylation sites (green) from different sequencing experiments can all be compared and analyzed together.}
+\end{figure}
+
+
+% \subsection{Experiments}
+% 
+% Since the output from NGS-experiments are large amounts of short reads, reference genomes have been an invaluable resource.
+% Most importantly they simplify the analysis of short read data by mapping them 
+% 
+% 
+% Reference genomes have become a vital part of bioinformatic analysis.
+% 
+% \subsection{As a }
+% The concept of a reference genome is that the genomic sequence between two individuals can be highly similar. Thus knowing the genomic sequence of one individual.
+% 
+% \subsection{Data Integration}
+% 
+% 
+% Genomic variation is one of the fundamental aspects of biology.
+% Difference in the DNA-sequence between two individuals can lead to a change in the translated RNA sequence and further in the sequence, and thereby the form and function, of the expressed protein.
+% Or it can lead to less drastic changes such as changes in the RNA-structure or the shape of the DNA molecule itself.
+% In this way genomic variation can determine differences between specimens of the same species and also differences between the species themselves.
+% 
+% Within a species, the genomic variation between individuals are often limited by evolutionary conservative pressure, 
+% meaning that the difference in DNA-sequence between viable specimens of the same species are often small and does not lead to big changes in neither the structure of the DNA or the translated proteins.
+% This limitation has made  possible the use of \emph{reference genome}s for a species, a DNA-sequence though to represent the generic sequence for that species, where individual variation from the reference sequence are though to be small.
+% 
+% Reference genomes have helped make sense of sequencing data, that have been dominated by large numbers of small sequence fragments.
+% Without a good reference genome, one would need to fit all those sequence fragments together like a puzzle, in a process called \emph{assembly}.
+% Using a reference genome, one can instead find the best sequence match for each read in the reference sequence, and thus find both where each read belongs in the genome, and also how the sequence differs from the reference.
+% Finding the position of each read can give context to them, since the location of biologically important parts of the genome can be represented on the genome.
+% For instance, if the sequencing of an individual maps to a location within a the known location of a protein coding gene and differs from the reference sequence, it's possible that that individual has a genomic variant that alters the function of that protein. 
+% 
+% Since this process of \emph{mapping} sequence reads to the reference is such a fundamental step in many biological analyses, the quality of the reference sequence has been of high importance.
+% Thus, since the dawn of human genome sequencing in \TODO{year}, the Genome Reference Consortium has released \TODO{n} versions of the human reference genome alone.
+% The latest version of the human reference genome (GRCh38), highlights some shortcomings of representing the reference of a species as a single sequence.
+% GRCh38 includes, in addition to the traditional linear reference sequence, a set of alternative sequences from areas of the genome where there are known variations of the DNA-sequences which makes it problematic to map reads from those areas to the reference sequences.
+% Secondly the new version included changes that disrupted the coordiante system of the reference.
+% This has lead to a backward incompatibility that has prevented a widespread adoption of the new reference.
+% 
+% \subsection{Mapping Bias}
+% Mapping sequencing reads to the reference entails finding subsequences in the reference sequence that are highly similar to the sequenced reads.
+% The match can be inexact due to either the actual DNA-sequence being different or sequencing errors that can substitute one nucleotide with another.
+% It is necessary to set a limit to how dissimilar the reference subsequence can be in order to produce a match due to computational complexity and that allowing a high level of divergence can lead to a large number of matches.
+% For instance, \emph{BWA-mem} by default requires a shared subsequence of at least 19 bp in order to produce a match.
+% This means that reads from regions with much variation from the reference can be unmappable using standard mapping software, and be susceptible to small amount of sequenceing error yielding them unmappable.
+% This means that the resemblence of the sample to the reference genome will lead to better mapping quality, and that some regions of the genome will have a lower mapping rate than others. 
+% 
+% 
+% \subsection{Geometry of the reference genome}
+% As well as being an indexable lookup table for sequencing reads, a reference genome provides a coordinate system and a geometry for sequence data that allows us to look at different sequence elements in conjunction. 
+% Most important is the analysis of overlap and distances between subsequences.
+% For instance, the location of a  potential transcription factor binding site, predicted from a ChIP-seq experiment, can be compared to the positions of known genes, predicted from amongst others RNA-seq experiments, to determine which gene is most likely regulated by the binding of a TF to the binding site.
+% The distances between subsequences is also used in some mapping tools themselves, as a way to evaluate the match of a read to a reference subsequence.
+% For instance Minimap2~\cite{minimap2} uses the relative positioning of kmer matches to the reference to find which chain of kmer-anchors match the read sequence best.
+% The distance between two subsequences on the reference is invariant to SNPs, since they do not affect distances.
+% However indels and especially structural variants affect the distances between subsequences, and can thus change the outcome of any analysis involving distances.
+% For instance, a structural variant that changes which gene a regulatory element affects. 
+
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-master: "main"
+%%% End:

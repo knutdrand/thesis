@@ -1,0 +1,186 @@
+The alignment methods described in the previous section do not scale well to large sequences.
+Aligning a read $Q[:m]$ to a reference genome $R[:N]$ will require computing $mN$ values.
+A typical NGS sequencing experiment typically yields hundreds of thousands of reads of length 100 which needs to be located in the human reference genome of length 3 billions.
+This would need to calculate $10^{16}$ values, which is impossible? even on modern computers. 
+
+This has led to much development the last 13 years in developing alignment methods that avoid the complexity of the exact dynamic programming methods.
+This has been achieved mainly by two measures, creating searchable indexes of the reference genome and using heuristics to limit the search space of possible alignments.
+
+In the following is a brief description of the developments in this field, with focus on the aligner used in this thesis' projects: BWA-mem~\cite{bwamem}.
+After this we will look at the methods used in for graph alignment with focus on \emph{vg}.
+
+\subsection{Linear Mapping}
+As in section~\ref{linmap}\TODO{Define this explicitly in alignmetn}, we define the mapping problem as finding the interval $i_R$ for wich the edit distance $D(R[i_r], Q)$ is smallest, and the alignment $A(R[i_R], Q)$.
+\subsubsection{Indexing}
+An essential tool for quick alignment is to have a searchable index of the reference genome which is capable of returning sets of interval-pairs from the reference and query sequence for which the reference sequence is identical or near identical to the query sequence.
+The indexes used by different tools vary, but can mainly be divided into fixed-length(kmer) indexes~\cite{minimap,,,} and variable-length indexes~\cite{bowtie, bwasw,,,}.
+Fixed length indexes typically uses hash tables to store the location of all, or subsets of all, kmers \TODO{define kmer} in the reference sequence.
+Variable length indexes usually uses a variation of the \emph{full text minute index} (FM-index)~\cite{fm}, described below.
+The main idea covered here is the seed-and-extend paradigm. This idea consists of finding a set of exact matches to the reference sequence, and using these as anchors for using dynamic programmic based alignment of the query.
+We let $EM(Q, R)$ be the set of all exact matches, represented by the tuples $\buildset{(q, r, l)}{Q[q:q+l]=R[r:r+1]}$.
+Since the dynamic programming methods can still be computationally expensive, the goal is to make the seeds as small a subset of exact matches as possible, while still making sure that the true alignment covers one of the seeds.
+
+\subsubsection{FM-index}
+The FM-index uses a succinct representation of suffix array~\cite{suffixarray} and Burrows-Wheeler transform~\cite{BWT} in order to find exact matches of a query string $S$ in $O(\size{S})$ time (see figure~\ref{fig:FM}).
+Thus if a read has one or more exact matches in the reference sequence it can be found directly using the FM-index.
+For inexact matches, it can also be used to find an exact alignment of $Q$ and $R$ in $O(\size{R}^{0.628}\size{Q})$ time~\cite{bwtsw,bwalong}.
+Some algorithms also use the FM-index to find exact matches for permutations of the query sequence~\cite{bowtie1, bwashort}, but for longer reads the search space gets too big when allowing for indels.
+\begin{figure}
+  \tikzpicture
+  \input{figures/fmfinish.tex}
+  \endtikzpicture
+  \label{fig:FM}
+  \caption{Illustration of backward extension using the last-first (LF) property of the FM index.
+    The rows represent sorted suffixes of the reference. The SA column holds the indices in the reference sequence for each suffix, the $F$ column holds the first character of each suffix, while the $L$ column holds the preceding character of each suffix. Subfixes gives the occurances of each character in each column. I.e. $T_i$ is the $i$th occurance of $T$ in that column. Finding the string \emph{CTG} is done by (1) starting with the range of all $G$'s in the F column; (2) finding all $T$'s in this range in the $L$ column; (3) mapping by occurance number those $T$'s to the F column; (4) mapping the $C$'c in the current range in the L folder by occurance number. The end result is in this case a single row which represents position $4$ in the reference sequences. 
+}
+\end{figure}
+
+In order to handle indels in longer reads, the main methodology is to use the FM-index to find exact matches between substrings of the query and reference sequence, called seeds.
+And then aligning the reads using dynmaic programing to intervals surrounding the seed matches on the reference sequence~\cite{bowtie2}, often called the seed-and-extend paradigm.
+
+One way of finding seeds is to find Maximal Exact Matches (MEM)~\cite{longmem, origmem}.
+Maximal Exact Matches are Exact Matches that cannot be extended in either direction, ie. 
+\[
+  MEM(Q, R) = \buildset{(q, r, l) \in EM}{(q, r, l+1) \notin EM \wedge (q-1, r-1, l+1) \notin EM}
+\]
+BWA-mem furthers this concept to SuperMaximal Exact Matches (SMEM)~\cite{origsmem}.
+A SMEM is a MEM where the query interval cannot be extended either side and still yield an Exact Match~\ref{fig:smem}.
+\[
+  SMEM(Q, R) = \buildset{(q, r, l) \in EM}{\nexists r^*[(q, r^*, l+1) \notin EM \vee (q-1, r^*-1, l+1) \notin EM}
+\]
+\begin{figure}
+  \tikzpicture
+  \input{figures/memfig}
+  \endtikzpicture
+  \label{fig:smem}
+  \caption{SMEMs found between query $Q$ and both strands of reference $R$. Note that the MEM $(q, r, l)=(2, 0, 2)$ (CT) is not a SMEM, since it is contained in the SMEM $(q, r, l) = (2, 4, 3)$}
+\end{figure}
+
+SMEMS are natural to use as seeds as they cover for each subsequence in $Q$ the longest exact match in $R$.
+They are however vulnerable for spurious long matches hiding shorter exact matches.
+To account for this BWA-mem allows an option to split long SMEMs into shorter MEMs if they are longer than a certian threshold.
+Splitting SMEMs like this increases accuracy, since it increases the number of seeds, but can negatively affect performance. 
+In order to find SMEMS, an adaption of the FM index is used, the FMD index, where $FMD(R) = FM(R \concat \bar{R}$.
+
+\subsubsection{Prioritizing and Extending}
+The seeds found from the index are next used as seeds for DP based alignment.
+$Q$ is then aligned against an area around $(r, r+l)$ for each seed $(q, r, l)$.
+Since this is a computationally expensive step, further limiting the set of seeds is advanteous.
+BWA-mem does this by \emph{chaining} the seeds.
+This is done by grouping approximately colinear, nearby seeds into chains, and removing small chains that overlap with larger chains.
+Approximately colinear means that $\abs{(q_1-q_2) -(r_1-r_2)}<w$ for some set threshold.
+
+\subsection{Graph Mapping}
+Mapping to a graph based reference is similar to the linear case, except that instead of finding a linear interval, the goal is to find a graph interval $i_r$ such that $D(\slabel(G_R(i_r), Q))$ is minimized. 
+
+% estimating a liner interval $(\hat{s}, \hat{e})$, a graph interval $(\hat{s}, \hat{e}, \hat{v})$ is estimated.
+It is however deceptively more complicated. 
+Firstly because the number of subsequences in a sequence graph grows exponentially with the complexity of the graph. 
+And secondly since chaining subsequence-matches is more complicated due to the possible existance of multiple paths between two matches.
+\emph{vg}~\cite{vg} has been at the forefront of mapping to a graph reference, showing that it can lead to better mapping accuracy than BWA-mem. 
+% But it is still too slow and memory- and disk-consuming for widespread use.
+Below is a brief description of the methodology used by \emph{vg}.
+
+\subsubsection{\emph{vg}}
+\emph{vg} uses much the same methodology as BWA-mem to align reads.
+It uses the GCSA2-index to find SMEMs, uses chain filtering to filter the SMEMs, and uses the graph adaption of Smith-Waterman to extend the seeds.
+\emph{vg} is able to align reads to more complicated graph structures than the simple directed sequence graphs considered in this thesis.
+For simplicity the descriptions below will be contained to simple graphs, which entails that the GCSA index described is GCSA1\cite{gcsa1} which is only able to index directed sequence graphs.
+
+\subsubsection{GCSA}
+The GCSA-index~\cite{gcsa, gcsa2} is a generalization of the FM-index, where arbitrary-length sequences can be looked up in a sequence graph.
+Originally constructed to work on acycilic sequence graphs, gcsa2 extends the functionallity to general variation graphs.
+For simplicity we will here constrain the discussion to acyclic graphs.
+
+GCSA uses the same concept of $LF$ mapping as the FM-index does. Here the F column holds the label of each node in the graph, sorted by the suffix starting from that node. The L column holds the label of the corresponding node's predecessor nodes. The problem with this setup is that there are many suffixes starting from each node, depending on which path is taken in the graph. To resolve this problem, the graph needs to be expanded so that for each node, all suffixes starting from that node shares a prefix that is not found from any other node in the graph(see figure~\ref{fig:gcsa}).
+
+For complicated regions in the graph, this expansion procedure gets too costly, and the GCSA index therefore needs to prune edges in such areas in order to be able to index it. This means that not all possible sequences in the graph gets indexed. Even after pruning, this procedure is costly and makes the GCSA index significantly slower to create, and more memory consuming than the FM-index.
+
+\begin{figure}
+  \tikzpicture
+  \input{figures/gcsafigb}
+  \endtikzpicture
+  \label{fig:gcsa}
+  \caption{
+    Valid and invalid GCSA index.
+    In the first graph, the two edges from $C$ to $A$ and$T$ makes a direct GCSA index impossible due the other $C$ with an edge to a $G$.
+    Both $T$ and $G$ needs to point to the same row in the index.
+    In the valid example, the $C$ node have been duplicated.
+    The bifurcation now happens at an earlier point, and the $GC$ now present is unique so that the the LF mapping is valid.}
+\end{figure}
+
+Since the gcsa index provides the same functionality as an FM-index, it can be used to find SMEMs in much the same manner. These SMEMs are in \emph{vg} used as seeds. 
+
+GCSA2 solves the problem in a slightly different way that allows for indexing general variation graphs.
+This is based on succinct de-Bruijn graph~\cite{debruijn, succinctdebruijn} structure which sets a limit to the length of the unique prefixes by allowing for false positive edges to occur in the index.
+This means that results from an index lookup needs to be validated by traversing the graph. 
+
+\subsubsection{Filtering and Extending}
+\emph{vg} employs a similar method as BWA-mem for filtering out seeds: chaining the seeds and filtering out small chains that overlap bigger chains.
+The chaining procedure is however more complicated on a graph, and involves clustering the seeds by position in addition to a Markov Model based method to find approximately colinear seeds. 
+
+% At the heart of \emph{vg} is the concept of Variation Graphs. A Variation Graph is a side graph togheter with a set of paths that represents the sample sequences. Since it uses a side graph and not a simple sequence graph it can represent SNPs and indels in addition to the large scale variants discussed above. This however comes at the price of complexity. A key functionality of \emph{vg} is to map reads to the the side graph. This is done similarily to how BWA-mem maps read to a linear reference sequence, by finding matches for subseqeunces and chaining these togheter. The process is more involved due the the complexity of graphs. 
+% \TODO{vg chaining}
+
+
+%%%%%%%%%%%%%%%%%%%%%%
+% Mapping a read $r \in \alphabet^*$ to a linear reference genome $G \in \alphabet^*$ can be seen as solving the problem of finding an interval $M(r | G) = (\hat{s}, \hat{e})$ that minimizes some edit distance $D(r, G_{\hat{s}:\hat{e}}$ as well as returning an uncertainty estimate of the mapping $\epsilon(r, G, (s, e))$.
+% Given no restraints on computation time or memory usage, a local alignment of $r$ versus $G$ finds the exact minimum \TODO{which distance}.
+% However since this algorithm has complexity $O(\size{r}\size{G})$, this is not possible in practice when dealing with million of reads and reference genomes with a length in the billions.
+% Thus indexing and further approximations are needed to meet the demands of modern bioinformatics.
+% A common approach is to generate an index that allows for efficient searching of subsequences, and to combine the matches from subsequences into a match for the whole sequence $r$.
+% The projects in this thesis have used $BWA-mem$ as the program to map reads to a linear reference genome. 
+% In the following a brief description of the methods used in $BWA-mem$~\cite{bwa} is explained.
+
+% While the creation of the index only needs to be done once for a reference genome, using it to find subsequence matches needs to be perfomed hundreds of thousand times.
+
+% 
+% 
+% The BWA-mem uses the strategy of first finding exact matches to subsequences followed by chaining these subsequences together. Finding the exact matches is done using an FM-index.
+% 
+% An FM index~\cite{fmindex} is a data structure that allows lookup of a sequence $s$ in a reference sequence $R$ in $O(\size{s})$ time.
+% It is based on a lexiographic sort of the suffixes of $R$ \TODO{BWT?} and the index structure contains representations of two character vectors.
+% One for the first letter of each suffix in sorted order and one for the letter preceding each suffix. The power of the FM-index comes from properties of these columns.
+% \begin{itemize}
+% \item The letters in $L$ are sorted, so that it can be represented by the offset of the firt occurance of each letter in the alphabet
+% \item Each letter $r_i$ in $R$ represents a new suffix, $r_iS_i$.
+% \item If $r_i$ is the $n$th occurence of that letter in $R$, the suffix $r_iS_i$ is represented by the $n$th occurance of $r_i$ in $L$.
+% \end{itemize}
+% These properties makes it possible to start from the last letter of a query string and traverse the FM-index in order to find  all occurances of that string in the reference, or finding the longest suffix of the string that is precent in the reference string. 
+% 
+% \subsubsection{BWA-mem}
+% The FM-index can be used to find \emph{Super-Maximal Exact Matches} (SMEMs). These are exact matches of subsequences of the query to the reference, with the property that they cannot be extended further and are not contained in another. The set of SMEMs on 
+% \TODO{mem-chaining}
+% 
+
+% , but first a brief discussion of variation on genome scale. 
+
+% 
+% pect to a singe reference sequence. Thus instead of representing each contributing sample as a row in a block, as in multiple sequence alignment, one represents each variant with a position in the reference sequence, a subsequence of the reference from that position, and the alternative sequence that replaces that sequence. The full sequence of a sample can then be represented as a sample of variant ids. The most common format for representing such variants and sample sequences is the Variant Call Format (VCF)\cite{vcf}. 
+% 
+% 
+% 
+% quely by a sequence graph. This is done by first representing the reference sequence as  a linear sequence graph and then adding to the graph the nodes and edges to represent the variants. The sample sequences can also here  be represented as paths through the graph. 
+% 
+% erted to a sequence graphs.
+%  thus leads to more complicated graphs. 
+% 
+%  represented by DAGs.
+% r copied (\TODO{only copied?}) to another location in the genome.
+% nce from covering both the old an new postions of the subsequence.
+% represented twice.
+% e substring has been moved. This will however break the acyclisity of the graph, and thus complicate most operations one would do on the graph. 
+% 
+% 
+% rse complement.
+% 
+% cible from a sequence in the graph.
+% cept of a side graph has been introduced.
+% s going from one side of a node to a side of another node.
+%  other reading direction.
+
+
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-master: "main"
+%%% End:

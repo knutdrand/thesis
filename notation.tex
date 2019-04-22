@@ -1,0 +1,22 @@
+\subsection{Strings}
+\subsection{Notation}
+Strings are important in this thesis as they are the means to represent DNA-sequences. We will here formally work with an alphabet $\alphabet_{DNA} = \set{A, C, G, T}$ and say that a \emph{sequence} of length $n$ over that alphabet are a tuple in the set $\alphabet_{DNA}^n$. The set of all sequences over $\alphabet_{DNA} = \set{A, C, G, T}$ is  represented by $\alphabet_{DNA}^*$. The length of a sequence $s \in \alphabet_{DNA}^*$ is notated $\size{s}$.
+The $i$th symbol in a sequence $s$ is notated $s[i]$ and a subsequence of $s$ starting at the $i$th symbol (inclusive) and ending at the $j$th symbol (exclusive) is denoted $s[i:j]$.
+A \emph{prefix} of $s$, i.e. a substring of $s$ starting from the first symbol, of length $k$ is denoted $s[:k]$, while a suffix of $s$ starting at the $k$th symbol is denoted $s[k:]$. For convenience a string of length $n$ is sometimes represented as $s[:n]$ to convey the size of the string.
+Concatenation of two strings $S, T$ are represented as $S \concat T$, while the concatenation of a symbol $a$ to a string $S$ is denoted $Sa$, and a string to a symbol as $aS$.
+
+\subsection{Graphs}
+A graph is a tuple $G=(V, E)$ of vertices and edges, where the edges are pairs of vertices $E \subset V^2$.
+We will here deal with directed graphs where we say that edge $(v_1, v_2)$ is an edge from $v_1$ to $v_2$. An \emph{path} is an alternating sequence of vertices of edges $(v_1, e_1, v_2, e_2,,,e_{n-1}, v_n)$ where $e_i = (v_i, v_{i+1})$.
+A cycle is a path $(v_1, e_1, v_2, e_2,,,e_{n-1}, v_n)$ where $v_1=v_n$ and $n>1$, i.e. a path that starts and ends at the same vertex. A directed acyclic graph (DAG) is a directed graph in which there are no cycles.
+We call the set of all paths starting at $v_s$ and ending at $v_e$ $\paths{v_s, v_e}$.
+\subsubsection{Sequence Graphs}
+We define a \emph{simple sequence graph} $SG = \set{G, s}$ over an alphabet $\alphabet$ as a graph $G=\set{V, E}$ and a label function $\slabel: V \rightarrow \alphabet$ labeling each vertex with a letter from $\alphabet$. We refer to the label of a path $\slabel((v_1, e_1, v_2,,,e_{n-1}v_n))$ as the concatenation of the labels of its vertices $\slabel(v_1)\concat\slabel(v_2) ... \slabel(v_n)$.
+The \emph{language} recognized by a sequence graph $L((G, \slabel))$ is the label of each path in the set $\paths(v_s, v_e)$. 
+
+
+
+%%%Local Variables:
+%%% mode: latex
+%%% TeX-master: "main"
+%%% End:

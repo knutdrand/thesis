@@ -1,0 +1,18 @@
+Using sequence graphs as reference structures
+\subsection{Complexity}
+Indexing a sequence graph has been shown to be inherently difficult~\cite{indexgraphs}. It is therefore no surprise that \emph{vg}, which is the graph mapper that shows the most promising results suffers from long run times and high memory consumption. 
+
+\subsection{Kmer Sinks}
+The combinatorial growth in subsequences from variant density not only leads to problems with computational efficiency. It also leads to possibilities for false positives.
+As is briefly discussed in Paper 3, areas with a high density of variants, can represent a large number of possible sequences.
+This can lead to such areas matching read sequences which does not originate from that area. 
+Such mismappings is a problem for the mapping accuracy in general and the bias it introduces can be a problem for downstream analysis. 
+
+\subsection{Pseudo-linearity}
+
+
+
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-master: "main"
+%%% End:

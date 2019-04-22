@@ -1,0 +1,91 @@
+  \centering
+\begin{subfigure}{\textwidth}
+  \begin{tikzpicture}[decoration={coil},
+dna/.style={decorate, thick, decoration={aspect=0, segment length=1.0cm}},
+protein/.style={ellipse, draw=white, minimum width=1cm, minimum height=1cm}]
+ 
+%DNA
+\draw[dna, decoration={amplitude=.15cm}] (.0,0) -- (11,0);
+\draw[dna, decoration={amplitude=-.15cm}] (0,0) -- (11,0);
+\node at (0,0.5) {DNA};
+ 
+%Gene
+ \node [rounded corners, fill=green!50, thick, inner xsep=30pt] at (8,0) (box){Gene X};
+ \node [protein, minimum height=.75cm,fill=blue!30] at (3,0.5) {CTCF};
+\node at (3.5, -0.5) {Transcription Factor};
+\draw (1.5, -0.2) rectangle (4.5, 1); 
+\end{tikzpicture}
+\end{subfigure}
+\begin{subfigure}{\textwidth}
+  \begin{tikzpicture}[decoration={coil},
+dna/.style={decorate, thick, decoration={aspect=0, segment length=1.0cm}},
+protein/.style={ellipse, draw=white, minimum width=1cm, minimum height=1cm}]
+\tikzstyle{seq}=[font=\ttfamily]
+ 
+%DNA
+\node[seq] at (3,0) {ACGTTCGTATATCGTAGCTACTCGAGCTGTAGTTTGATAGATAT};
+%Gene
+\node [protein, minimum height=.75cm,fill=blue!30] at (3,0.5) {CTCF};
+\end{tikzpicture}
+\caption{Transcription factor binding to DNA, regulating the expression of Gene X}
+\end{subfigure}
+\begin{subfigure}{\textwidth}
+  \begin{tikzpicture}[decoration={coil},
+dna/.style={decorate, thick, decoration={aspect=0, segment length=1.0cm}},
+protein/.style={ellipse, draw=white, minimum width=1cm, minimum height=1cm}]
+seq/.style={font=\ttfamily}
+\tikzstyle{seq}=[font=\ttfamily]
+\def\fy{0.4}
+% DNA
+\node[seq] at (3, 0*\fy) (c1) {ACGTTCGTATATCGTAGCTACTCGAGCTGTAGTTTGATAGATAT};
+\node[seq] at (3,-1*\fy) (c2) {ACGTTCGTATATCGTAGCTACTCG....................};
+\node[seq] at (3,-2*\fy) (c3) {.......TATATCGTAGCTACTCGAGCTGTA.............};
+\node[seq] at (3,-3*\fy) (c4) {...........TCGTAGCTACTCGAGCTGTAGTTT.........};
+\node[seq] at (3,-4*\fy) (c5) {..GTTCGTATATCGTAGCTACTCGAG..................};
+\node[seq] at (3,-5*\fy) {...TTCGTATATCGTAGCTACTCGAGC.................};
+\node[seq] at (3,-6*\fy) {.................CTACTCGAGCTGTAGTTTGATAGA...};
+\node[seq] at (3,-7*\fy) {...................ACTCGAGCTGTAGTTTGATAGATA.};
+\node[seq] at (3,-8*\fy) {.............GTAGCTACTCGAGCTGTAGTTTGA.......};
+
+\node[left=of c1] {Cell1: };
+\node[left=of c2] {Cell2: };
+\node[left=of c3] {Cell3: };
+
+%Gene
+\node [protein, minimum height=.75cm,fill=blue!30] at (3,0.5) {CTCF};
+%0, 7, 11, 2, 3, 17, 19, 13
+% 0, 2, 3, 7, 11, 13, 17, 19
+\end{tikzpicture}
+\caption{DNA Fragments obtained from ChIP different cells}
+\end{subfigure}
+\begin{subfigure}{\textwidth}
+  \begin{tikzpicture}[decoration={coil},
+dna/.style={decorate, thick, decoration={aspect=0, segment length=1.0cm}},
+protein/.style={ellipse, draw=white, minimum width=1cm, minimum height=1cm}]
+seq/.style={font=\ttfamily}
+\tikzstyle{seq}=[font=\ttfamily]
+\def\fy{0.4}
+\node [protein, minimum height=.75cm,fill=blue!30] at (3,0.5) {CTCF};
+
+% DNA
+\node[seq] at (3, 0*\fy) {ACGTTCGTATATCGTAGCTACTCGAGCTGTAGTTTGATAGATAT};
+\node[seq] at (3,-1*\fy) {\textcolor{red}{ACGTTCGTAT}ATCGTAGCTACTCG....................};
+\node[seq] at (3,-2*\fy) {.......TATATCGTAGCTAC\textcolor{red}{TCGAGCTGTA}.............};
+\node[seq] at (3,-3*\fy) {...........\textcolor{red}{TCGTAGCTAC}TCGAGCTGTAGTTT.........};
+\node[seq] at (3,-4*\fy) {..\textcolor{red}{GTTCGTATAT}CGTAGCTACTCGAG..................};
+\node[seq] at (3,-5*\fy) {...TTCGTATATCGTAG\textcolor{red}{CTACTCGAGC}.................};
+\node[seq] at (3,-6*\fy) {.................\textcolor{red}{CTACTCGAGC}TGTAGTTTGATAGA...};
+\node[seq] at (3,-7*\fy) {...................ACTCGAGCTGTAGT\textcolor{red}{TTGATAGATA}.};
+\node[seq] at (3,-8*\fy) {.............GTAGCTACTCGAGC\textcolor{red}{TGTAGTTTGA}.......};
+% Gene
+\draw[->] (3, -8.5*\fy) -- (3, -9.5*\fy);
+\node[seq] at (3, -10*\fy) {ACGTTCGTAT, TACAGCTCGA, TCGTAGCTAC, GTTCGTATAT};
+\node[seq] at (3, -11*\fy) {GCTCGAGTAG , CTACTCGAGC, TATCTATCAA, TCAAACTACA};
+\end{tikzpicture}
+\caption{One end of each fragment is sequenced}
+\end{subfigure}
+
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-master: "sequencing.tex"
+%%% End:
