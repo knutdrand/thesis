@@ -9,22 +9,22 @@ Illumina dye sequencing uses sequencing by synthesis, which is the same base met
 This uses the property that given a single strand of DNA and the presence of DNA polymerase, nucleotides will sequentially bind to the strand according to the complementary pairings (A-T) and (C-G).
 This usually happens so fast that it is difficult to measure any point in this process.
 However nucleotides can be adapted so that the synthesis is terminated after including the adapted nucleotide (chain termination).
-Sanger sequencing uses this by comnbining a small amount of adapted nucleotides with a larger amount of normal nucleotides, and then using this combined set for DNA synthesis.
+Sanger sequencing uses this by combining a small amount of adapted nucleotides with a larger amount of normal nucleotides, and then using this combined set for DNA synthesis.
 Illumina sequencing evolves this concept by also being able to reverse these adaptions so that synthesis can continue. Thus it can step for step synthesize one adapted nucleotide to the single DNA-strand, find out which nucleotide was included, then reverse the adaption and synthesise a new adapted nucleotide(see figure~\ref{fig:illumina}.
 \begin{figure}
   \tikzpicture
   \input{figures/sequencing}
   \endtikzpicture
-  \caption{Sequencing of one DNA-chain in Illumina sequencing. For each step, an adapted nucleotide is added with a phospherecent color, a picture is taken - capturing the color, and the adaption is reversed allowing for the next nucleotide to be bound.}
+  \caption{Sequencing of one DNA-chain in Illumina sequencing. For each step, an adapted nucleotide is added with a phosphorescent color, a picture is taken - capturing the color, and the adaption is reversed allowing for the next nucleotide to be bound.}
   \label{fig:illumina}
 \end{figure}
 
-The big breakthrough for this sequenceing technology is that it could be performed massively in parallel and thereby generate much more sequencing data.
+The big breakthrough for this sequencing technology is that it could be performed massively in parallel and thereby generate much more sequencing data.
 The downside is that while Sanger sequencing could yield up to 700 base pairs long sequences, Illumina sequencing typically yields shorter reads (25-200)\TODO{accurate numbers}.
 This massive amount of relatively short reads have are able to give great insights into biology by mapping them to reference genomes. Reference genomes are covered in section~\ref{sec:reference}, and the mapping process is covered in~\ref{sec:mapping}.
 
-Illumina sequencing's main error source is that a non-adapted nucleotide can get included in one of the steps, whereupon it is possible for a new nucleotide to get included without the previous one being captured.
-To alleviate this, and to obtain a stronger signal, Illumina performs the sequencing steps concurrently on many identiacal DNA templates. Even so, the number of out-of-sync strands grows with the length of the sequence and puts a practical limit on how many base pairs can be read with certainty.
+Illumina sequencing main error source is that a non-adapted nucleotide can get included in one of the steps, whereupon it is possible for a new nucleotide to get included without the previous one being captured.
+To alleviate this, and to obtain a stronger signal, Illumina performs the sequencing steps concurrently on many identical DNA templates. Even so, the number of out-of-sync strands grows with the length of the sequence and puts a practical limit on how many base pairs can be read with certainty.
 
 Depending on which input DNA is provided, this technology can be used to answer a range of biological questions.
 The simplest\TODO{other word} application, is to input unfiltered DNA for sequencing and using the resulting reads to deduce as much of the whole genomic sequence as possible. One can also filter the DNA to contain mostly fragments from protein coding parts of the genome, in order to more efficiently find the DNA-sequence of these regions, from which variations can cause differences in protein structure and function.
@@ -44,10 +44,8 @@ These DNA-fragments can then be sequenced, yielding reads that tend to come from
 \label{fig:chipseq}
 \end{figure}
 \subsection{Third Generation Sequencing}
-New technologies are continuously being developed, and a set of more recent technologies allows for sequencing of long DNA-molecules. This does however come at the price of much higher error rates than Illumina sequenceing. Most notable is Oxford Nanopore~\cite{nanopore}, passing DNA-molecules through a molecule which emits a different electric current for each type of nucleotide, and PacBio~\cite{pacbio}, using  nucleotide-dependent lightwaves emitted continously while synthesising.
-These techniques offer possibilities for answering biological questions where short read lengths are insufficent, and also new computational challenges for dealing with the high error rates and long read lengths. 
-
-
+New technologies are continuously being developed, and a set of more recent technologies allows for sequencing of long DNA-molecules. This does however come at the price of much higher error rates than Illumina sequencing. Most notable is Oxford Nanopore~\cite{nanopore}, passing DNA-molecules through a molecule which emits a different electric current for each type of nucleotide, and PacBio~\cite{pacbio}, using  nucleotide-dependent light waves emitted continuously while synthesising.
+These techniques offer possibilities for answering biological questions where short read lengths are insufficient, and also new computational challenges for dealing with the high error rates and long read lengths. 
 
 %%% Local Variables:
 %%% mode: latex
