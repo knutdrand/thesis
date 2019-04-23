@@ -1,10 +1,11 @@
-\chapter{Summary of Papers}
-In paper 1, we discussed the implications of using a graphical reference structure for representing and comparing genomic locations and intervals.
+\subsection{Paper I: Coordinates and Intervals in Graph Based Reference Genomes}
+In paper I, we discussed the implications of using a graphical reference structure for representing and comparing genomic locations and intervals.
 The work focused on how to obtain succinct and interpretable representations that were robust against changes to the reference graph topology. 
-Paper 2 developed a new method of calling ChIP-seq peaks using a sequence graph as reference.
+\subsection{Paper II: Graph Peak Caller: Calling ChIP-seq peaks on graph-based reference genomes}
+Paper III developed a new method of calling ChIP-seq peaks using a sequence graph as reference.
 The method is an adaptation of MACS2 that uses the benefits of read-mapping to a variation graph to obtain more accurate peak calling of potential transctription factor binding sites. 
-Paper 3 further developed the method of paper 2 to perform better on graphs constructed solely from SNPs and indels from a VCF-file. Introducing a new succinct data structure for variation graphs and obtaining similar speeds to MACS2.
-Paper 4 looked into the potential for using a two step approach for read mapping using the benefits of mapping to a graph for estimating a genotype for the sample, before using a linear mapper to obtain a final mapping that is not suffer from the too big search space of graph mapping. 
+\subsection{Paper III: Assessing graph-based read mappers against a novel baseline approach highlights strengths and weaknesses of the current generation of methods}
+  Paper III looked into the potential for using a two step approach for read mapping using the benefits of mapping to a graph for estimating a genotype for the sample, before using a linear mapper to obtain a final mapping that is not suffer from the too big search space of graph mapping. 
 
 %%% Local Variables:
 %%% mode: latex
