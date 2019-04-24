@@ -13,7 +13,7 @@ After this we will look at the methods used in for graph alignment with focus on
 As in section~\ref{linmap}\TODO{Define this explicitly in alignmetn}, we define the mapping problem as finding the interval $i_R$ for wich the edit distance $D(R[i_r], Q)$ is smallest, and the alignment $A(R[i_R], Q)$.
 \subsubsection{Indexing}
 An essential tool for quick alignment is to have a searchable index of the reference genome which is capable of returning sets of interval-pairs from the reference and query sequence for which the reference sequence is identical or near identical to the query sequence.
-The indexes used by different tools vary, but can mainly be divided into fixed-length(kmer) indexes~\cite{minimap,,,} and variable-length indexes~\cite{bowtie, bwasw,,,}.
+The indexes used by different tools vary, but can mainly be divided into fixed-length(kmer) indexes~\cite{minimap,,,} and variable-length indexes~\cite{bowtie, bwalong,,,}.
 Fixed length indexes typically uses hash tables to store the location of all, or subsets of all, kmers \TODO{define kmer} in the reference sequence.
 Variable length indexes usually uses a variation of the \emph{full text minute index} (FM-index)~\cite{fm}, described below.
 The main idea covered here is the seed-and-extend paradigm. This idea consists of finding a set of exact matches to the reference sequence, and using these as anchors for using dynamic programmic based alignment of the query.
@@ -24,7 +24,7 @@ Since the dynamic programming methods can still be computationally expensive, th
 The FM-index uses a succinct representation of suffix array~\cite{suffixarray} and Burrows-Wheeler transform~\cite{BWT} in order to find exact matches of a query string $S$ in $O(\size{S})$ time (see figure~\ref{fig:FM}).
 Thus if a read has one or more exact matches in the reference sequence it can be found directly using the FM-index.
 For inexact matches, it can also be used to find an exact alignment of $Q$ and $R$ in $O(\size{R}^{0.628}\size{Q})$ time~\cite{bwtsw,bwalong}.
-Some algorithms also use the FM-index to find exact matches for permutations of the query sequence~\cite{bowtie1, bwashort}, but for longer reads the search space gets too big when allowing for indels.
+Some algorithms also use the FM-index to find exact matches for permutations of the query sequence~\cite{bowtie, bwashort}, but for longer reads the search space gets too big when allowing for indels.
 \begin{figure}
   \tikzpicture
   \input{figures/fmfinish.tex}
@@ -88,7 +88,7 @@ It uses the GCSA2-index to find SMEMs, uses chain filtering to filter the SMEMs,
 For simplicity the descriptions below will be contained to simple graphs, which entails that the GCSA index described is GCSA1\cite{gcsa1} which is only able to index directed sequence graphs.
 
 \subsubsection{GCSA}
-The GCSA-index~\cite{gcsa, gcsa2} is a generalization of the FM-index, where arbitrary-length sequences can be looked up in a sequence graph.
+The GCSA-index~\cite{gcsa1, gcsa2} is a generalization of the FM-index, where arbitrary-length sequences can be looked up in a sequence graph.
 Originally constructed to work on acycilic sequence graphs, gcsa2 extends the functionallity to general variation graphs.
 For simplicity we will here constrain the discussion to acyclic graphs.
 
