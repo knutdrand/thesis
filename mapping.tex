@@ -29,10 +29,11 @@ Some algorithms also use the FM-index to find exact matches for permutations of 
   \tikzpicture
   \input{figures/fmfinish.tex}
   \endtikzpicture
-  \label{fig:FM}
   \caption{Illustration of backward extension using the last-first (LF) property of the FM index.
     The rows represent sorted suffixes of the reference. The SA column holds the indices in the reference sequence for each suffix, the $F$ column holds the first character of each suffix, while the $L$ column holds the preceding character of each suffix. Subscripts give the occurrences of each character in each column. I.e. $T_i$ is the $i$th occurrence of $T$ in that column. Finding the string \emph{CTG} is done by (1) starting with the range of all $G$'s in the F column; (2) finding all $T$'s in this range in the $L$ column; (3) mapping by occurrence number those $T$'s to the F column; (4) mapping the $C$'c in the current range in the L folder by occurrence number. The end result is in this case a single row which represents position $4$ in the reference sequences. 
-}
+  }
+  \label{fig:FM}
+
 \end{figure}
 
 In order to handle indels in longer reads, the main methodology is to use the FM-index to find exact matches between substrings of the query and reference sequence, called seeds, and then aligning the reads using dynamic programing to intervals surrounding the seed matches on the reference sequence~\cite{bowtie2}, often called the seed-and-extend paradigm.
@@ -51,8 +52,8 @@ A SMEM is a MEM where the query interval cannot be extended in either direction 
   \tikzpicture
   \input{figures/memfig}
   \endtikzpicture
-  \label{fig:smem}
   \caption{SMEMs found between query $Q$ and both strands of reference $R$. Note that the MEM $(q, r, l)=(2, 0, 2)$ (CT) is not a SMEM, since it is contained in the SMEM $(q, r, l) = (2, 4, 3)$}
+  \label{fig:smem}
 \end{figure}
 
 SMEMS are natural to use as seeds as they cover for each subsequence in $Q$ the longest exact match in $R$.
@@ -70,6 +71,7 @@ This is done by grouping approximately collinear, nearby seeds into chains, and 
 Approximately collinear means that $\abs{(q_1-q_2) -(r_1-r_2)}<w$ for some set threshold $w$.
 
 \subsection{Graph Mapping}
+\label{sec:graphmapping}
 Mapping to a graph based reference is similar to the linear case, except that instead of finding a linear interval, the goal is to find a graph interval $i_r$ such that $D(\slabel(G_R(i_r), Q))$ is minimized. 
 
 % estimating a linear interval $(\hat{s}, \hat{e})$, a graph interval $(\hat{s}, \hat{e}, \hat{v})$ is estimated.
@@ -99,13 +101,13 @@ For complicated regions in the graph, this expansion procedure gets too costly, 
   \tikzpicture
   \input{figures/gcsafigb}
   \endtikzpicture
-  \label{fig:gcsa}
   \caption{
     Valid and invalid GCSA index.
     In the first graph, the two edges from $C$ to $A$ and$T$ makes a direct GCSA index impossible due the other $C$ with an edge to a $G$.
     Both $T$ and $G$ needs to point to the same row in the index.
     In the valid example, the $C$ node have been duplicated.
     The bifurcation now happens at an earlier point, and the $GC$ now present is unique so that the the LF mapping is valid.}
+    \label{fig:gcsa}
 \end{figure}
 
 Since the GCSA index provides the same functionality as an FM-index, it can be used to find SMEMs in much the same manner. These SMEMs are in \emph{vg} used as seeds. 

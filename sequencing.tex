@@ -1,8 +1,8 @@
 The fact that the sequence of nucleotides in the DNA has direct links to biological function has made determining such sequences as well as possible an important goal in molecular biology.
 The process of determining the sequence of nucleotides is referred to as DNA-\emph{sequencing}.
-The first widely used method for DNA-sequencing was Sanger Sequencing~\cite{sanger} in \TODO{year}.
-The throughput from Sanger sequencing was pretty low since it required measuring the weight of many nucleotides. 
-In the beginning of the 2000s, several technologies were developed that were able to parallelize the process of sequencing and thus increased the throughput. Among these technologies,  collectively called Next-Generation Sequencing (NGS), Illumina\TODO{trademark?} dye sequencing is the most commonly used, and will be described here.
+The first widely used method for DNA-sequencing was Sanger Sequencing~\cite{sanger}, developed in 1976.
+The throughput from Sanger sequencing was pretty low since it required measuring the weight of many nucleotides.
+In the beginning of the 2000s, several technologies were developed that were able to parallelize the process of sequencing and thus increased the throughput. Among these technologies,  collectively called Next-Generation Sequencing (NGS), Illumina dye sequencing is the most commonly used, and will be described here.
 
 \subsection{Illumina Dye Sequencing}
 Illumina dye sequencing uses sequencing by synthesis, which is the same base methodology as Sanger sequencing. 
@@ -20,8 +20,10 @@ Illumina sequencing evolves this concept by also being able to reverse these ada
 \end{figure}
 
 The big breakthrough for this sequencing technology was that it could be performed massively in parallel and thereby generate much more sequencing data.
-The downside is that while Sanger sequencing could yield up to 700 base pairs long sequences, Illumina sequencing typically yields shorter reads (25-200)\TODO{accurate numbers}.
-This massive amount of relatively short reads is able to give great insights into biology by mapping them to reference genomes. Reference genomes are covered in section~\ref{sec:reference}, and the mapping process is covered in~\ref{sec:mapping}.
+The downside is that while Sanger sequencing could yield up to 700 base pairs long sequences, Illumina sequencing typically yields shorter reads (30-300 base pairs).
+This massive amount of relatively short reads is able to give great insights into biology by mapping them to reference genomes.
+Reference genomes are covered in Section~\ref{sec:refgenomes}, and the mapping process is covered in Section~\ref{sec:mapping}.
+
 
 The main error source of Illumina sequencing is that a non-adapted nucleotide can get included in one of the steps, whereupon it is possible for a new nucleotide to get included without the previous one being captured.
 To alleviate this, and to obtain a stronger signal, Illumina performs the sequencing steps concurrently on many identical DNA templates. Even so, the number of out-of-sync strands grows with the length of the sequence and puts a practical limit on how many base pairs can be read with certainty.

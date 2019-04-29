@@ -27,8 +27,8 @@ The Needleman-Wunch algorithm~\cite{needleman} uses dynamic programming to calcu
   \begin{tikzpicture}
     \input{figures/needleman_a}
   \end{tikzpicture}
-  \label{fig:needle}
   \caption{Figure showing the alignment of two sequences using Needleman-Wunch. Each cell in the matrix corresponds to the edit distance between prefixes of $S$ and $T$. The red path shows the backtracking, resulting in an alignment block where each diagonal arrow gives a symbol from both sequences, while horizontal or vertical arrows give an insertion or deletion.}
+  \label{fig:needle}
 \end{figure}
 This algorithm can be adopted in a number of ways in order to solve related problems.
 Notably, by using an affine gap penalty one can reduce the cost of long indels compared to many small indels~\cite{affine}, or one can use positive scores for matches to be able to find subsequences that align well to each other~\cite{smithwaterman}.
@@ -39,9 +39,9 @@ This can be done by changing just the initial conditions of the Needleman-Wunch 
   \begin{tikzpicture}
     \input{figures/needleman_b}
   \end{tikzpicture}
-  \label{fig:needlemanmap}
   \caption{Figure showing the alignment of a query sequence $Q$ to a reference sequence $R$, 
-Each cell in the matrix corresponds to the edit distance between a prefix of $S$ and a subsequence of  $R$. The red path shows the backtracking, starting at the lowest value of the last column, resulting in an alignment block where each diagonal arrow gives a symbol from both sequences, while horizontal or vertical arrows give an insertion or deletion.}
+    Each cell in the matrix corresponds to the edit distance between a prefix of $S$ and a subsequence of  $R$. The red path shows the backtracking, starting at the lowest value of the last column, resulting in an alignment block where each diagonal arrow gives a symbol from both sequences, while horizontal or vertical arrows give an insertion or deletion.}
+  \label{fig:needlemanmap}
 \end{figure}
 This algorithm provides three results: the coordinate $k, l$ of the subsequence of $R$ most similar to $Q$, the edit distance from that subsequence to $Q$, and the set of edits contributing to the edit distance. In this way it solves in a exact, but slow way the problem of the next chapter, namely mapping a read $Q$ to a reference genome $R$.
 
@@ -49,7 +49,10 @@ This algorithm provides three results: the coordinate $k, l$ of the subsequence 
 The framework used to align sequences extends naturally to acyclic sequence graphs \cite{hein, poa}. We define the alignment of a sequence $S$ to a sequence graph $G$ as the alignment of $S$ to a sequence $T \in L(G)$ in the language of $G$ \TODO{define language} which yields the lowest edit distance.
 Similarly, the alignment of two sequence graphs $G, H$, is the alignment of a sequence $S \in L(G)$ to a sequence $T \in L(G)$ that yields the lowest edit distance. 
 
-\TODO{Make recurrence relation nicer} If we let $d_{ij} = \min_{p_g \in \paths(v_0, v_i), p_h \in \paths(w_0, w_k)}(D(\slabel(p_h), \slabel(p_g)))$  we get a recurrence relation:
+If we let 
+\[
+  d_{ij} = \min_{p_g \in \paths(v_0, v_i), p_h \in \paths(w_0, w_k)}(D(\slabel(p_h), \slabel(p_g)))
+\]  we get a recurrence relation:
 \begin{align*}
   d_{ij} &= \min_{v_k \in \preds{v_i}, w_l \in \preds{w_l}} d^*(i, j, k, l)\\
   d^*(i, j, k, l) &= \min \begin{cases}
@@ -65,8 +68,8 @@ This is the same as for ordinary sequence alignment, except that all predecessor
   \begin{tikzpicture}
     \input{figures/seqgraph_a}
   \end{tikzpicture}
-  \label{fig:seqgrapha}
   \caption{Figure showing the alignment of two sequence graphs. Marked in red is the path taken during backtracking. The result is the best alignment of a sequence from the language of each sequence graph. This alignment can again be represented as a sequence graph}
+    \label{fig:seqgrapha}
 \end{figure}
 
 An alignment between two sequences $S, T$ can be represented by a sequence graph in a meaningful manner in that one can construct a sequence graph $AG(S, T)$ from the alignment of the sequences in such a way that 
@@ -85,7 +88,8 @@ Similarly, aligning two alignment graphs can be seen as finding the ancestors of
   \label{fig:treealign}
 \end{figure}
 
-The sequence graph alignment algorithm can also be adapted to find the subsequence of a sequence graph $G_R$ that minimizes the edit distance to a sequence $Q$. This solves the problem of mapping a read to a graph, which will be discussed further in section~\ref{graphmapping}.
+The sequence graph alignment algorithm can also be adapted to find the subsequence of a sequence graph $G_R$ that minimizes the edit distance to a sequence $Q$. This solves the problem of mapping a read to a graph, which will be discussed further in section~\ref{sec:graphmapping}.
+
 
 %%% Local Variables:
 %%% mode: latex

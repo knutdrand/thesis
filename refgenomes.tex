@@ -11,24 +11,26 @@ If a disease associated variant is located inside a protein coding gene, this in
 Similarly, if the variant is located in a predicted transcription factor binding site, this can give and indication that the gene closest to the binding site is relevant for the disease (see Figure~\ref{fig:refpos}).
 \begin{figure}
   \includegraphics{figures/refgenomes}
-  \label{fig:refpos}
   \caption{Figure showing the locations of several genomic elements on the same coordinate system.
     Locations of genes (red), transcription factor binding sites (blue), and disease associated variants (green) from different sequencing experiments can all be compared and analyzed together.
     In this case two of the variants are located inside a known gene, and one is located in a predicted transcription factor binding site.
-}
+  }
+  \label{fig:refpos}
+
 \end{figure}
 
 Such analyses can be conducted on a genomic scale with the use of software like The Genomic Hyperbrowser~\cite{hyperbrowser} and others~\cite{colocstats, bedtools}.
 This enables answering questions like whether variants associated with Schizophrenia tend to be located more in accessible chromatin regions of immune cells than of brain cells~\cite{hyperbrowserexample}. \TODO{find example}
 Paper IV in this thesis discusses how the choice of similarity measures between sets of genomic intervals can affect the outcome of such genome wide co-localization analyses.
 
+
 \subsection{Graph Based References}
 Both mapping of reads and any subsequent analysis of the predicted genomic features is affected by the reference genome used.
 The more different the sample genome is from the reference, the less accurate the analyses become.
-In this light the inclusion of known common variants into the reference can be benefitial as the reference would then represent the population more accurately.
-Representing the reference as a sequence graph where different paths represents different variants is one way to achieve this.
+In this light the inclusion of known common variants into the reference can be beneficial as the reference would then represent the population more accurately.
+Representing the reference as a sequence graph where different paths represents different variants is one way to achieve this~\cite{genomegraphs}.
 The first three papers of this thesis discuss various facets of a change from linear reference sequences to reference sequence graphs; Paper I discuss the representation of genomic intervals on sequence graphs, Paper II introduces a method for analyzing ChIP-seq data on reference graphs and Paper III discusses aspects of mapping reads to a reference graph.
-The central concept of mapping and aligning reads to a sequence graph is more thouroughly introduced in the next two sections. 
+The central concept of mapping and aligning reads to a sequence graph is more thoroughly introduced in Sections~\ref{sec:alignment} and \ref{sec:mapping}.
 
 
 % \subsection{Experiments}
