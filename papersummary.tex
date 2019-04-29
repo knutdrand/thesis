@@ -1,11 +1,30 @@
 \subsection{Paper I: Coordinates and Intervals in Graph Based Reference Genomes}
 In paper I, we discussed the implications of using a graphical reference structure for representing and comparing genomic locations and intervals.
-The work focused on how to obtain succinct and interpretable representations that were robust against changes to the reference graph topology. 
+The coordinate systems discussed are ones in which the graph is partitioned into disjoint paths where each path gets its own linear coordinate system.
+The disussion is about how the graph should be partitioned, and how the different paths should be named in order to provide an intuitve coordinate system that is robust against changes in the graph topology. 
+The article further discuss how intervals should be represented on such graphs.
+Since there can be multiple paths betweeen two nodes in a graph, this is not as simple as on linear coordinate systems where intervals can be represented by a start and end position.
+The article describes two interpretations of intervals on grpahs, single-path intervals and multi-path intervals, and how they should be represented.
+A single-paths intervals is simply a path in the graph, while a multi-path interval are a subset of all paths between two nodes in the graph. 
+
+These consepts are examplified through an analysis of genes annotated on GRCh38 with alternative loci.
 \subsection{Paper II: Graph Peak Caller: Calling ChIP-seq peaks on graph-based reference genomes}
-Paper III developed a new method of calling ChIP-seq peaks using a sequence graph as reference.
-The method is an adaptation of MACS2 that uses the benefits of read-mapping to a variation graph to obtain more accurate peak calling of potential transctription factor binding sites. 
+Paper II developed a new method for calling ChIP-seq peaks on graph based reference genomes.
+Here we generalized the methodology used by MACS2 in order to utilize the increased accuracy of reads mapped to a graph based reference genome.
+The new method is evaluated by comparing the motif enrichment in peaks called by Graph Peak Caller versus peaks called by MACS2 from the same reads.
+Using CHiP-seq data from \emph{Arabidopsis thaliana} we show that the motif-enrichment is significantly higher for Graph Peak Caller peaks.
+In addition we show that the motif-enrichment is also higher a set of human and \emph{Drosophila melanogaster} experiments.
+
 \subsection{Paper III: Assessing graph-based read mappers against a novel baseline approach highlights strengths and weaknesses of the current generation of methods}
-  Paper III looked into the potential for using a two step approach for read mapping using the benefits of mapping to a graph for estimating a genotype for the sample, before using a linear mapper to obtain a final mapping that is not suffer from the too big search space of graph mapping. 
+Paper III compares the performance of current graph based read mappers to a linear read mapper tuned for performance and not speed.
+This shows that the performance gains reported by graph based read mappers can be obtainable by increasing the searchspace of linear mapping.
+It also introduces a two-step approach to graph-mapping.
+Here, reads mapped to the graph is used to deduce a most likely path through the graph. This path is in turned into a linear reference which is mapped to using a linear reference.
+We show that this approach performs well on reads covering variants while avoiding the loss of accuracy due to mismappings.
+
+\subsection{Paper IV: Beware the Jaccard: the choice of metric is important and non-trivial in genomic colocalisation analysis}
+Paper IV investigates the properties different metrics used to measure genomic co-localization of binary tracks.
+We show that the different measures are affected differently by track size, and that the underlying reason for differing track sizes can be used to inform which similarity measure to use.
 
 %%% Local Variables:
 %%% mode: latex

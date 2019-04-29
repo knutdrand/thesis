@@ -1,15 +1,34 @@
 When it can be assumed that the genomic DNA-sequences from individuals of the same population is highly similar, it is possible to use one DNA-sequence as a \emph{reference genome} for the population.
-Such reference genomes serves two main purposes. They make the deduction of the DNA-sequence from a sample a simpler problem through mapping, and they make it possible to represent the outcome of a range of biological experiments as intervals or coordinates on the coordinate system induced by the reference genome. 
-The process of mapping is covered in section~\ref{sec:mapping}, while the representation of different experiment outputs are illustrated in figure~\ref{fig:refpos}.
+Such reference genomes serves two main purposes. They make the deduction of the DNA-sequence from a sample a simpler problem through mapping (see Section~\ref{sec:mapping}), and they make it possible to represent the outcome of a range of biological experiments as intervals or coordinates on the coordinate system induced by the reference genome. 
 
+\subsection{Co-localization Analysis}
+The ability to represent genomic features as coordinates or intervals on a common coordinate system, makes it possible to analyze the results of an experiment in light of previously accumulated data.
+For instance, predicted locations of genes in the human genome are available as a sets of intervals from for instance~\cite{genelist}.
+Such sets can for instance be used to find the closest gene to a predicted transcription factor binding site obtained from a CHiP-seq experiment, thus obtaining a link to the phenotypic role of the transcription factor binding.
+Genome wide association studies can be used to find genomic variants that are associated with a certain disease.
+The location of such variants can be represented in reference genome coordinates and thus be compared to the location of genomic functional elements.
+If a disease associated variant is located inside a protein coding gene, this indicates that the function of the protein can be linked to the disease.
+Similarly, if the variant is located in a predicted transcription factor binding site, this can give and indication that the gene closest to the binding site is relevant for the disease (see Figure~\ref{fig:refpos}).
 \begin{figure}
   \includegraphics{figures/refgenomes}
   \label{fig:refpos}
   \caption{Figure showing the locations of several genomic elements on the same coordinate system.
-    Locations of genes (red), transcription factor binding sites (blue), and methylation sites (green) from different sequencing experiments can all be compared and analyzed together.}
+    Locations of genes (red), transcription factor binding sites (blue), and disease associated variants (green) from different sequencing experiments can all be compared and analyzed together.
+    In this case two of the variants are located inside a known gene, and one is located in a predicted transcription factor binding site.
+}
 \end{figure}
 
-The ability to represent genomic features as coordinates or intervals on a common coordinate system, makes it possible to integrate results from different experiments in a comprehensive study.
+Such analyses can be conducted on a genomic scale with the use of software like The Genomic Hyperbrowser~\cite{hyperbrowser} and others~\cite{colocstats, bedtools}.
+This enables answering questions like whether variants associated with Schizophrenia tend to be located more in accessible chromatin regions of immune cells than of brain cells~\cite{hyperbrowserexample}. \TODO{find example}
+Paper IV in this thesis discusses how the choice of similarity measures between sets of genomic intervals can affect the outcome of such genome wide co-localization analyses.
+
+\subsection{Graph Based References}
+Both mapping of reads and any subsequent analysis of the predicted genomic features is affected by the reference genome used.
+The more different the sample genome is from the reference, the less accurate the analyses become.
+In this light the inclusion of known common variants into the reference can be benefitial as the reference would then represent the population more accurately.
+Representing the reference as a sequence graph where different paths represents different variants is one way to achieve this.
+The first three papers of this thesis discuss various facets of a change from linear reference sequences to reference sequence graphs; Paper I discuss the representation of genomic intervals on sequence graphs, Paper II introduces a method for analyzing ChIP-seq data on reference graphs and Paper III discusses aspects of mapping reads to a reference graph.
+The central concept of mapping and aligning reads to a sequence graph is more thouroughly introduced in the next two sections. 
 
 
 % \subsection{Experiments}
