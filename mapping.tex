@@ -40,14 +40,16 @@ In order to handle indels in longer reads, the main methodology is to use the FM
 
 One way of finding seeds is to find Maximal Exact Matches (MEM)~\cite{longmem, origmem}.
 Maximal Exact Matches are Exact Matches that cannot be extended in either direction, ie. 
-\[
-  MEM(Q, R) = \buildset{(q, r, l) \in EM}{(q, r, l+1) \notin EM \wedge (q-1, r-1, l+1) \notin EM}
-\]
+\begin{align*}
+  MEM(Q, R) = \{(q, r, l) \in EM \mid &(q, r, l+1) \notin EM \wedge \\
+  & (q-1, r-1, l+1) \notin EM \}
+\end{align*}
 BWA-mem furthers this concept to SuperMaximal Exact Matches (SMEM)~\cite{origsmem}.
 A SMEM is a MEM where the query interval cannot be extended in either direction and still yields an Exact Match anywhere on the reference~\ref{fig:smem}.
-\[
-  SMEM(Q, R) = \buildset{(q, r, l) \in EM}{\nexists r^*[(q, r^*, l+1) \notin EM \vee (q-1, r^*-1, l+1) \notin EM}
-\]
+\begin{align*}
+  SMEM(Q, R) = \{(q, r, l) \in EM \mid \nexists r^*[&(q, r^*, l+1) \in EM \vee\\
+    &(q-1, r^*, l+1) \in EM] \}
+\end{align*}
 \begin{figure}
   \tikzpicture
   \input{figures/memfig}
