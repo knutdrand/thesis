@@ -29,7 +29,7 @@ The main error source of Illumina sequencing is that a non-adapted nucleotide ca
 To alleviate this, and to obtain a stronger signal, Illumina performs the sequencing steps concurrently on many identical DNA templates. Even so, the number of out-of-sync strands grows with the length of the sequence and puts a practical limit on how many base pairs can be read with certainty.
 
 Depending on which input DNA is provided, this technology can be used to answer a range of biological questions.
-The simplest application, is to input unfiltered DNA for sequencing and using the resulting reads to deduce as much of the whole genomic sequence as possible. One can also filter the DNA to contain mostly fragments from protein coding parts of the genome, in order to more efficiently find the DNA-sequence of these regions, from which variations can cause differences in protein structure and function.
+The \TODO{simplest} application is to input unfiltered DNA for sequencing and use the resulting reads to deduce as much of the whole genomic sequence as possible. One can also filter the DNA to contain mostly fragments from protein coding parts of the genome, in order to more efficiently find the DNA-sequence of these regions, from which variations can cause differences in protein structure and function.
 
 In addition to deducing the DNA-sequence of a sample, NGS can also be used to deduce where in the genome biochemical processes occur, for instance the binding of proteins to the genomes. Of importance to this thesis are experiments used to find binding sites for transcription factors, described below.
 
@@ -47,7 +47,7 @@ These DNA-fragments can then be sequenced, yielding reads that tend to come from
 \end{figure}
 \subsection{Third Generation Sequencing}
 New technologies are continuously being developed, and a set of more recent technologies allows for sequencing of long DNA-molecules. This does however come at the price of much higher error rates than Illumina sequencing. Most notable is Oxford Nanopore~\cite{nanopore}, passing DNA-molecules through a molecule which emits a different electric current for each type of nucleotide, and PacBio~\cite{pacbio}, using  nucleotide-dependent light waves emitted continuously while synthesising.
-These techniques offer possibilities for answering biological questions where short read lengths are insufficient, and also new computational challenges for dealing with the high error rates and long read lengths. 
+These techniques offer possibilities for answering biological questions where short read lengths are insufficient, but also new computational challenges for dealing with the high error rates and long read lengths. 
 
 %%% Local Variables:
 %%% mode: latex

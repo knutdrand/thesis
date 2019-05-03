@@ -6,9 +6,10 @@ The process of finding these estimates is called \emph{sequence alignment} and i
 
 In the following we will refer to the edit distance between two sequences, $S$ and $T$, as $D(S, T)$, meaning the Levenshtein distance unless specifically mentioned. The concepts discussed are however generalisable to other (weighted) edit distances by small changes.
 
-The set of edits between two sequences can be represented with an \emph{alignment block} where ``-'' symbols are inserted into the sequences to represent insertions and deletions (indels), (see Figure~\ref{fig:needle}\TODO{Fig order}).
+The set of edits between two sequences can be represented with an \emph{alignment block} where ``-'' symbols are inserted into the sequences to represent insertions and deletions (indels), (see Figure~\ref{fig:needle}).
 
 \subsection{Pairwise Sequence Alignment}
+\label{seq:pairwise}
 Finding the edit distance between two strings is easy if indels are not considered.
 It is merely the process of counting the number of mismatches between them.
 Indels introduce a dependency since an insertion at position $i$ affects the pairings of all the symbols after position $i$. The number of meaningful combinations of insertions and deletions grow exponentially with sequence length, so exploring all of them is not a viable solution even for short sequences.
@@ -33,7 +34,7 @@ The Needleman-Wunch algorithm~\cite{needleman} uses dynamic programming to calcu
 This algorithm can be adopted in a number of ways in order to solve related problems.
 Notably, by using an affine gap penalty one can reduce the cost of long indels compared to many small indels~\cite{affine}, or one can use positive scores for matches to be able to find subsequences that align well to each other~\cite{smithwaterman}.
 
-An adaption relevant for this thesis, is to find the a subsequence of one sequence $R$ that minimizes the edit distance to another $Q$. I.e find $\min_{k, l}(D(R[k, l], Q)$.
+An adaption relevant for this thesis, referred to as the \emph{mapping} problem, is to find the a subsequence of one sequence $R$ that minimizes the edit distance to another $Q$. I.e find $\min_{k, l}(D(R[k, l], Q)$.
 This can be done by changing just the initial conditions of the Needleman-Wunch algorithm, to remove the cost of gaps at the beginning and end of $R$. We set $d_{k0} = 0$ and start the backtracking algorithm at $(m, l)$ where $l=arg min_i d_{mi}$. Figure\ref{fig:needlmanmap} shows an example of this algorithm.
 \begin{figure}
   \begin{tikzpicture}
@@ -46,8 +47,8 @@ This can be done by changing just the initial conditions of the Needleman-Wunch 
 This algorithm provides three results: the coordinate $k, l$ of the subsequence of $R$ most similar to $Q$, the edit distance from that subsequence to $Q$, and the set of edits contributing to the edit distance. In this way it solves in a exact, but slow way the problem of the next chapter, namely mapping a read $Q$ to a reference genome $R$.
 
 \subsection{Sequence Graph Alignment}
-The framework used to align sequences extends naturally to acyclic sequence graphs \cite{hein, poa}. We define the alignment of a sequence $S$ to a sequence graph $G$ as the alignment of $S$ to a sequence $T \in L(G)$ in the language of $G$ \TODO{define language} which yields the lowest edit distance.
-Similarly, the alignment of two sequence graphs $G, H$, is the alignment of a sequence $S \in L(G)$ to a sequence $T \in L(G)$ that yields the lowest edit distance. 
+The framework used to align sequences extends naturally to acyclic sequence graphs \cite{hein, poa}. We define the alignment of a sequence $S$ to a sequence graph $G$ as the alignment of $S$ to a sequence $T \in \lang(G)$ in the language of $G$ which yields the lowest edit distance.
+Similarly, the alignment of two sequence graphs $G, H$, is the alignment of a sequence $S \in \lang(G)$ to a sequence $T \in \lang(G)$ that yields the lowest edit distance. 
 
 If we let 
 \[
@@ -74,7 +75,7 @@ This is the same as for ordinary sequence alignment, except that all predecessor
 
 An alignment between two sequences $S, T$ can be represented by a sequence graph in a meaningful manner in that one can construct a sequence graph $AG(S, T)$ from the alignment of the sequences in such a way that 
 \[
-\forall (R \in L(AG(S, T)))\left[D(S, R)+D(R, T) =  D(S, T\right)].
+\forall (R \in \lang(AG(S, T)))\left[D(S, R)+D(R, T) =  D(S, T\right)].
 \]
 For an optimal alignment, this means that all sequences recognized by the sequence graph have the property that the sum of the distance to the original sequences is as low as it can be.
 These sequences thus represent combinations of $S$ and $T$ that are natural estimates of an ancestor of the two sequences.

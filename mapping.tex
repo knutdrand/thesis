@@ -4,17 +4,17 @@ A NGS sequencing experiment typically yields hundreds of thousands of reads of l
 This would need to calculate $10^{16}$ values, which is intractable even on modern computers. 
 
 This has led to much progress since the dawn of NGS in developing alignment methods that avoid the complexity of the exact dynamic programming methods.
-This has been achieved mainly by two \TODO{measures}, creating searchable indexes of the reference genome and using heuristics to limit the search space of possible alignments.
+This has been achieved mainly by two approaches, creating searchable indexes of the reference genome and using heuristics to limit the search space of possible alignments.
 
-\TODO{In the following is} a brief description of the developments in this field, with focus on the aligner used in this thesis' projects: BWA-mem~\cite{bwamem}.
+The following is a brief description of the developments in this field, with focus on the aligner used in this thesis' projects: BWA-mem~\cite{bwamem}.
 After this we will look at the methods used  for graph alignment with focus on \emph{vg}~\cite{vg}, which is also central in our work.
 
 \subsection{Linear Mapping}
-As in section~\ref{linmap}\TODO{Define this explicitly in alignment}, we define the mapping problem as finding the interval $i_R$ for wich the edit distance $D(R[i_R], Q)$ is smallest, and the alignment $A(R[i_R], Q)$.
+As in section~\ref{sec:pairwise}, we define the mapping problem as finding the interval $i_R$ for wich the edit distance $D(R[i_R], Q)$ is smallest, and the alignment $A(R[i_R], Q)$.
 \subsubsection{Indexing}
 An essential tool for quick alignment is to have a searchable index of the reference genome which is capable of returning sets of interval-pairs from the reference and query sequence for which the reference sequence is identical or near identical to the query sequence.
 The indexes used by different tools vary, but can mainly be divided into fixed-length(kmer) indexes~\cite{minimap,,,} and variable-length indexes~\cite{bowtie, bwasw,,,}.
-Fixed length indexes typically use hash tables to store the location of a subset of the kmers \TODO{define kmer} in the reference sequence.
+Fixed length indexes typically use hash tables to store the location of a subset of the kmers in the reference sequence.
 Variable length indexes usually use a variation of the \emph{full text minute index} (FM-index)~\cite{fm}, described below.
 The main idea covered here is the seed-and-extend paradigm. This idea consists of finding a set of exact matches to the reference sequence, and using these as anchors for using dynamic programming based alignment of the query.
 We let $EM(Q, R)$ be the set of all exact matches, represented by the tuples $\buildset{(q, r, l)}{Q[q:q+l]=R[r:r+1]}$.
@@ -85,19 +85,22 @@ Below is a brief description of the methodology used by \emph{vg}.
 
 \subsubsection{\emph{vg}}
 \emph{vg} uses much the same methodology as BWA-mem to align reads.
-It uses the GCSA2-index to find SMEMs, uses chain \TODO{filtering to filter} the SMEMs, and uses a graph adaption of Smith-Waterman to extend the seeds.
+It uses the GCSA2-index to find SMEMs, uses chains to filter the SMEMs, and uses a graph adaption of Smith-Waterman to extend the seeds.
 \emph{vg} is able to align reads to more complicated graph structures than the simple directed sequence graphs considered in this thesis.
 For simplicity, the descriptions below will be contained to simple graphs, which entails that the GCSA index described is GCSA1\cite{gcsa1} which is only able to index directed sequence graphs.
 
 \subsubsection{GCSA}
-The GCSA-index~\cite{gcsa, gcsa2} is a generalization of the FM-index, where arbitrary-length sequences can be looked up in a sequence graph.
+The \emph{Generalized compressed suffix array} (GCSA)-index~\cite{gcsa, gcsa2} is a generalization of the FM-index, where arbitrary-length sequences can be looked up in a sequence graph.
 Originally constructed to work on acyclic sequence graphs, GCSA2 extends the functionality to general variation graphs.
 For simplicity we will here constrain the discussion to acyclic graphs.
 
 \TODO{clearer GCSA12}
-GCSA uses the same concept of $LF$ mapping as the FM-index does. Here the F column holds the label of each node in the graph, sorted by the suffix starting from that node. The L column holds the label of the corresponding node's predecessor nodes. The problem with this setup is that there are many suffixes starting from each node, depending on which path is taken in the graph. To resolve this problem, the graph needs to be expanded so that for each node, all suffixes starting from that node shares a prefix that is not found from any other node in the graph (see Figure~\ref{fig:gcsa} ).
+GCSA uses the same concept of $LF$ mapping as the FM-index does. Here the $F$ column holds the label of each node in the graph, sorted by the suffix starting from that node. The $L$ column holds the labels of the corresponding node's predecessor nodes.
+The problem with this setup is that there are many suffixes starting from each node, depending on which path is taken in the graph.
+To resolve this problem, the graph needs to be expanded so that for each node, all suffixes starting from that node shares a prefix that is not found from any other node in the graph (see Figure~\ref{fig:gcsa}).
 
-For complicated regions in the graph, this expansion procedure gets too costly, and the GCSA index therefore needs to prune edges in such areas in order to be able to index it. This means that not all possible sequences in the graph gets indexed. Even after pruning, this procedure is costly and makes the GCSA index significantly slower to create, and more memory consuming than the FM-index.
+For complicated regions in the graph, this expansion procedure gets too costly, and the GCSA index therefore needs to prune edges in such areas in order to be able to index it. This means that not all possible sequences in the graph gets indexed. 
+Even after pruning, this procedure is costly and makes the GCSA index significantly slower to create, and more memory consuming than the FM-index.
 
 \begin{figure}
   \tikzpicture
