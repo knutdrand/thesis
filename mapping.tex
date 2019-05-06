@@ -11,14 +11,16 @@ After this we will look at the methods used  for graph alignment with focus on \
 
 \subsection{Linear Mapping}
 As in section~\ref{sec:pairwise}, we define the mapping problem as finding the interval $i_R$ for wich the edit distance $D(R[i_R], Q)$ is smallest, and the alignment $A(R[i_R], Q)$.
+
 \subsubsection{Indexing}
 An essential tool for quick alignment is to have a searchable index of the reference genome which is capable of returning sets of interval-pairs from the reference and query sequence for which the reference sequence is identical or near identical to the query sequence.
-The indexes used by different tools vary, but can mainly be divided into fixed-length(kmer) indexes~\cite{minimap,,,} and variable-length indexes~\cite{bowtie, bwasw,,,}.
+The indexes used by different tools vary, but can mainly be divided into fixed-length (kmer) indexes~\cite{minimap} and variable-length indexes~\cite{bowtie2, bwalong}.
 Fixed length indexes typically use hash tables to store the location of a subset of the kmers in the reference sequence.
 Variable length indexes usually use a variation of the \emph{full text minute index} (FM-index)~\cite{fm}, described below.
-The main idea covered here is the seed-and-extend paradigm. This idea consists of finding a set of exact matches to the reference sequence, and using these as anchors for using dynamic programming based alignment of the query.
+The main idea covered here is the seed-and-extend paradigm.
+This idea consists of finding a set of exact matches to the reference sequence (seeds), and using these as anchors for using dynamic programming based alignment of the query.
 We let $EM(Q, R)$ be the set of all exact matches, represented by the tuples $\buildset{(q, r, l)}{Q[q:q+l]=R[r:r+1]}$.
-Since the dynamic programming methods can still be computationally expensive, the goal is to make the seeds\TODO{explain seeds earlier} as small a subset of exact matches as possible, while still making sure that the true alignment covers one of the seeds.
+Since the dynamic programming methods can still be computationally expensive, the goal is to make the seeds as small a subset of exact matches as possible, while still making sure that the true alignment covers one of the seeds.
 
 \subsubsection{FM-index}
 The FM-index uses a succinct representation of the suffix array~\cite{suffixarray} and Burrows-Wheeler transform~\cite{BWT} of the sequence in order to find exact matches of a query string $S$ in $O(\size{S})$ time (see Figure~\ref{fig:FM}).
@@ -38,7 +40,7 @@ Some algorithms also use the FM-index to find exact matches for permutations of 
 
 In order to handle indels in longer reads, the main methodology is to use the FM-index to find exact matches between substrings of the query and reference sequence, called seeds, and then aligning the reads using dynamic programing to intervals surrounding the seed matches on the reference sequence~\cite{bowtie2}, often called the seed-and-extend paradigm.
 
-One way of finding seeds is to find Maximal Exact Matches (MEM)~\cite{longmem, origmem}.
+One way of finding seeds is to find Maximal Exact Matches (MEM)~\cite{longmem}.
 Maximal Exact Matches are Exact Matches that cannot be extended in either direction, ie. 
 \begin{align*}
   MEM(Q, R) = \{(q, r, l) \in EM \mid &(q, r, l+1) \notin EM \wedge \\
@@ -65,7 +67,7 @@ Splitting SMEMs like this increases accuracy, since it increases the number of s
 In order to find SMEMS, an adaption of the FM index is used, the FMD index, where $FMD(R) = FM(R \concat \bar{R})$.
 
 \subsubsection{Prioritizing and Extending}
-The seeds found from the index are next used as seeds for DP based alignment.
+The seeds found from the index are next used as seeds for dynamic programming based alignment.
 $Q$ is then aligned against the left and right side of $(r, r+l)$ for each seed $(q, r, l)$.
 Since this is a computationally expensive step, further limiting the set of seeds is advantageous.
 BWA-mem does this by \emph{chaining} the seeds.
@@ -74,32 +76,31 @@ Approximately collinear means that $\abs{(q_1-q_2) -(r_1-r_2)}<w$ for some set t
 
 \subsection{Graph Mapping}
 \label{sec:graphmapping}
-Mapping to a graph based reference is similar to the linear case, except that instead of finding a linear interval, the goal is to find a graph interval $i_r$ such that $D(\slabel(G_R(i_r), Q))$ is minimized. 
-
-% estimating a linear interval $(\hat{s}, \hat{e})$, a graph interval $(\hat{s}, \hat{e}, \hat{v})$ is estimated.
+Mapping to a graph based reference is similar to the linear case, except that instead of finding a linear interval, the goal is to find a graph interval $i_r$ such that $D(\slabel(G_R(i_r), Q))$ is minimized.
 It is however deceptively more complicated. 
 Firstly, because the number of subsequences in a sequence graph grows exponentially with the complexity of the graph, and secondly since chaining subsequence-matches is more complicated due to the possible existence of multiple paths between two matches.
-\emph{vg}~\cite{vg} has been at the forefront of mapping to a graph reference, showing that it can lead to better mapping accuracy than BWA-mem. 
-% But it is still too slow and memory- and disk-consuming for widespread use.
+\emph{vg}~\cite{vg} has been at the forefront of mapping to a graph reference, showing that it can lead to better mapping accuracy than BWA-mem.
 Below is a brief description of the methodology used by \emph{vg}.
 
 \subsubsection{\emph{vg}}
 \emph{vg} uses much the same methodology as BWA-mem to align reads.
-It uses the GCSA2-index to find SMEMs, uses chains to filter the SMEMs, and uses a graph adaption of Smith-Waterman to extend the seeds.
+It uses the GCSA2-index to find SMEMs, uses chaining to filter the SMEMs, and uses a graph adaption of Smith-Waterman to extend the seeds.
 \emph{vg} is able to align reads to more complicated graph structures than the simple directed sequence graphs considered in this thesis.
 For simplicity, the descriptions below will be contained to simple graphs, which entails that the GCSA index described is GCSA1\cite{gcsa1} which is only able to index directed sequence graphs.
 
 \subsubsection{GCSA}
-The \emph{Generalized compressed suffix array} (GCSA)-index~\cite{gcsa, gcsa2} is a generalization of the FM-index, where arbitrary-length sequences can be looked up in a sequence graph.
-Originally constructed to work on acyclic sequence graphs, GCSA2 extends the functionality to general variation graphs.
-For simplicity we will here constrain the discussion to acyclic graphs.
+The \emph{Generalized compressed suffix array} (GCSA)-index~\cite{gcsa1, gcsa2} is a generalization of the FM-index, where arbitrary-length sequences can be looked up in a sequence graph.
+Originally constructed to work on acyclic sequence graphs, version two of GCSA extends the functionality to general variation graphs.
+For simplicity we will here focus on acyclic graphs, i.e. version 1 of GCSA.
 
-\TODO{clearer GCSA12}
-GCSA uses the same concept of $LF$ mapping as the FM-index does. Here the $F$ column holds the label of each node in the graph, sorted by the suffix starting from that node. The $L$ column holds the labels of the corresponding node's predecessor nodes.
+GCSA uses the same concept of $LF$ mapping as the FM-index does.
+Here the $F$ column holds the label of each node in the graph, sorted by the suffix starting from that node.
+The $L$ column holds the labels of the corresponding node's predecessor nodes.
 The problem with this setup is that there are many suffixes starting from each node, depending on which path is taken in the graph.
 To resolve this problem, the graph needs to be expanded so that for each node, all suffixes starting from that node shares a prefix that is not found from any other node in the graph (see Figure~\ref{fig:gcsa}).
 
-For complicated regions in the graph, this expansion procedure gets too costly, and the GCSA index therefore needs to prune edges in such areas in order to be able to index it. This means that not all possible sequences in the graph gets indexed. 
+For complicated regions in the graph, this expansion procedure gets too costly, and the GCSA index therefore needs to prune edges in such areas in order to be able to index it.
+This means that not all possible sequences in the graph gets indexed. 
 Even after pruning, this procedure is costly and makes the GCSA index significantly slower to create, and more memory consuming than the FM-index.
 
 \begin{figure}
@@ -117,9 +118,9 @@ Even after pruning, this procedure is costly and makes the GCSA index significan
 
 Since the GCSA index provides the same functionality as an FM-index, it can be used to find SMEMs in much the same manner. These SMEMs are in \emph{vg} used as seeds. 
 
-GCSA2 solves the problem in a slightly different way that allows for indexing general variation graphs.
+GCSA version 2 solves the problem in a slightly different way that allows for indexing general variation graphs.
 This is based on succinct de-Bruijn graph~\cite{succinctdebruijn} structure which sets a limit to the length of the unique prefixes by allowing for false positive edges to occur in the index.
-This means that results from an index lookup needs to be validated by traversing the graph. 
+This means that results from an index lookup need to be validated by traversing the graph. 
 
 \subsubsection{Filtering and Extending}
 \emph{vg} employs a similar method as BWA-mem for filtering out seeds: chaining the seeds and filtering out small chains that overlap bigger chains.

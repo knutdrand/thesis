@@ -1,14 +1,23 @@
-Peak Calling is an important step in the CHiP-seq experiment pipeline.
-The sequencing in a ChIP-seq experiments yields reads that tend to come from DNA-fragments with the transcription factor bound to it. After mapping these reads to the reference genome, the result is a set of genomic intervals which should be in the vicinity of the binding site. Peak calling is the process of using these intervals to predict regions containing the actual binding sites. 
+\emph{Peak calling} is an important step in the CHiP-seq experiment pipeline.
+The sequencing in a ChIP-seq experiments yields reads that tend to come from DNA-fragments with the transcription factor bound to it.
+After mapping these reads to the reference genome, the result is a set of genomic intervals which should be in the vicinity of the binding site.
+Peak calling is the process of using these intervals to predict regions containing the actual binding sites. 
 
-Calling peaks faces two main problems, noise and bias. Noise can come from either of the previous steps of the experiment: isolating DNA fragments with the TF bound to it, sequencing the fragments, or mapping the resulting reads to the reference genome. The bias can be either biological, in that certain regions of the genome are over/under-represented in the sample independently of the TF, or from the mapping, in that certain regions of the reference genome are more or less likely to be mapped to. In addition to this, the sequenced reads do not always contain the actual binding site, but rather comes from the beginning of a fragment containing the binding site. 
+Calling peaks faces two main problems, noise and bias.
+Noise can come from either of the previous steps of the experiment: isolating DNA fragments with the TF bound to it, sequencing the fragments, or mapping the resulting reads to the reference genome.
+The bias can be either biological, in that certain regions of the genome are over/under-represented in the sample independently of the TF, or from the mapping, in that certain regions of the reference genome are more or less likely to be mapped to.
+In addition to this, the sequenced reads do not always contain the actual binding site, but rather can come from the beginning of a fragment containing a binding site. 
 
 In light of this, peak callers seek to recognize the pattern expected from a true binding site: that the mapped intervals should generally be close to and point towards the true binding site.
-Several algorithms exists for this~\cite{SPP, MACS2, MACS}, of which MACS2 is one of the most widely used. As it forms the basis for Graph Peak Caller (paper 2), the algorithm is described in some detail in Figure~\ref{fig:macs}.
+Several algorithms exists for this~\cite{SPP, macs}, of which MACS2 is one of the most widely used.
+As it forms the basis for Graph Peak Caller (paper 2), the algorithm is described in some detail in Figure~\ref{fig:macs}.
 
 \begin{figure}
   \includegraphics{figures/macs2}
-  \caption{Illustration of the main MACS2 algorithm. After reads are mapped to the reference genome, all mapped intervals are extended to match the estimated fragment length. A pileup is then created based on the coverage of each position, and positions with a high enough coverage are marked as peaks}
+  \caption{
+    Illustration of the main MACS2 algorithm.
+    After reads are mapped to the reference genome, all mapped intervals are extended to match the estimated fragment length.
+    A pileup is then created based on the coverage of each position, and positions with a high enough coverage are marked as peaks.}
   \label{fig:macs}
 \end{figure}
 

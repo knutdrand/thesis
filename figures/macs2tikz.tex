@@ -1,0 +1,60 @@
+\begin{figure}
+  \begin{tikzpicture}[decoration={coil},
+dna/.style={decorate, thick, decoration={aspect=0, segment length=1.0cm}},
+protein/.style={ellipse, draw=white, minimum width=1cm, minimum height=1cm}]
+\tikzstyle{myseq}=[]
+\def\fy{0.4}
+      \node[myseq] (reads) at (3, 3*\fy) {ACGTTCGTAT, TACAGCTCGA, TCGTAGCTAC, GTTCGTATAT};
+      \node[myseq] at (3, 2*\fy) {GCTCGAGTAG , CTACTCGAGC, TATCTATCAA, TCAAACTACA};
+
+%DNA
+\node[myseq] at (3,0)      {ACGTTCGTATATCGTAGCTACTCGAGCTGTAGTTTGATAGATAT};
+\node[myseq] (mapped) at (3,-1*\fy) {[-------->..................................};
+\node[myseq] at (3,-2*\fy) {.....................<--------].............};
+\node[myseq] at (3,-3*\fy) {...........[-------->.......................};
+\node[myseq] at (3,-4*\fy) {..[-------->................................};
+\node[myseq] at (3,-5*\fy) {.................<--------].................};
+\node[myseq] at (3,-6*\fy) {.................[-------->.................};
+\node[myseq] at (3,-7*\fy) {.................................<--------].};
+\node[myseq] at (3,-8*\fy) {...........................<--------].......};
+% 0, 7, 11, 2,
+% 3, 17, 19, 13
+\node[myseq] at (3, -10*\fy) {(0, 10, +), (21, 31, -), (7, 17, +), (2, 12, +)};
+\node[myseq] at (3, -11*\fy) {(17, 27, -), (17, 27, +), (33, 43, -), (27, 37, -)};
+
+\node[myseq] at (3, 0)      {ACGTTCGTATATCGTAGCTACTCGAGCTGTAGTTTGATAGATAT};
+\node[myseq] (extended) at (3,-13*\fy) {[--------++++++++++++++]....................};
+\node[myseq] at (3,-14*\fy) {.......[++++++++++++++--------].............};
+\node[myseq] at (3,-15*\fy) {...........[--------++++++++++++++].........};
+\node[myseq] at (3,-16*\fy) {..[--------++++++++++++++]..................};
+\node[myseq] at (3,-17*\fy) {...[++++++++++++++--------].................};
+\node[myseq] at (3,-18*\fy) {.................[--------++++++++++++++]...};
+\node[myseq] at (3,-19*\fy) {...................[++++++++++++++--------].};
+\node[myseq] at (3,-20*\fy) {.............[++++++++++++++--------].......};
+
+\node[myseq] at (3, -22*\fy) {(0, 24), (7, 31), (7, 31), (2, 26)};
+\node[myseq] at (3, -23*\fy) {(3, 27), (17, 41), (19, 43), (13, 37)};
+
+
+\node[myseq] (pileup) at (3,-25*\fy) {...................-----....................};
+\node[myseq] at (3,-26*\fy) {.................---------..................};
+\node[myseq] at (3,-27*\fy) {.............--------------.................};
+\node[myseq] at (3,-28*\fy) {...........--------------------.............};
+\node[myseq] at (3,-29*\fy) {.......----------------------------.........};
+\node[myseq] at (3,-30*\fy) {...----------------------------------.......};
+\node[myseq] at (3,-31*\fy) {..---------------------------------------...};
+\node[myseq] at (3,-32*\fy) {-------------------------------------------.};
+
+\node[myseq] (peak) at (3,-34*\fy) {...................-----....................};
+
+\node[left=of reads] {Reads:};
+\node[left=of mapped] {Mapped:};
+\node[left=of extended] {Extended:};
+\node[left=of pileup] {Pileup:};
+\node[left=of peak] {Peak:};
+% \node[seq] at (3, -25*\fy) {+.++..+...+.+...+.+...-.--..-...-.-...-.-..};
+
+\end{tikzpicture}
+\caption{Illustration of the main MACS2 algorithm. After reads are mapped to the reference genome, all mapped intervals are extended to match the estimated fragment length. A pileup is then created based on the coverage of each position, and positions with a high enough coverage are marked as reads}
+%\end{subfigure}
+\end{figure}

@@ -1,24 +1,27 @@
 This thesis comprises three projects that investigates different facets of graph based reference genomes.
-In this work, and in the work of others, some problems have become clear which relate to the potentially large number of sequences in the language of a sequence graph. Foremost of these is the computational complexity of dealing with this large set of potential sequences, and the large number of sequences that does not exist in real.
+In this work, and in the work of others, some problems have become clear which relate to the potentially large number of sequences in the language of a sequence graph. Foremost of these are the computational complexity of dealing with this large set of potential sequences, and the large number of sequences that does not exist in any observed individual.
 
 \subsection{Computational Complexity}
 The work in paper II and III involved using mapping reads using \emph{vg}.
 Although the method used there is in principle very similar to what is used by BWA-mem, the memory requirements and running times are significantly higher.
 Graph Peak Caller itself also suffers from requiring more memory and having longer running times than MACS2. 
-Although algorithmic and data structural advances might alleviate these problems, some complexities might not be resolvable without turning to further approximations, or changing the interpretation of sequence graphs. Indeed, \TODO{name} et al showed that the indexing of sequence graphs is a hard problem with theoretical lower bound on complexity~\cite{indexcomplexity}.
+Although algorithmic and data structural advances might alleviate these problems, some complexities might not be resolvable without turning to further approximations, or changing the interpretation of sequence graphs.
+Indeed, Massimo et al showed that the indexing of sequence graphs is a hard problem with theoretical lower bound on complexity~\cite{indexcomplexity}.
 
 When the field of bioinformatics in recent years have been dominated by the sequencing capacity growing faster than Moore's law, it is worth to wonder how much accuracy gains is needed to justify the increase in computational complexity.
 
 \subsection{Invalid Sequences}
-Not only performance is affected by the large number of sequences in a graphs language.
+Not only computational performance is affected by the large number of sequences in a graphs language.
 It can also lead to a large number of sequences that one would not expect to observe in nature.
 This is because all combinations of variants are represented in the language, but in nature variants can be highly positively of negatively correlated with each other.
 Such sequences makes graph mappers prone to mapping reads to sub sequences in the graph that matches the query string, but is unlikely to be the true origin of the read.
 This can lead to a loss of accuracy when mapping, but can also introduce biases in downstream analysis: Regions of the graph with many variants will be able to match many different query sequences and can thus become over represented when mapping reads to a graph.
-This potential bias is discussed in briefly in Paper II, where such over represented regions could be interpreted as peaks by the peak caller. The loss of accuracy in general can be seen in paper II in the relatively poor performance of graph mappers on reads not containing any variants. The two step approach introduced there can remedy such mapping effects, and it would be interesting in the future to use this approach also when calling ChIP-seq peaks, as this could remove the bias. 
+This potential bias is discussed in briefly in Paper II, where such over represented regions could be interpreted as peaks by the peak caller.
+The loss of accuracy in general can be seen in paper II in the relatively poor performance of graph mappers on reads not containing any variants.
+The two step approach introduced there can remedy such mapping effects, and it would be interesting in the future to use this approach also when calling ChIP-seq peaks, as this could remove the bias. 
 
-Recent work has introduced indexes for sequence graph that only index sub strings that are present in one of the sequences which was used to create the graph~\cite{haplotypeaware}. This approach has the potential of both reducing the computational complexity, and improve the accuracy of the read mapping. But in doing this, the simple interpretation of the language of a graph is not used, which makes this approach not as much mapping to a sequence graph as mapping to a set of similar sequences. 
-
+Recent work has introduced indexes for sequence graph that only index substrings that are present in one of the sequences which was used to create the graph~\cite{haplotypeaware}.
+This approach has the potential of both reducing the computational complexity, and improve the accuracy of the read mapping. It will be interesting to see how such approches perform in the benchmarks from Paper III, and also if they can improve the accuracy of downstream peak calling for ChIP-seq experiments.
 
 %%% Local Variables:
 %%% mode: latex
