@@ -103,11 +103,13 @@ Similarly, aligning two alignment graphs can be seen as finding the ancestors of
 This is illustrated in figure~\ref{fig:treealign}.
 
 \begin{figure}
-  \includegraphics[width=\textwidth,height=\textheight,keepaspectratio]{figures/graph_msa}
+  %\input{figures/msa_standalone}
+  \includegraphics[width=\textwidth]{figures/graph_msa}
+
   \caption{
-    Iterative sequence graph alignments of four sequences evolved in two generations from \emph{ACGTACGTACGT}.
-    The sequences are represented as linear sequence graphs (a) and pairwise alignment is performed on the closest pairs yielding two sequence graphs (b).
-    These two sequence graphs are then aligned to each other, yielding a sequence graph representing an alignment of the two closest paths in the graphs (c).
+    Iterative sequence graph alignments of four sequences evolved in two generations from $S=\emph{ACGTACGTACGT}$.
+    The sequences are represented as linear sequence graphs (X1, X2, Y1, Y2) and pairwise alignment is performed on the closest pairs yielding two sequence graphs ($\hat{X}, \hat{Y}$).
+    These two sequence graphs are then aligned to each other, yielding a sequence graph representing an alignment of the two closest paths in the graphs ($\hat{S}$).
     As seen the original sequence is in the language of the final sequence graph}
   \label{fig:treealign}
 \end{figure}
