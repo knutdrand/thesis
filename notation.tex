@@ -5,6 +5,8 @@ The length of a sequence $S \in \alphabet_{DNA}^*$ is notated $\size{S}$.
 The $i$th symbol in a sequence $s$ is notated $S[i]$ and a substring of $S$ starting at the $i$th symbol (inclusive) and ending at the $j$th symbol (exclusive) is denoted $S[i:j]$.
 A \emph{prefix} of $S$, i.e. a substring of $S$ starting from the first symbol, of length $k$ is denoted $S[:k]$, while a \emph{suffix} of $S$ starting at the $k$th symbol is denoted $S[k:]$. A \emph{kmer} of a sequence $S$ is any substring of $S$ of length $k$.
 
+An \emph{interval} on a sequenence is a tuple of start and end position $(s, e)$. For an interval $i_S=(s, e)$, the notation $S[i_S]=S[s, e]$
+
 For convenience, a string of length $n$ is sometimes represented as $S[:n]$ to convey the size of the string.
 Concatenation of two strings $S, T$ are represented as $S \concat T$, while the concatenation of a symbol $a$ to a string $S$ is denoted $Sa$, and a string to a symbol as $aS$.
 
@@ -26,6 +28,7 @@ The \emph{language} recognized by a sequence graph $\lang((G, \slabel))$ is the 
 \[
   \lang((G, \slabel)) = \buildset{ \slabel(p)}{p \in \paths(v_s, v_e)}
 \]
+A \emph{graph interval} is a path in the graph, and for a graph interval $i_G$, the notation  $SG(i_G)$ will mean $\slabel(i_G)$.
 
 %%%Local Variables:
 %%% mode: latex
