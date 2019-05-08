@@ -1,7 +1,7 @@
 \documentclass[convert={density=300,outext=.png}]{standalone}
 \usepackage{tikz}
 \begin{document}
-\usetikzlibrary{positioning}
+% \usetikzlibrary{positioning}
 \begin{tikzpicture}[shorten >=1pt,->]
   \def\f{1.2};
   \def\fy{1}
@@ -11,7 +11,7 @@
 \tikzstyle{vertex}=[circle, minimum size=17*\f pt,inner sep=0pt]
 %AA
 \node[vertex][] (P1) at (0*\f,0) {A};
-\node[left=\ol of P1] (X1) {X1:};
+\node (X1) at (-1*\f, 0) {X1:};
 \node[vertex][] (P2) at (1*\f,0) {C};
 \draw (P1) -- (P2);
 \draw (P1) -- (P2);
@@ -51,7 +51,7 @@
 
 %AB
 \node[vertex][] (P14) at (0*\f,-1) {C};
-\node[left=\ol of P14] (X2) {X2:};
+\node (X2) at (-1*\f, -1) {X2:};
 \node[vertex][] (P15) at (1*\f,-1) {G};
 \draw (P14) -- (P15);
 \draw (P14) -- (P15);
@@ -88,7 +88,8 @@
 
 %A
 \node[vertex][] (P54) at (0*\f,-3) {A};
-\node[left=\ol of P54] (X) {$\hat{X}$:};
+\node (X) at (-1*\f, -3) {$\hat{X}$:};
+%\node[left=\ol of P54] (X) {$\hat{X}$:};
 \node[vertex][] (P55) at (1*\f,-3) {C};
 \draw (P54) -- (P55);
 \node[vertex][] (P56) at (2*\f,-3) {G};
@@ -128,7 +129,8 @@
 
 %BA
 \node[vertex][] (P26) at (15*\f-\ox,0+\oy) {A};
-\node[left=\ol of P26] (Y1) {Y1:};
+\node (Y1) at (-1*\f, \oy) {Y1:};
+%\node[left=\ol of P26] (Y1) {Y1:};
 \node[vertex][] (P27) at (16*\f-\ox,0+\oy) {T};
 \draw (P26) -- (P27);
 \draw (P26) -- (P27);
@@ -168,8 +170,8 @@
 
 %BB
 \node[vertex][] (P39) at (15*\f-\ox,-1+\oy) {A};
-\node[left=\ol of P39] (Y2) {Y2:};
-
+\node (Y2) at (-1*\f, -1+\oy) {Y2:};
+% \node[left=\ol of P39] (Y2) {Y2:};
 \node[vertex][] (P40) at (16*\f-\ox,-1+\oy) {C};
 \draw (P39) -- (P40);
 \draw (P39) -- (P40);
@@ -215,7 +217,8 @@
 
 
 \node[vertex][] (P68) at (15*\f-\ox,\oy-3) {A};
-\node[left=\ol of P68] (Y) {$\hat{Y}$:};
+\node (Y) at (-1*\f, -3+\oy) {$\hat{Y}$:};
+%\node[left=\ol of P68] (Y) {$\hat{Y}$:};
 \node[vertex][] (P69) at (16*\f-\ox,\oy-3) {T};
 \draw (P68) -- (P69);
 \node[vertex][] (P70) at (16*\f-\ox,\oy-2) {C};
@@ -261,7 +264,9 @@
 
 
 \node[vertex][] (P85) at (7*\f-7*\f,-10) {A};
-\node[left=\ol of P85] (S) {$\hat{S}$:};
+% \node[left=\ol of P85] (S) {$\hat{S}$:};
+\node (S) at (-1*\f, -10) {$\hat{S}$:};
+%\node[left=\ol of P85] (S) {$\hat{S}$:};
 \node[vertex][] (P86) at (8*\f-7*\f,-10) {C};
 \draw (P85) -- (P86);
 \draw (P85) -- (P86);
@@ -309,7 +314,6 @@
 \path [->] (Y) edge[bend right=30] node {} (S);
 \end{tikzpicture}
 \end{document}
-
 
 %%% Local Variables:
 %%% mode: latex

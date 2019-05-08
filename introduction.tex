@@ -1,12 +1,54 @@
-The topic of this thesis is reference genomes, and in particular graph-based reference genomes.
-In four papers, various aspects of reference genomes are investigated. 
-How sequenced reads are mapped to the reference genome, how mapped reads can be used in downstream analysis to deduce biochemical properties of DNA, how results from such analysis can be represented as coordinates and intervals on the reference genome, and how such coordinates and intervals can be used to investigate interplay between different biochemical processes.
-Three of the papers are focused on how these processes are performed using a graph based reference genomes.
+In this thesis four papers are presented that each involves a different part of how reference genomes are used in bioinformatics.
+Read in the correct order, these can be seen to follow a common bioinformatics pipeline from start to end: Mapping sequenced reads to a reference genome (Paper III), using mapped reads to predict protein binding regions (Paper II), representing these binding regions as intervals on the reference (Paper I), and using these intervals in a colocalization analysis.
+What separates this example pipeline from a normal bioinformatics pipeline is that the first three steps are performed using a graph based reference genome as opposed to a linear reference.
+The implications of using a graph based reference is the main focus of this thesis.
 
-In the next chapter, brief introductions are given to themes needed to give context to the use of reference genomes in bioinformatics.
-Starting out with an introduction to molecular biology in Section~\ref{sec:biology}, Section~\ref{sec:sequencing} explains the process of DNA-sequencing which is how the observed data used in this thesis was obtained.
-In Section~\ref{sec:refgenomes} the role of reference genomes is discussed, followed by two sections (\ref{sec:alignment}, \ref{sec:mapping}) on alignment and mapping which introduces some technical aspects of one of the primary functions of reference genomes. Section~\ref{sec:peakcalling} gives some background information on peak calling which is the theme of Paper II. 
-Together this background should provide info on what reference genomes are and how they are used, as well as a motivation for using graph based reference genomes.
+In order to give context to these papers and the concept of graph based reference structures, some background is provided in Chapter~\ref{sec:background}.
+Section~\ref{sec:biology} introduces important concepts from molecular biology, the subject matter which the methodologies used in this thesis are meant to elucidate.
+DNA-sequencing, the measuring process providing the raw data (sequenced reads) for the analyses in this thesis, is briefly explained in Section~\ref{sec:sequencing}.
+Section~\ref{sec:refgenomes} outlines how reference genomes are used to help make sense of this raw data.
+% Section~\ref{sec:sequencing} introduces methods in DNA-sequencing, which is the process where biological molecules are.
+% The central concept of reference genomes is explained in Section~\ref{sec:refgenomes}.
+
+Section~\ref{sec:notation} provides the mathematical framework used in the last, and most technical, part of the background which gives brief explanations of the relevant algorithms used to make inferences, using reference genomes, based on sequenced reads.
+The related concepts of sequence alignment (Section~\ref{sec:alignment}) and mapping (Section~\ref{sec:mapping}) is followed by peak calling (Section~\ref{sec:peakcalling}).
+
+In total this background is meant to elucidate the role of reference genomes in bioinformatics, and provide a background for what a change to the use of graph based reference genomes entails.
+
+Finally, Chapter~\ref{sec:summary} provides a brief summary of each paper provided, before the final discussion and conclusion of the thesis (Chapter~\ref{sec:discussion}).
+
+%
+% 
+% 
+% e adapted to make use of a more detailed graph based reference genome, and the consequences such a change involves.
+% 
+% 
+% 
+% s to answer biological questions.
+% ogether covering reference genomes' use from raw data to biological results.
+% 
+% 
+% 
+% in a genome.
+% 
+% ferent results.
+% 
+% ons.
+% 
+% 
+% .
+% 
+% 
+% ream analysis to deduce biochemical properties of DNA,
+% e genome,
+% biochemical processes.
+% ence genomes.
+% 
+%  of reference genomes in bioinformatics.
+% ref{sec:sequencing} explains the process of DNA-sequencing which is how the observed data used in this thesis was obtained.
+% ctions (\ref{sec:alignment}, \ref{sec:mapping}) on alignment and mapping which introduces some technical aspects of one of the primary functions of reference genomes.
+% heme of Paper II. 
+% ed, as well as a motivation for using graph based reference genomes.
 % 
 % 
 % erences.

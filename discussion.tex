@@ -21,7 +21,14 @@ The loss of accuracy in general can be seen in paper II in the relatively poor p
 The two step approach introduced there can remedy such mapping effects, and it would be interesting in the future to use this approach also when calling ChIP-seq peaks, as this could remove the bias. 
 
 Recent work has introduced indexes for sequence graph that only index substrings that are present in one of the sequences which was used to create the graph~\cite{haplotypeaware}.
-This approach has the potential of both reducing the computational complexity, and improve the accuracy of the read mapping. It will be interesting to see how such approches perform in the benchmarks from Paper III, and also if they can improve the accuracy of downstream peak calling for ChIP-seq experiments.
+This approach has the potential of both reducing the computational complexity, and improve the accuracy of the read mapping.
+It will be interesting to see how such approaches perform in the benchmarks from Paper III, and also if they can improve the accuracy of downstream peak calling for ChIP-seq experiments.
+
+\subsection{Conclusion}
+In this thesis, the role of reference genomes have been investigated from several angles with a focus on how a change to a graph based representation can affect commonly performed analyses.
+As discussed above, a graph based representation carries with it some inherent complexities.
+However, these complexities aside, we have shown that a graph based approach can increase accuracy: The two step graph mapper introduced in Paper III shows improved mapping accuracy, and Graph Peak Caller (Paper II) seems from the motif enrichment analysis to more accurately predict binding regions than MACS2 on which it is based.
+These results can provide motivation for overcoming the complexities, both computational and conceptual, of working with graph based reference structures in order to attain the improved accuracy with tools that are easy to understand and use and without the high computational requirements.
 
 %%% Local Variables:
 %%% mode: latex

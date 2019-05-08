@@ -1,4 +1,4 @@
-\subsection{Paper I: Coordinates and Intervals in Graph Based Reference Genomes}
+\subsection*{Paper I: Coordinates and Intervals in Graph Based Reference Genomes}
 In paper I, we discussed the implications of using a graphical reference structure for representing and comparing genomic locations and intervals.
 The coordinate systems discussed are ones in which the graph is partitioned into disjoint paths where each path gets its own linear coordinate system.
 The disussion is about how the graph should be partitioned, and how the different paths should be named in order to provide an intuitve coordinate system that is robust against changes in the graph topology. 
@@ -8,21 +8,21 @@ The article describes two interpretations of intervals on grpahs, single-path in
 A single-paths intervals is simply a path in the graph, while a multi-path interval are a subset of all paths between two nodes in the graph. 
 
 These consepts are examplified through an analysis of genes annotated on GRCh38 with alternative loci.
-\subsection{Paper II: Graph Peak Caller: Calling ChIP-seq peaks on graph-based reference genomes}
+\subsection*{Paper II: Graph Peak Caller: Calling ChIP-seq peaks on graph-based reference genomes}
 Paper II developed a new method for calling ChIP-seq peaks on graph based reference genomes.
 Here we generalized the methodology used by MACS2 in order to utilize the increased accuracy of reads mapped to a graph based reference genome.
 The new method is evaluated by comparing the motif enrichment in peaks called by Graph Peak Caller versus peaks called by MACS2 from the same reads.
 Using CHiP-seq data from \emph{Arabidopsis thaliana} we show that the motif-enrichment is significantly higher for Graph Peak Caller peaks.
 In addition we show that the motif-enrichment is also higher a set of human and \emph{Drosophila melanogaster} experiments.
 
-\subsection{Paper III: Assessing graph-based read mappers against a novel baseline approach highlights strengths and weaknesses of the current generation of methods}
+\subsection*{Paper III: Assessing graph-based read mappers against a novel baseline approach highlights strengths and weaknesses of the current generation of methods}
 Paper III compares the performance of current graph based read mappers to a linear read mapper tuned for performance and not speed.
 This shows that the performance gains reported by graph based read mappers can be obtainable by increasing the searchspace of linear mapping.
 It also introduces a two-step approach to graph-mapping.
 Here, reads mapped to the graph is used to deduce a most likely path through the graph. This path is in turned into a linear reference which is mapped to using a linear reference.
 We show that this approach performs well on reads covering variants while avoiding the loss of accuracy due to mismappings.
 
-\subsection{Paper IV: Beware the Jaccard: the choice of metric is important and non-trivial in genomic colocalisation analysis}
+\subsection*{Paper IV: Beware the Jaccard: the choice of metric is important and non-trivial in genomic colocalisation analysis}
 Paper IV investigates the properties different metrics used to measure genomic co-localization of binary tracks.
 We show that the different measures are affected differently by track size, and that the underlying reason for differing track sizes can be used to inform which similarity measure to use.
 

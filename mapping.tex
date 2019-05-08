@@ -1,26 +1,24 @@
 The alignment methods described in the previous section do not scale well to large sequences.
 Aligning a read $Q[:m]$ to a reference genome $R[:N]$ will require computing $mN$ values.
 A NGS sequencing experiment typically yields hundreds of thousands of reads of length 50 which need to be located in the human reference genome of length 3 billions.
-This would need to calculate $10^{16}$ values, which is intractable even on modern computers. 
+This would need to calculate $10^{16}$ values, which is intractable even on modern computers. n
 
 This has led to much progress since the dawn of NGS in developing alignment methods that avoid the complexity of the exact dynamic programming methods.
 This has been achieved mainly by two approaches, creating searchable indexes of the reference genome and using heuristics to limit the search space of possible alignments.
 
-The following is a brief description of the developments in this field, with focus on the aligner used in this thesis' projects: BWA-mem~\cite{bwamem}.
-After this we will look at the methods used  for graph alignment with focus on \emph{vg}~\cite{vg}, which is also central in our work.
+The following is a brief description of the developments in this field, with focus on the aligner used in this thesis' projects, BWA-mem~\cite{bwamem}, which uses a common approach called the \emph{seed-and-extend} paradigm.
+After this we will look at the methods used for graph alignment with focus on \emph{vg}~\cite{vg}, which is also central in our work.
 
 \subsection{Linear Mapping}
-As in section~\ref{sec:pairwise}, we define the mapping problem as finding the interval $i_R$ for wich the edit distance $D(R[i_R], Q)$ is smallest, and the alignment $A(R[i_R], Q)$.
-
+As in section~\ref{sec:pairwise}, we define the mapping problem as finding the interval $i_R$ for wich the edit distance $D(R[i_R], Q)$ is smallest, and the alignment $A(R[i_R], Q)$. We here introduce some of the heuristics used to solve this problem, with focus on the \emph{seed-and-extend} paradigm. The seed-and-extend paradigm involves using an index to find substrings of the query sequence $Q$ which has an exact match in the reference sequence $R$ (called seeds) and using dynamic programming based methods to align the query sequence to a region around the seeds in the reference sequence. We let $EM(Q, R)$ be the set of all exact matches, represented by the tuples $\buildset{(q, r, l)}{Q[q:q+l]=R[r:r+1]}$. Since the dynamic programming methods can still be computationally expensive, the goal is to make the seeds as small a subset of exact matches as possible, while still making sure that the true alignment covers one of the seeds.
+ 
 \subsubsection{Indexing}
 An essential tool for quick alignment is to have a searchable index of the reference genome which is capable of returning sets of interval-pairs from the reference and query sequence for which the reference sequence is identical or near identical to the query sequence.
 The indexes used by different tools vary, but can mainly be divided into fixed-length (kmer) indexes~\cite{minimap} and variable-length indexes~\cite{bowtie2, bwalong}.
 Fixed length indexes typically use hash tables to store the location of a subset of the kmers in the reference sequence.
 Variable length indexes usually use a variation of the \emph{full text minute index} (FM-index)~\cite{fm}, described below.
-The main idea covered here is the seed-and-extend paradigm.
-This idea consists of finding a set of exact matches to the reference sequence (seeds), and using these as anchors for using dynamic programming based alignment of the query.
-We let $EM(Q, R)$ be the set of all exact matches, represented by the tuples $\buildset{(q, r, l)}{Q[q:q+l]=R[r:r+1]}$.
-Since the dynamic programming methods can still be computationally expensive, the goal is to make the seeds as small a subset of exact matches as possible, while still making sure that the true alignment covers one of the seeds.
+ % The main idea covered here is the seed-and-extend paradigm.
+ % This idea consists of finding a set of exact matches to the reference sequence (seeds), and using these as anchors for using dynamic programming based alignment of the query.
 
 \subsubsection{FM-index}
 The FM-index uses a succinct representation of the suffix array~\cite{suffixarray} and Burrows-Wheeler transform~\cite{BWT} of the sequence in order to find exact matches of a query string $S$ in $O(\size{S})$ time (see Figure~\ref{fig:FM}).
@@ -38,8 +36,7 @@ Some algorithms also use the FM-index to find exact matches for permutations of 
 
 \end{figure}
 
-In order to handle indels in longer reads, the main methodology is to use the FM-index to find exact matches between substrings of the query and reference sequence, called seeds, and then aligning the reads using dynamic programing to intervals surrounding the seed matches on the reference sequence~\cite{bowtie2}, often called the seed-and-extend paradigm.
-
+In order to handle indels in longer reads, the main methodology is to use the FM-index to find exact matches between substrings of the query and reference sequence, called seeds, and then aligning the reads using dynamic programing to intervals surrounding the seed matches on the reference sequence~\cite{bowtie2}.
 One way of finding seeds is to find Maximal Exact Matches (MEM)~\cite{longmem}.
 Maximal Exact Matches are Exact Matches that cannot be extended in either direction, ie. 
 \begin{align*}
@@ -60,11 +57,11 @@ A SMEM is a MEM where the query interval cannot be extended in either direction 
   \label{fig:smem}
 \end{figure}
 
-SMEMS are natural to use as seeds as they cover for each subsequence in $Q$ the longest exact match in $R$.
+SMEMs are natural to use as seeds as they cover for each subsequence in $Q$ the longest exact match in $R$.
 They are however vulnerable for spurious long matches hiding shorter exact matches.
 To account for this BWA-mem allows an option to split long SMEMs into shorter MEMs if they are longer than a certain threshold.
 Splitting SMEMs like this increases accuracy, since it increases the number of seeds, but can negatively affect performance. 
-In order to find SMEMS, an adaption of the FM index is used, the FMD index, where $FMD(R) = FM(R \concat \bar{R})$.
+In order to find SMEMs, an adaption of the FM index is used, the FMD index, where $FMD(R) = FM(R \concat \bar{R})$.
 
 \subsubsection{Prioritizing and Extending}
 The seeds found from the index are next used as seeds for dynamic programming based alignment.
