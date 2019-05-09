@@ -9,11 +9,11 @@ Such sets can for instance be used to find the closest gene to a predicted trans
 Genome wide association studies~\cite{gwas} can be used to find genomic variants that are associated with a certain disease.
 The location of such variants can be represented in reference genome coordinates and thus be compared to the location of genomic functional elements.
 If a disease associated variant is located inside a protein coding gene, this indicates that the function of the protein can be linked to the disease.
-Similarly, if the variant is located in a predicted transcription factor binding site, this can give an indication that the gene closest to the binding site is relevant for the disease (see Figure~\ref{fig:refpos}).
+Similarly, if the variant is located in a predicted transcription factor binding region, this can give an indication that the gene closest to the binding region is relevant for the disease (see Figure~\ref{fig:refpos}).
 \begin{figure}
   \includegraphics{figures/refgenomes}
   \caption{Figure showing the locations of several genomic elements on the same coordinate system.
-    Locations of genes (red), transcription factor binding sites (blue), and disease associated variants (green) from different sequencing experiments can all be compared and analyzed together.
+    Locations of genes (red), transcription factor binding region (blue), and disease associated variants (green) from different sequencing experiments can all be compared and analyzed together.
     In this case two of the variants are located inside a known gene, and one is located in a predicted transcription factor binding site.
   }
   \label{fig:refpos}
@@ -25,6 +25,7 @@ This enables answering questions like whether variants associated with multiple 
 Paper IV in this thesis discusses how the choice of similarity measures between sets of genomic intervals can affect the outcome of such genome wide colocalization analyses.
 
 \subsection{Graph Based References}
+\TODO{GRCh38}
 Both mapping of reads and any subsequent analysis of the predicted genomic features is affected by the reference genome used.
 The more different the sample genome is from the reference, the less accurate the analyses become.
 In this light the inclusion of known common variants into the reference can be beneficial as the reference would then represent the population more accurately.

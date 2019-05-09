@@ -1,7 +1,7 @@
 The alignment methods described in the previous section do not scale well to large sequences.
 Aligning a read $Q[:m]$ to a reference genome $R[:N]$ will require computing $mN$ values.
-A NGS sequencing experiment typically yields hundreds of thousands of reads of length 50 which need to be located in the human reference genome of length 3 billions.
-This would need to calculate $10^{16}$ values, which is intractable even on modern computers. n
+A NGS sequencing experiment typically yields hundreds of thousands of reads of length 30-300 which need to be located in the human reference genome of length 3 billions.
+This would need to calculate $10^{16}$ values, which is intractable even on modern computers.
 
 This has led to much progress since the dawn of NGS in developing alignment methods that avoid the complexity of the exact dynamic programming methods.
 This has been achieved mainly by two approaches, creating searchable indexes of the reference genome and using heuristics to limit the search space of possible alignments.
@@ -29,8 +29,9 @@ Some algorithms also use the FM-index to find exact matches for permutations of 
   \tikzpicture
   \input{figures/fmfinish.tex}
   \endtikzpicture
-  \caption{Illustration of backward extension using the last-first (LF) property of the FM index.
-    The rows represent sorted suffixes of the reference. The SA column holds the indices in the reference sequence for each suffix, the $F$ column holds the first character of each suffix, while the $L$ column holds the preceding character of each suffix. Subscripts give the occurrences of each character in each column. I.e. $T_i$ is the $i$th occurrence of $T$ in that column. Finding the string \emph{CTG} is done by (1) starting with the range of all $G$'s in the F column; (2) finding all $T$'s in this range in the $L$ column; (3) mapping by occurrence number those $T$'s to the F column; (4) mapping the $C$'c in the current range in the L folder by occurrence number. The end result is in this case a single row which represents position $4$ in the reference sequences. 
+  \caption{\TODO{labelcolumns} Illustration of backward extension using the last-first (LF) property of the FM index.
+    The rows represent sorted suffixes of the reference. The SA column holds the indices in the reference sequence for each suffix, the $F$ column holds the first character of each suffix, while the $L$ column holds the preceding character of each suffix.
+    Subscripts give the occurrences of each character in each column. I.e. $T_i$ is the $i$th occurrence of $T$ in that column. Finding the string \emph{CTG} is done by (1) starting with the range of all $G$'s in the F column; (2) finding all $T$'s in this range in the $L$ column; (3) mapping by occurrence number those $T$'s to the F column; (4) mapping the $C$'s in the current range in the L column by occurrence number. The end result is in this case a single row which represents position $4$ in the reference sequences. 
   }
   \label{fig:FM}
 
@@ -53,7 +54,7 @@ A SMEM is a MEM where the query interval cannot be extended in either direction 
   \tikzpicture
   \input{figures/memfig}
   \endtikzpicture
-  \caption{SMEMs found between query $Q$ and both strands of reference $R$. Note that the MEM $(q, r, l)=(2, 0, 2)$ (CT) is not a SMEM, since it is contained in the SMEM $(q, r, l) = (2, 4, 3)$}
+  \caption{\TODO{label seqs} SMEMs found between query $Q$ and both strands of reference $R$. Note that the MEM $(q, r, l)=(2, 0, 2)$ (CT) is not a SMEM, since it is contained in the SMEM $(q, r, l) = (2, 4, 3)$}
   \label{fig:smem}
 \end{figure}
 
@@ -73,22 +74,22 @@ Approximately collinear means that $\abs{(q_1-q_2) -(r_1-r_2)}<w$ for some set t
 
 \subsection{Graph Mapping}
 \label{sec:graphmapping}
-Mapping to a graph based reference is similar to the linear case, except that instead of finding a linear interval, the goal is to find a graph interval $i_r$ such that $D(\slabel(G_R(i_r), Q))$ is minimized.
+Mapping to a graph based reference $G_R$ is similar to the linear case, except that instead of finding a linear interval, the goal is to find a graph interval $i_r$ such that $D(G_R[i_r], Q))$ is minimized.
 It is however deceptively more complicated. 
 Firstly, because the number of subsequences in a sequence graph grows exponentially with the complexity of the graph, and secondly since chaining subsequence-matches is more complicated due to the possible existence of multiple paths between two matches.
-\emph{vg}~\cite{vg} has been at the forefront of mapping to a graph reference, showing that it can lead to better mapping accuracy than BWA-mem.
+\emph{vg}~\cite{vg} has been at the forefront of mapping to a graph reference, showing that it can lead to better mapping accuracy than BWA-mem. \TODO{cite 7bridges}
 Below is a brief description of the methodology used by \emph{vg}.
 
 \subsubsection{\emph{vg}}
 \emph{vg} uses much the same methodology as BWA-mem to align reads.
 It uses the GCSA2-index to find SMEMs, uses chaining to filter the SMEMs, and uses a graph adaption of Smith-Waterman to extend the seeds.
 \emph{vg} is able to align reads to more complicated graph structures than the simple directed sequence graphs considered in this thesis.
-For simplicity, the descriptions below will be contained to simple graphs, which entails that the GCSA index described is GCSA1\cite{gcsa1} which is only able to index directed sequence graphs.
+% For simplicity, the descriptions below will be contained to simple graphs, which entails that the GCSA index described is GCSA1\cite{gcsa1} which is only able to index directed sequence graphs.
 
 \subsubsection{GCSA}
 The \emph{Generalized compressed suffix array} (GCSA)-index~\cite{gcsa1, gcsa2} is a generalization of the FM-index, where arbitrary-length sequences can be looked up in a sequence graph.
 Originally constructed to work on acyclic sequence graphs, version two of GCSA extends the functionality to general variation graphs.
-For simplicity we will here focus on acyclic graphs, i.e. version 1 of GCSA.
+For simplicity we will here focus on acyclic graphs.
 
 GCSA uses the same concept of $LF$ mapping as the FM-index does.
 Here the $F$ column holds the label of each node in the graph, sorted by the suffix starting from that node.
@@ -105,6 +106,7 @@ Even after pruning, this procedure is costly and makes the GCSA index significan
   \input{figures/gcsafigb}
   \endtikzpicture
   \caption{
+    \TODO{fix}
     Valid and invalid GCSA index.
     In the first graph, the two edges from $C$ to $A$ and$T$ makes a direct GCSA index impossible due the other $C$ with an edge to a $G$.
     Both $T$ and $G$ needs to point to the same row in the index.
@@ -120,7 +122,7 @@ This is based on succinct de-Bruijn graph~\cite{succinctdebruijn} structure whic
 This means that results from an index lookup need to be validated by traversing the graph. 
 
 \subsubsection{Filtering and Extending}
-\emph{vg} employs a similar method as BWA-mem for filtering out seeds: chaining the seeds and filtering out small chains that overlap bigger chains.
+\emph{vg} employs a similar method as BWA-mem for filtering out seeds: chaining the seeds and removing small chains that overlap bigger chains.
 The chaining procedure is however more complicated on a graph, and involves clustering the seeds by position in addition to a Markov Model based method\TODO{cite} to find approximately collinear seeds. 
 
 %%% Local Variables:

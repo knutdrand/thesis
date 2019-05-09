@@ -7,8 +7,8 @@ Finding the edit distance between two sequences, and which set of edits this edi
 The process of finding these estimates is called \emph{sequence alignment} and is important for this thesis in two respects.
 Firstly, it is one of the earliest and most intuitive applications of sequence graphs, and secondly it is an important part of \emph{mapping} which will be covered in the next section. 
 
-In the following we will refer to the edit distance between two sequences, $S$ and $T$, as $D(S, T)$, meaning the Levenshtein distance unless specifically mentioned.
-The concepts discussed are however generalisable to other (weighted) edit distances by small changes.
+In the following we will refer to the edit distance between two sequences, $S$ and $T$, as $D(S, T)$, here meaning the Levenshtein distance unless specifically mentioned.
+The concepts discussed are however generalisable to other (weighted) edit distances and similarity measures by small changes.
 
 The set of edits between two sequences can be represented with an \emph{alignment block} where ``-'' symbols are inserted into the sequences to represent insertions and deletions (indels), (see Figure~\ref{fig:needle}).
 
@@ -18,7 +18,7 @@ Finding the edit distance between two strings is easy if indels are not consider
 It is merely the process of counting the number of mismatches between them.
 Indels introduce a dependency since an insertion at position $i$ affects the pairings of all the symbols after position $i$.
 The number of meaningful combinations of insertions and deletions grow exponentially with sequence length, so exploring all of them is not a viable solution even for short sequences.
-The problem is however tractable since the best alignment of two sequences $S[:m], T[:n]$ is either the best alignment of $S[:m-1], T[:n]$ with an insertion at the end, or of $S[:m], T[:n-1]$ with a deletion at the end, or of $S[:n-1], T[:m-1]$ with a match or substitution at the end. 
+The problem is however tractable since the best alignment of two sequences $S[:M], T[:N]$ is either the best alignment of $S[:M-1], T[:N]$ with an insertion at the end, or of $S[:M], T[:N-1]$ with a deletion at the end, or of $S[:M-1], T[:N-1]$ with a match or substitution at the end. 
 Letting $d_{i,j} = D(S[:i], T[:j])$ and $m_{i,j}$ be zero if $S[i]=T[j]$ else $1$, we can write this as the recurrence relation:
 \begin{align*}
   d_{k,l} = min\begin{cases}
@@ -28,8 +28,8 @@ Letting $d_{i,j} = D(S[:i], T[:j])$ and $m_{i,j}$ be zero if $S[i]=T[j]$ else $1
 \end{cases}
 \end{align*}
 The fact that the edit distance to a empty string is just the sequence length gives the initial conditions $d_{k, 0}=k,\,d_{0,l}=l$.
-The Needleman-Wunch algorithm~\cite{needlemanwunch} uses dynamic programming to calculate the matrix of edit distances $d_{kl}$, where $d_{mn}$ is the edit distance between $S$ and $T$.
-In order to find the specific edits, a backtracking algorithm is used that starts at the $(i, j) = (m, n)$ corner and finds out which of the possible predecessors $(i-1, j), (i-1, j-1), (i, j-1)$ contributed to the $(i, j)$ edit distance.
+The Needleman-Wunch algorithm~\cite{needlemanwunch} uses dynamic programming to calculate the matrix of edit distances $d_{kl}$, where $d_{MN}$ is the edit distance between $S[:M]$ and $T[:N]$.
+In order to find the specific edits, a backtracking algorithm is used that starts at the $(i, j) = (M, N)$ corner and finds out which of the possible predecessors $(i-1, j), (i-1, j-1), (i, j-1)$ contributed to the $(i, j)$ edit distance.
 Then repeating this until the $(0, 0)$ corner is reached. Each of these steps correspond to a column in the alignment block.
 Figure~\ref{fig:needle} details the Needleman Wunch algorithm.
 \begin{figure}
@@ -40,12 +40,12 @@ Figure~\ref{fig:needle} details the Needleman Wunch algorithm.
   \label{fig:needle}
 \end{figure}
 This algorithm can be adopted in a number of ways in order to solve related problems.
-Notably, by using an affine gap penalty one can reduce the cost of long indels compared to many small indels~\cite{affine}, or one can use positive scores for matches to be able to find subsequences that align well to each other~\cite{smithwaterman}.
+Notably, by using an affine gap penalty one can reduce the cost of long indels compared to many small indels~\cite{affine}, or one can use positive scores for matches to be able to find subsequences that align well to each other~\cite{smithwaterman}(Smith-Waterman).
 
 An adaption relevant for this thesis, referred to as the \emph{mapping} problem, is to find the a subsequence of one sequence $R$ that minimizes the edit distance to another $Q$.
 I.e find $\min_{k, l}(D(R[k, l], Q)$.
 This can be done by changing just the initial conditions of the Needleman-Wunch algorithm, to remove the cost of gaps at the beginning and end of $R$.
-We set $d_{k0} = 0$ and start the backtracking algorithm at $(m, l)$ where $l=\argmin_i d_{mi}$.
+We set $d_{k0} = 0$ and start the backtracking algorithm at $(m, l)$ where $l=\argmin_i d_{Mi}$.
 Figure~\ref{fig:needlemanmap} shows an example of this algorithm.
 \begin{figure}
   \begin{tikzpicture}
@@ -61,15 +61,15 @@ In this way it solves in a exact, but slow way the problem of the next chapter, 
 
 \subsection{Sequence Graph Alignment}
 The framework used to align sequences extends naturally to acyclic sequence graphs \cite{hein, poa}.
-We define the alignment of a sequence $S$ to a sequence graph $G$ as the alignment of $S$ to a sequence $T \in \lang(G)$ in the language of $G$ ($\lang(G)$) which yields the lowest edit distance.
-Similarly, the alignment of two sequence graphs $G, H$, is the alignment of a sequence $S \in \lang(G)$ to a sequence $T \in \lang(G)$ that yields the lowest edit distance. 
+We define the alignment of a sequence $S$ to a sequence graph $G$ as the alignment of $S$ to a sequence $T \in \lang(G)$ in the language of $G$ which yields the lowest edit distance.
+Similarly, the alignment of two sequence graphs $G, H$, is the alignment of a sequence $S \in \lang(G)$ to a sequence $T \in \lang(H)$ that yields the lowest edit distance. 
 
 If we let 
 \[
-  d_{ij} = \min_{p_g \in \paths(v_0, v_i), p_h \in \paths(w_0, w_k)}(D(\slabel(p_h), \slabel(p_g)))
+  d_{ij} = \min_{p_g \in \paths(v_0, v_i), p_h \in \paths(w_0, w_j)}(D(\slabel(p_h), \slabel(p_g)))
 \]  we get a recurrence relation:
 \begin{align*}
-  d_{ij} &= \min_{v_k \in \preds{v_i}, w_l \in \preds{w_l}} d^*(i, j, k, l)\\
+  d_{ij} &= \min_{v_k \in \preds{v_i}, w_l \in \preds{w_j}} d^*(i, j, k, l)\\
   d^*(i, j, k, l) &= \min \begin{cases}
     d_{il} + 1\\
     d_{kj} + 1\\
@@ -78,7 +78,7 @@ If we let
     \\
     m_{ij} &= 1\, \text{if}\, \slabel(v_i) \neq \slabel(w_j)\, \text{else}\, 0\\
 \end{align*}
-This is the same as for ordinary sequence alignment, except that all predecessor nodes of $v_i$ and $w_k$ have to be considered, not only $i-1$ and $j-1$ as in the linear case.
+This is the same as for ordinary sequence alignment, except that all predecessor nodes of $v_i$ and $w_j$ have to be considered, not only $i-1$ and $j-1$ as in the linear case.
 If the graph is acyclic, then all the $d_{ij}$ can be calculated using dynamic programming, without incurring any infinite loops.
 \begin{figure}
   \begin{tikzpicture}
@@ -99,7 +99,7 @@ An alignment between two sequences $S, T$ can be represented by a sequence graph
 For an optimal alignment, this means that all sequences recognized by the sequence graph have the property that the sum of the distance to the original sequences is as low as it can be.
 These sequences thus represent combinations of $S$ and $T$ that are natural estimates of an ancestor of the two sequences.
 Thus aligning a sequence $S$ to an alignment graph $AG(T, R)$  can be seen as aligning $S$ to the best fitting ancestor sequence of $T$ and $R$
-Similarly, aligning two alignment graphs can be seen as finding the ancestors of two pairs of sequences that fit best together~\cite{treealign}.
+Similarly, aligning two alignment graphs can be seen as finding the ancestors of two pairs of sequences that fit best together~\cite{treealign, poa2}.
 This is illustrated in figure~\ref{fig:treealign}.
 
 \begin{figure}
