@@ -21,14 +21,14 @@ $G^0$ & $C^1$  & $A^2$ & $C^5$ & $G^6$\\
 \draw (seqe-1-4) -- (seqe-1-5);
 \draw (seqe-1-4) -- (seqe-1-5);
 \matrix (gcsa) [matrix of math nodes, align=right, row sep=0.5em,column sep=0.5em, minimum width=1em, minimum height=1em, nodes={align=right},below=of seq]{
-SA &  & BWT\\
-  & $\$$ & $G_0$ \\
-2 & $A_0$ & $C_0$ \\
-1 & $C_{0,1}$ & $G_1$ \\
-4 & $C_{2}$ & $A_0, \textcolor{red}{T_0}$ \\
-6 & $G_{0}$ & $C_1$ \\
-0 & $G_{1}$ & $\$$ \\
-3 & $T_0$ & $\textcolor{blue}{C_2}$\\
+SA & F & L\\
+  & $\$$ & $G_0^5$ \\
+2 & $A_0^2$ & $C_0^4$ \\
+1 & $C_{0,1}^1$ & $G_1^0$ \\
+4 & $C_{2}^4$ & $A_0^2, \textcolor{red}{T_0^3}$ \\
+5 & $G_{0}^5$ & $C_1^1$ \\
+0 & $G_{1}^0$ & $\$$ \\
+3 & $T_0^3$ & $\textcolor{blue}{C_2^1}$\\
 };
 \draw[dotted] (gcsa-5-2) -- (gcsa-5-3);
 \draw[dotted, color=red] (gcsa-5-3)  -- (gcsa-8-2);
@@ -36,15 +36,15 @@ SA &  & BWT\\
 \draw[dotted, color=blue] (gcsa-8-3) -- (gcsa-5-2);
 
 \matrix (gcsag) [matrix of math nodes, align=right, row sep=0.5em,column sep=0.5em, minimum width=1em, minimum height=1em, nodes={align=right},below=of seqe]{
-SA &  & BWT\\
-  & $\$$ & $G_0$ \\
-2 & $A_0$ & $C_0$ \\
-1 & $C_0$ & $G_1$ \\
-5 & $C_1$ & $A_0, \textcolor{red}{T_0}$ \\
-3  & $C_2$ & $\textcolor{yellow}{G_2}$ \\
-7 & $G_{0}$ & $C_1$ \\
-\textbf{0} & $G_{1,2}$ & $\$$ \\
-4 & $T_0$ & $\textcolor{blue}{C_2}$\\
+SA & F & L\\
+  & $\$$ & $G_0^6$ \\
+2 & $A_0^2$ & $C_0^1$ \\
+1 & $C_0^1$ & $G_1^0$ \\
+5 & $C_1^5$ & $A_0^2, \textcolor{red}{T_0^4}$ \\
+3  & $C_2^3$ & $\textcolor{yellow}{G_2^0}$ \\
+7 & $G_{0}^6$ & $C_1^5$ \\
+\textbf{0} & $G_{1,2}^0$ & $\$$ \\
+4 & $T_0^4$ & $\textcolor{blue}{C_2^3}$\\
 };
 \draw[dotted] (gcsag-5-2) -- (gcsag-5-3);
 \draw[dotted, color=red] (gcsag-5-3)  -- (gcsag-9-2);
@@ -55,8 +55,9 @@ SA &  & BWT\\
 %\draw[dotted] (gcsa-5-2) -- (gcsa-5-3) -- (gcsa-8-2) -- (gcsa-8-3);\\
 
 
-\node[above=of seq] {Invalid};
-\node[above=of seqe] {Valid};
+\node[above=0.2 of seq] {Invalid};
+\node[above=0.2 of seqe] {Valid};
+% \node[above=of seq] {Invalid};
 
 \node[color=green, draw, dashed, fit=(gcsa-4-2) (gcsa-5-2)] {};
 \node[color=red, draw, dashed, fit=(gcsa-8-2)] {};
@@ -70,6 +71,11 @@ SA &  & BWT\\
 
 \matrix (query) [matrix of math nodes, align=right, row sep=0.1em,column sep=0.2em, minimum width=1em, minimum height=0.5em, nodes={align=right}, below=of gcsa]{
 \textcolor{yellow}{G} & \textcolor{blue}{C} & \textcolor{red}{T} & \textcolor{green}{C}\\};
+\node[left=0.2 of seq] {$G_R$:};
+\node[left=0.2 of gcsa] {GCSA:};
+\node[left=0.2 of query] {$Q$:};
+
+
 %%% Local Variables:
 %%% mode: plain-tex
 %%% TeX-master: t

@@ -107,12 +107,10 @@ Even after pruning, this procedure is costly and makes the GCSA index significan
   \input{figures/gcsafigb}
   \endtikzpicture
   \caption{
-    \TODO{fix}
-    Valid and invalid GCSA index.
-    In the first graph, the two edges from $C$ to $A$ and$T$ makes a direct GCSA index impossible due the other $C$ with an edge to a $G$.
-    Both $T$ and $A$ need to point to the same row in the index.
-    In the valid example, the $C$ node have been duplicated.
-    The bifurcation now happens at an earlier point, and the $GC$ prefix now common to all suffices from $G$ is unique so that the the LF mapping is valid.}
+    Example of a graph with an invalid GCSA index, and an expanded graph with the same language but a valid GCSA index. Superscripts are node ids, while subscripts denote occurance in the index. 
+    In the first graph, the two edges from $C^1$ to $A$ and$T$ makes a direct GCSA index impossible due the other $C^4$ with an edge to a $G$. The suffix from $C^4$ ($CG$) comes between the two possible suffixes for $C^1$ ($CACG$, $CTCG$). This leads to the occurance of $C^1$ in the $L$ and $F$ columns being different, invalidating the LF-mapping.
+    In the valid example, the $C^1$ node have been duplicated. The bifurcation now happens at an earlier point, and the $GC$ prefix now common to all suffices from $G^0$ is unique so that the the LF mapping is valid. This is examplified by the backward extension of the query sequence $Q$, which fails in the first index but is correct in the second index.
+}
     \label{fig:gcsa}
 \end{figure}
 
