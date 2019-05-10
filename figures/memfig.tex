@@ -1,5 +1,7 @@
 \matrix (seq) [matrix of math nodes, align=right, row sep=0.5em,column sep=0.5em, minimum width=1em, minimum height=1em, nodes={align=right}, ]{C & T & A & G & C & T & G & C & A & T & G\\ 
 G & A & T & C & G & A & C & G & T & A & C\\};
+\node[left=0.2 of seq-1-1] {$R\rightarrow$};
+\node[right=0.2 of seq-2-11] {$\leftarrow\bar{R}$};
 \matrix (q) [matrix of math nodes, align=right, row sep=0.5em,column sep=0.5em, minimum width=1em, minimum height=1em, nodes={align=right}, below=of seq]{T & A & C & T & G & A & T & G\\};
 \node[color=red, draw, dashed, rounded corners, fit=(q-1-3) (q-1-5)] {};
 \node[color=red, draw, dashed, rounded corners, fit=(seq-1-5) (seq-1-7)] {};

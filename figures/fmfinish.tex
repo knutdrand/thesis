@@ -1,6 +1,7 @@
 \matrix (ref) [matrix of math nodes, align=right, row sep=0.2em,column sep=0.2em, minimum width=1em, minimum height=1em, nodes={align=right}, ]{
 C & T & A & \textcolor{green}{G} & \textcolor{blue}{C} & \textcolor{red}{T} & \textcolor{green}{G} & C & A & \textcolor{red}{T} & \textcolor{green}{G}\\ 
 0 & 1 & 2 & 3 & 4 & 5 & 6 & 7 & 8 & 9 & 10\\};
+\node[left=0.2 of ref-1-1] {R:};
 \matrix (fm) [matrix of math nodes, align=right, row sep=0.2em,column sep=0.2em, minimum width=1em, minimum height=1em, nodes={align=right}, below=of ref]{
 % SA & F & & L & $A_i$ & $C_i$ & $G_i$ & $T_i$ \\
 11 & \$ & CTAGCTGCAT & $G_0$ & 0 & 0 & 0 & 0\\ 
@@ -15,6 +16,11 @@ C & T & A & \textcolor{green}{G} & \textcolor{blue}{C} & \textcolor{red}{T} & \t
 1 & $T_0$ & AGCTGCATG\$ & $C_1$ & 1 & 1 & 3 & 3\\ 
 9 & $T_1$ & G\$CTAGCTGC & $A_1$ & 1 & 2 & 3 & 3\\ 
 5 & $T_2$ & GCATG\$CTAG & $\textcolor{blue}{C_2}$ & 2 & 2 & 3 & 3\\};
+\node[above=0.2 of fm-1-1] {SA};
+\node[above=0.2 of fm-1-2] {F};
+\node[above=0.2 of fm-1-4] {L};
+\node[above=0.2 of fm-1-7] {OCC};
+
 \matrix (query) [matrix of math nodes, align=right, row sep=0.1em,column sep=0.2em, minimum width=1em, minimum height=0.5em, nodes={align=right}, below=of fm]{
 \textcolor{blue}{C} & \textcolor{red}{T} & \textcolor{green}{G}\\};
 \node[color=green, draw, dashed, fit=(fm-7-2) (fm-9-2)] {};
@@ -23,6 +29,7 @@ C & T & A & \textcolor{green}{G} & \textcolor{blue}{C} & \textcolor{red}{T} & \t
 \draw[dashed, color=red] (fm-7-4) -> (fm-11-2);
 \draw[dashed, color=red] (fm-8-4) -> (fm-12-2);
 \draw[dashed, color=blue] (fm-12-4) -> (fm-6-2);
+\node[left=0.2 of query-1-1] {Q:};
 % \node[left=of ref] {R:};
 % \node[left=of query] {Q:};
 

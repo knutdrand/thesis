@@ -29,9 +29,10 @@ Some algorithms also use the FM-index to find exact matches for permutations of 
   \tikzpicture
   \input{figures/fmfinish.tex}
   \endtikzpicture
-  \caption{\TODO{labelcolumns} Illustration of backward extension using the last-first (LF) property of the FM index.
+  \caption{Illustration of backward extension using the last-first (LF) property of the FM index.
     The rows represent sorted suffixes of the reference. The SA column holds the indices in the reference sequence for each suffix, the $F$ column holds the first character of each suffix, while the $L$ column holds the preceding character of each suffix.
-    Subscripts give the occurrences of each character in each column. I.e. $T_i$ is the $i$th occurrence of $T$ in that column. Finding the string \emph{CTG} is done by (1) starting with the range of all $G$'s in the F column; (2) finding all $T$'s in this range in the $L$ column; (3) mapping by occurrence number those $T$'s to the F column; (4) mapping the $C$'s in the current range in the L column by occurrence number. The end result is in this case a single row which represents position $4$ in the reference sequences. 
+    Subscripts give the occurrences of each character in each column. I.e. $T_i$ is the $i$th occurrence of $T$ in that column. Finding the string \emph{CTG} is done by (1) starting with the range of all $G$'s in the F column; (2) finding all $T$'s in this range in the $L$ column; (3) mapping by occurrence number those $T$'s to the F column; (4) mapping the $C$'s in the current range in the L column by occurrence number. The end result is in this case a single row which represents position $4$ in the reference sequences.
+    The OCC matrix makes it quick to find the range of occurances of a symbol in the $L$ column.
   }
   \label{fig:FM}
 
@@ -54,7 +55,7 @@ A SMEM is a MEM where the query interval cannot be extended in either direction 
   \tikzpicture
   \input{figures/memfig}
   \endtikzpicture
-  \caption{\TODO{label seqs} SMEMs found between query $Q$ and both strands of reference $R$. Note that the MEM $(q, r, l)=(2, 0, 2)$ (CT) is not a SMEM, since it is contained in the SMEM $(q, r, l) = (2, 4, 3)$}
+  \caption{SMEMs found between query $Q$ and both strands of reference $R$. Note that the MEM $(q, r, l)=(2, 0, 2)$ (CT) is not a SMEM, since it is contained in the SMEM $(q, r, l) = (2, 4, 3)$}
   \label{fig:smem}
 \end{figure}
 
@@ -77,7 +78,7 @@ Approximately collinear means that $\abs{(q_1-q_2) -(r_1-r_2)}<w$ for some set t
 Mapping to a graph based reference $G_R$ is similar to the linear case, except that instead of finding a linear interval, the goal is to find a graph interval $i_r$ such that $D(G_R[i_r], Q))$ is minimized.
 It is however deceptively more complicated. 
 Firstly, because the number of subsequences in a sequence graph grows exponentially with the complexity of the graph, and secondly since chaining subsequence-matches is more complicated due to the possible existence of multiple paths between two matches.
-\emph{vg}~\cite{vg} has been at the forefront of mapping to a graph reference, showing that it can lead to better mapping accuracy than BWA-mem. \TODO{cite 7bridges}
+\emph{vg}~\cite{vg} has been at the forefront of mapping to a graph reference in company with 7bridges~\cite{7bridges}, showing that it can lead to better mapping accuracy than BWA-mem.
 Below is a brief description of the methodology used by \emph{vg}.
 
 \subsubsection{\emph{vg}}
