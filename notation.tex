@@ -1,4 +1,5 @@
-\subsection{Notation}
+The following sections introduces some notation needed for the next chapters. This notation will mainly follow a simplification of the notation used in~\cite{gcsa1}.
+\subsection{Sequences}
 Sequences are important in this thesis as they are the means to represent DNA-sequences. We will here formally work with an alphabet $\alphabet_{DNA} = \set{A, C, G, T}$ and say that a \emph{sequence} of length $n$ over that alphabet is a tuple in the set $\alphabet_{DNA}^n$.
 The set of all sequences of any length over $\alphabet_{DNA} = \set{A, C, G, T}$ is  represented by $\alphabet_{DNA}^*$.
 The length of a sequence $S \in \alphabet_{DNA}^*$ is notated $\size{S}$.
@@ -20,7 +21,7 @@ A \emph{cycle} is a path $(v_1, e_1, v_2, e_2,,,e_{n-1}, v_n)$ where $v_1=v_n$ a
 A \emph{directed acyclic graph} (DAG) is a directed graph in which there are no cycles.
 We call the set of all paths starting at $v_s$ and ending at $v_e$ $\paths(v_s, v_e)$. The \emph{predecessors} of a node $v$ are all nodes with an edge going to $v$, i.e: $\preds(v) = \buildset{w \in V}{(w, v) \in E}$.
 
-\subsubsection{Sequence Graphs}
+\subsection{Sequence Graphs}
 We define a \emph{simple sequence graph} $SG = (V, E, \slabel)$ over an alphabet $\alphabet$ as a graph $(V, E)$ and a label function $\slabel: V \rightarrow \alphabet$ labeling each vertex with a letter from $\alphabet$.
 We refer to the label of a path $\slabel((v_1, e_1, v_2,,,e_{n-1}v_n))$ as the concatenation of the labels of its vertices $\slabel(v_1)\concat\slabel(v_2) ... \slabel(v_n)$.
 The sequence graphs we look at here will have clearly defined start and end nodes, which will be denoted $v_s$ and $v_e$. If this were not the case, dummy nodes ($\#, \$$) can be inserted to the graph to make the start and end unambiguous.

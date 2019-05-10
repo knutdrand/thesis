@@ -43,7 +43,7 @@ This algorithm can be adopted in a number of ways in order to solve related prob
 Notably, by using an affine gap penalty one can reduce the cost of long indels compared to many small indels~\cite{affine}, or one can use positive scores for matches to be able to find subsequences that align well to each other~\cite{smithwaterman}(Smith-Waterman).
 
 An adaption relevant for this thesis, referred to as the \emph{mapping} problem, is to find the a subsequence of one sequence $R$ that minimizes the edit distance to another $Q$.
-I.e find $\min_{k, l}(D(R[k, l], Q)$.
+I.e find $\min_{k, l}(D(R[k, l], Q))$.
 This can be done by changing just the initial conditions of the Needleman-Wunch algorithm, to remove the cost of gaps at the beginning and end of $R$.
 We set $d_{k0} = 0$ and start the backtracking algorithm at $(m, l)$ where $l=\argmin_i d_{Mi}$.
 Figure~\ref{fig:needlemanmap} shows an example of this algorithm.
@@ -76,7 +76,7 @@ If we let
     d_{kl} + m_{kl}\\
     \end{cases}    
     \\
-    m_{ij} &= 1\, \text{if}\, \slabel(v_i) \neq \slabel(w_j)\, \text{else}\, 0\\
+    m_{kl} &= 1\, \text{if}\, \slabel(v_k) \neq \slabel(w_l)\, \text{else}\, 0\\
 \end{align*}
 This is the same as for ordinary sequence alignment, except that all predecessor nodes of $v_i$ and $w_j$ have to be considered, not only $i-1$ and $j-1$ as in the linear case.
 If the graph is acyclic, then all the $d_{ij}$ can be calculated using dynamic programming, without incurring any infinite loops.
@@ -94,13 +94,13 @@ If the graph is acyclic, then all the $d_{ij}$ can be calculated using dynamic p
 
 An alignment between two sequences $S, T$ can be represented by a sequence graph in a meaningful manner in that one can construct a sequence graph $AG(S, T)$ from the alignment of the sequences in such a way that 
 \[
-\forall (R \in \lang(AG(S, T)))\left[D(S, R)+D(R, T) =  D(S, T\right)].
+\forall (R \in \lang(AG(S, T)))\left[D(S, R)+D(R, T) =  D(S, T)\right].
 \]
 For an optimal alignment, this means that all sequences recognized by the sequence graph have the property that the sum of the distance to the original sequences is as low as it can be.
 These sequences thus represent combinations of $S$ and $T$ that are natural estimates of an ancestor of the two sequences.
 Thus aligning a sequence $S$ to an alignment graph $AG(T, R)$  can be seen as aligning $S$ to the best fitting ancestor sequence of $T$ and $R$
 Similarly, aligning two alignment graphs can be seen as finding the ancestors of two pairs of sequences that fit best together~\cite{treealign, poa2}.
-This is illustrated in figure~\ref{fig:treealign}.
+This is illustrated in Figure~\ref{fig:treealign}.
 
 \begin{figure}
   %\input{figures/msa_standalone}
@@ -115,7 +115,7 @@ This is illustrated in figure~\ref{fig:treealign}.
 \end{figure}
 
 The sequence graph alignment algorithm can also be adapted to find the substring of a sequence graph $G_R$ that minimizes the edit distance to a sequence $Q$.
-This solves the problem of mapping a read to a graph, which will be discussed further in section~\ref{sec:graphmapping}.
+This solves the problem of mapping a read to a graph, which will be discussed further in Section~\ref{sec:graphmapping}.
 
 
 %%% Local Variables:

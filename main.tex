@@ -1,13 +1,21 @@
 \documentclass[]{uiophd}
+
 \usepackage[utf8]{inputenc}         % or whatever you use
 \include{statsHeader}
+\usepackage{titlesec}
 
-\title{Inference with Next Generation Genome Representations}
+\titleformat{\chapter}[block]
+  {\normalfont\huge\bfseries}{\thechapter.}{1em}{\Huge}
+\titlespacing*{\chapter}{0pt}{-19pt}{0pt}
+\title{Inference with Graph Based Genome Representations}
 \author{Knut Dagestad Rand}
 
 \begin{document}
 \frontmatter
 \maketitle
+\input{preface}
+\chapter*{List of papers}
+\input{listofpapers}
 \tableofcontents
 
 \mainmatter

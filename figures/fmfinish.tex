@@ -2,9 +2,11 @@
 C & T & A & \textcolor{green}{G} & \textcolor{blue}{C} & \textcolor{red}{T} & \textcolor{green}{G} & C & A & \textcolor{red}{T} & \textcolor{green}{G}\\ 
 0 & 1 & 2 & 3 & 4 & 5 & 6 & 7 & 8 & 9 & 10\\};
 \node[left=0.2 of ref-1-1] {R:};
+\draw (ref-1-7)--(ref-1-6) --(ref-1-5);
+\draw (ref-1-11)--(ref-1-10);
 \matrix (fm) [matrix of math nodes, align=right, row sep=0.2em,column sep=0.2em, minimum width=1em, minimum height=1em, nodes={align=right}, below=of ref]{
 % SA & F & & L & $A_i$ & $C_i$ & $G_i$ & $T_i$ \\
-11 & \$ & CTAGCTGCAT & $G_0$ & 0 & 0 & 0 & 0\\ 
+- & \$ & CTAGCTGCAT & $G_0$ & 0 & 0 & 0 & 0\\ 
 2 & $A_0$ & GCTGCATG\$C & $T_0$ & 0 & 0 & 1 & 0\\ 
 8 & $A_1$ & TG\$CTAGCTG & $C_0$ & 0 & 0 & 1 & 1\\ 
 7 & $C_0$ & ATG\$CTAGCT & $G_1$ & 0 & 1 & 1 & 1\\ 
