@@ -22,7 +22,7 @@ Variable length indexes usually use a variation of the \emph{full text minute in
 
 \subsubsection{FM-index}
 The FM-index uses a succinct representation of the suffix array~\cite{suffixarray} and Burrows-Wheeler transform~\cite{BWT} of the sequence in order to find exact matches of a query string $S$ in $O(\size{S})$ time (see Figure~\ref{fig:FM}).
-Thus if a read has one or more exact matches in the reference sequence it can be found directly using the FM-index.
+Thus if a read has one or more exact matches in the reference sequence, it can be found directly using the FM-index.
 For inexact matches, it can also be used to find an exact alignment of $Q$ and $R$ in approximately $O(\size{R}^{0.628}\times\size{Q})$ time~\cite{bwtsw, bwalong}.
 Some algorithms also use the FM-index to find exact matches for permutations of the query sequence~\cite{bowtie1, bwashort}, but for longer reads the search space gets too big when allowing for indels.
 \begin{figure}
@@ -38,7 +38,7 @@ Some algorithms also use the FM-index to find exact matches for permutations of 
 
 \end{figure}
 
-In order to handle indels in longer reads, the main methodology is to use the FM-index to find exact matches between substrings of the query and reference sequence, called seeds, and then aligning the reads using dynamic programing to intervals surrounding the seed matches on the reference sequence~\cite{bowtie2}.
+In order to handle indels in longer reads, the main methodology is to use the FM-index to find exact matches between substrings of the query and reference sequence, called seeds, and then aligning the reads using dynamic programming to intervals surrounding the seed matches on the reference sequence~\cite{bowtie2}.
 One way of finding seeds is to find Maximal Exact Matches (MEM)~\cite{longmem}.
 Maximal Exact Matches are Exact Matches that cannot be extended in either direction, ie. 
 \begin{align*}
@@ -61,7 +61,7 @@ A SMEM is a MEM where the query interval cannot be extended in either direction 
 
 SMEMs are natural to use as seeds as they cover for each substring in $Q$ the longest exact match in $R$.
 They are however vulnerable for spurious long matches hiding shorter exact matches.
-To account for this BWA-mem allows an option to split long SMEMs into shorter MEMs if they are longer than a certain threshold.
+To account for this, BWA-mem allows an option to split long SMEMs into shorter MEMs if they are longer than a certain threshold.
 Splitting SMEMs like this increases accuracy, since it increases the number of seeds, but can negatively affect performance. 
 In order to find SMEMs, an adaption of the FM index is used, the FMD index, where $FMD(R) = FM(R \concat \bar{R})$.
 
@@ -77,8 +77,8 @@ Approximately collinear means that $\abs{(q_1-q_2) -(r_1-r_2)}<w$ for some set t
 \label{sec:graphmapping}
 Mapping to a graph based reference $G_R$ is similar to the linear case, except that instead of finding a linear interval, the goal is to find a graph interval $i_r$ such that $D(G_R[i_r], Q)$ is minimized.
 It is however deceptively more complicated. 
-Firstly, because the number of substring in a sequence graph grows exponentially with the complexity of the graph, and secondly since chaining subsequence-matches is more complicated due to the possible existence of multiple paths between two matches.
-\emph{vg}~\cite{vg} has been at the forefront of mapping to a graph reference in company with 7bridges~\cite{7bridges}, showing that it can lead to better mapping accuracy than BWA-mem.
+Firstly, because the number of substring in a sequence graph grows exponentially with the complexity of the graph, and secondly, since chaining subsequence-matches is more complicated due to the possible existence of multiple paths between two matches.
+\emph{vg}~\cite{vg} has been at the forefront of mapping to a graph reference in company with \emph{seven bridges}~\cite{7bridges}, showing that it can lead to better mapping accuracy than BWA-mem.
 Below is a brief description of the methodology used by \emph{vg}.
 
 \subsubsection{\emph{vg}}
@@ -96,7 +96,7 @@ GCSA uses the same concept of $LF$ mapping as the FM-index does.
 Here the $F$ column holds the label of each node in the graph, sorted by the suffix starting from that node.
 The $L$ column holds the labels of the corresponding node's predecessor nodes.
 The problem with this setup is that there are many suffixes starting from each node, depending on which path is taken in the graph.
-To resolve this problem, the graph needs to be expanded so that for each node, all suffixes starting from that node shares a prefix that is not found from any other node in the graph (see Figure~\ref{fig:gcsa}).
+To resolve this problem, the graph needs to be expanded so that for each node, all suffixes starting from that node share a prefix that is not found from any other node in the graph (see Figure~\ref{fig:gcsa}).
 
 For complicated regions in the graph, this expansion procedure gets too costly, and the GCSA index therefore needs to prune edges in such areas in order to be able to index it.
 This means that not all possible sequences in the graph gets indexed. 
@@ -107,22 +107,22 @@ Even after pruning, this procedure is costly and makes the GCSA index significan
   \input{figures/gcsafigb}
   \endtikzpicture
   \caption{
-    Example of a graph with an invalid GCSA index, and an expanded graph with the same language but a valid GCSA index. Superscripts are node ids, while subscripts denote occurance in the index. 
+    Example of a graph with an invalid GCSA index, and an expanded graph with the same language but a valid GCSA index. Superscripts are node IDs, while subscripts denote occurance in the index. 
     In the first graph, the two edges from $C^1$ to $A$ and $T$ makes a direct GCSA index impossible due the other $C^4$ with an edge to a $G$. The suffix from $C^4$ ($CG$) comes between the two possible suffixes for $C^1$ ($CACG$, $CTCG$). This leads to the occurance of $C^1$ in the $L$ and $F$ columns being different, invalidating the LF-mapping.
-    In the valid example, the $C^1$ node have been duplicated. The bifurcation now happens at an earlier point, and the $GC$ prefix now common to all suffices from $G^0$ is unique so that the the LF mapping is valid. This is examplified by the backward extension of the query sequence $Q$, which fails in the first index but is correct in the second index.
+    In the valid example, the $C^1$ node have been duplicated. The bifurcation now happens at an earlier point, and the $GC$ prefix now common to all suffices from $G^0$ is unique so that the LF mapping is valid. This is examplified by the backward extension of the query sequence $Q$, which fails in the first index but is correct in the second index.
 }
     \label{fig:gcsa}
 \end{figure}
 
 Since the GCSA index provides the same functionality as an FM-index, it can be used to find SMEMs in much the same manner. These SMEMs are in \emph{vg} used as seeds. 
 
-GCSA version 2 solves the problem in a slightly different way that allows for indexing general variation graphs.
+GCSA version 2 solves the problem in a slightly different way that allows for indexing of general variation graphs.
 This is based on succinct de-Bruijn graph~\cite{succinctdebruijn} structure which sets a limit to the length of the unique prefixes by allowing for false positive edges to occur in the index.
 This means that results from an index lookup need to be validated by traversing the graph. 
 
 \subsubsection{Filtering and Extending}
 \emph{vg} employs a similar method as BWA-mem for filtering out seeds: chaining the seeds and removing small chains that overlap bigger chains.
-The chaining procedure is however more complicated on a graph, and involves clustering the seeds by position in addition to a Markov Model based method\TODO{cite} to find approximately collinear seeds. 
+The chaining procedure is, however, more complicated on a graph, and involves clustering the seeds by position, in addition to a Markov Model based method, to find approximately collinear seeds.
 
 %%% Local Variables:
 %%% mode: latex

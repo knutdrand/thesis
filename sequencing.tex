@@ -1,4 +1,4 @@
-The fact that the sequence of nucleotides in the DNA has direct links to biological function has made determining such sequences as well as possible an important goal in molecular biology.
+The fact that the sequence of nucleotides in the DNA has direct links to biological function has made determining such sequences as accurately and efficiently as possible an important goal in molecular biology.
 The process of determining the sequence of nucleotides is referred to as DNA-\emph{sequencing}.
 The first widely used method for DNA-sequencing was Sanger Sequencing~\cite{sanger}, developed in 1976.
 The throughput from Sanger sequencing is pretty low since it requires measuring the weight of many nucleotides.
@@ -7,11 +7,12 @@ Among these technologies, collectively called Next-Generation Sequencing (NGS), 
 
 \subsection{Illumina Dye Sequencing}
 Illumina dye sequencing uses sequencing by synthesis, which is the same base methodology as Sanger sequencing.
-This method uses the property that given a single strand of DNA and the presence of DNA polymerase, nucleotides will sequentially bind to the strand according to the complementary pairings (A-T) and (C-G).
-This usually happens so fast that it is difficult to measure any point in this process.
+This method uses the property that, given a single strand of DNA and the presence of DNA polymerase, nucleotides will sequentially bind to the strand according to the complementary pairings (A-T) and (C-G).
+This usually happens so fast that it is difficult to measure any specific point in this process.
 However, nucleotides can be adapted so that the synthesis is terminated after including the adapted nucleotide (chain termination).
 Sanger sequencing uses this by combining a small amount of adapted nucleotides with a larger amount of normal nucleotides, and then using this combined set for DNA synthesis.
-Illumina sequencing evolves this concept by also being able to reverse these adaptions so that synthesis can continue~\cite{reversiblechain}. Thus it can step by step synthesize one adapted nucleotide to the single DNA-strand, find out which nucleotide was included, then reverse the adaption and synthesize a new adapted nucleotide(see Figure~\ref{fig:illumina}).
+Illumina sequencing further evolves this concept by also being able to reverse these adaptions so that synthesis can continue~\cite{reversiblechain}.
+Thus it can, step-by-step, synthesize one adapted nucleotide to the single DNA-strand, find out which nucleotide was included, then reverse the adaption and synthesize a new adapted nucleotide(see Figure~\ref{fig:illumina}).
 \begin{figure}
   \tikzpicture
   \input{figures/sequencing}
@@ -28,7 +29,7 @@ The downside is that while Sanger sequencing could yield up to 700 base pairs lo
 This massive amount of relatively short reads is able to give great insights into biology by mapping them to reference genomes.
 Reference genomes are covered in Section~\ref{sec:refgenomes}, and the mapping process is covered in Section~\ref{sec:mapping}.
 
-The main error source of Illumina sequencing is that a non-adapted nucleotide can get included in one of the steps, whereupon it is possible for a new nucleotide to get included without the previous one being captured.
+The main source of error from Illumina sequencing is that a non-adapted nucleotide can get included in one of the steps, whereupon it is possible for a new nucleotide to get included without the previous one being captured.
 To alleviate this, and to obtain a stronger signal, Illumina performs the sequencing steps concurrently on many identical DNA templates. Even so, the number of out-of-sync strands grows with the length of the sequence and puts a practical limit on how many base pairs can be read with certainty.
 
 Depending on which input DNA is provided, this technology can be used to answer a range of biological questions.

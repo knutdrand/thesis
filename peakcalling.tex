@@ -1,5 +1,5 @@
 \emph{Peak calling} is an important step in the CHiP-seq experiment pipeline.
-The sequencing in a ChIP-seq experiments yields reads that tend to come from DNA-fragments with the transcription factor bound to it.
+The sequencing in a ChIP-seq experiment yields reads that tend to come from DNA-fragments with the transcription factor bound to it.
 After mapping these reads to the reference genome, the result is a set of genomic intervals which should be in the vicinity of the binding site.
 Peak calling is the process of using these intervals to predict regions containing the actual binding sites. 
 
@@ -17,7 +17,7 @@ As it forms the basis for Graph Peak Caller (Paper II), the algorithm is describ
   \caption{
     Illustration of the main MACS2 algorithm.
     After reads are mapped to the reference genome, all mapped intervals are extended to match the estimated fragment length.
-    A pileup is then created based on the coverage of each position, and positions with a high enough coverage are marked as peaks.}
+    A pileup is then created based on the coverage of each position, and positions with high enough coverage are marked as peaks.}
   \label{fig:macs}
 \end{figure}
 

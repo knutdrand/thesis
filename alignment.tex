@@ -3,9 +3,9 @@ Edit distance is a measure of how many edit operations are required to convert o
 Different edit distance measures exist, varying in the set of allowed operations.
 The most common is the \emph{Levenshtein distance}~\cite{levenshtein}, allowing single character substitutions, insertions and deletions. 
 
-Finding the edit distance between two sequences, and which set of edits this edit distance corresponds to, is of central importance in bioinformatics since it can give an estimate of how related the two sequences are and which mutations have separated them.
+Finding the edit distance between two sequences, and which set of edits this edit distance corresponds to, is of central importance in bioinformatics since it can give an estimate of how related the two sequences are, and which mutations have separated them.
 The process of finding these estimates is called \emph{sequence alignment} and is important for this thesis in two respects.
-Firstly, it is one of the earliest and most intuitive applications of sequence graphs, and secondly it is an important part of \emph{mapping} which will be covered in the next section. 
+Firstly, it is one of the earliest and most intuitive applications of sequence graphs, and secondly, it is an important part of \emph{mapping} which will be covered in the next section. 
 
 In the following we will refer to the edit distance between two sequences, $S$ and $T$, as $D(S, T)$, here meaning the Levenshtein distance unless specifically mentioned.
 The concepts discussed are however generalisable to other (weighted) edit distances and similarity measures by small changes.
@@ -27,10 +27,10 @@ Letting $d_{i,j} = D(S[:i], T[:j])$ and $m_{i,j}$ be zero if $S[i]=T[j]$ else $1
   &d_{k, l-1}+1 \quad \text{(deletion)}\\
 \end{cases}
 \end{align*}
-The fact that the edit distance to a empty string is just the sequence length gives the initial conditions $d_{k, 0}=k,\,d_{0,l}=l$.
+The fact that the edit distance to an empty string is just the sequence length gives the initial conditions $d_{k, 0}=k,\,d_{0,l}=l$.
 The Needleman-Wunch algorithm~\cite{needlemanwunch} uses dynamic programming to calculate the matrix of edit distances $d_{kl}$, where $d_{MN}$ is the edit distance between $S[:M]$ and $T[:N]$.
 In order to find the specific edits, a backtracking algorithm is used that starts at the $(i, j) = (M, N)$ corner and finds out which of the possible predecessors $(i-1, j), (i-1, j-1), (i, j-1)$ contributed to the $(i, j)$ edit distance.
-Then repeating this until the $(0, 0)$ corner is reached. Each of these steps correspond to a column in the alignment block.
+Then repeating this until the $(0, 0)$ corner is reached. Each of these steps corresponds to a column in the alignment block.
 Figure~\ref{fig:needle} details the Needleman Wunch algorithm.
 \begin{figure}
   \begin{tikzpicture}
@@ -58,7 +58,7 @@ Figure~\ref{fig:needlemanmap} shows an example of this algorithm.
   \label{fig:needlemanmap}
 \end{figure}
 This algorithm provides three results: the coordinate $k, l$ of the substring of $R$ most similar to $Q$, the edit distance from that substring to $Q$, and the set of edits contributing to the edit distance.
-In this way it solves in a exact, but slow way the problem of the next chapter, namely mapping a read $Q$ to a reference genome $R$.
+In this way it solves in an exact, but slow, way the problem of the next chapter, namely mapping a read $Q$ to a reference genome $R$.
 
 \subsection{Sequence Graph Alignment}
 The framework used to align sequences extends naturally to acyclic sequence graphs \cite{hein, poa}.
@@ -66,7 +66,7 @@ We define the alignment of a sequence $S$ to a sequence graph $G$ as the alignme
 Similarly, the alignment of two sequence graphs $G=(V, E, \slabel_G), H=(W, F, \slabel_H)$, is the alignment of a sequence $S \in \lang(G)$ to a sequence $T \in \lang(H)$ that yields the lowest edit distance.
 For each pair of nodes, $v_i \in V, w_i \in W$, we can define a distance between the two graphs up to the corresponding nodes as the lowest edit distance between two substrings ending at the given nodes.
 \[
-  d_{ij} = \min_{p_g \in \paths(v_0, v_i), p_h \in \paths(w_0, w_j)}(D(G[p_g], H[p_h])))
+  d_{ij} = \min_{p_g \in \paths(v_0, v_i), p_h \in \paths(w_0, w_j)} D(G[p_g], H[p_h])
 \]
 We then get a recurrence relation similar to that of ordinary sequence alignment, except that all predecessor nodes of $v_i$ and $w_j$ have to be considered, not only $i-1$ and $j-1$ as in the linear case:
 \begin{align*}
@@ -107,7 +107,7 @@ An alignment between two sequences $S, T$ can be represented by a sequence graph
 \]
 For an optimal alignment, this means that all sequences recognized by the sequence graph have the property that the sum of the distance to the original sequences is as low as it can be.
 These sequences thus represent combinations of $S$ and $T$ that are natural estimates of an ancestor of the two sequences.
-Thus aligning a sequence $S$ to an alignment graph $AG(T, R)$  can be seen as aligning $S$ to the best fitting ancestor sequence of $T$ and $R$
+Thus aligning a sequence $S$ to an alignment graph $AG(T, R)$  can be seen as aligning $S$ to the best fitting ancestor sequence of $T$ and $R$.
 Similarly, aligning two alignment graphs can be seen as finding the ancestors of two pairs of sequences that fit best together~\cite{treealign, poa2}.
 This is illustrated in Figure~\ref{fig:treealign}.
 
