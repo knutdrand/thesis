@@ -11,13 +11,12 @@ This method uses the property that given a single strand of DNA and the presence
 This usually happens so fast that it is difficult to measure any point in this process.
 However, nucleotides can be adapted so that the synthesis is terminated after including the adapted nucleotide (chain termination).
 Sanger sequencing uses this by combining a small amount of adapted nucleotides with a larger amount of normal nucleotides, and then using this combined set for DNA synthesis.
-Illumina sequencing evolves this concept by also being able to reverse these adaptions so that synthesis can continue. Thus it can step by step synthesize one adapted nucleotide to the single DNA-strand, find out which nucleotide was included, then reverse the adaption and synthesize a new adapted nucleotide(see Figure~\ref{fig:illumina}).
+Illumina sequencing evolves this concept by also being able to reverse these adaptions so that synthesis can continue~\cite{reversiblechain}. Thus it can step by step synthesize one adapted nucleotide to the single DNA-strand, find out which nucleotide was included, then reverse the adaption and synthesize a new adapted nucleotide(see Figure~\ref{fig:illumina}).
 \begin{figure}
   \tikzpicture
   \input{figures/sequencing}
   \endtikzpicture
   \caption{
-    \TODO{Add color translation}
     Sequencing of one DNA-chain in Illumina sequencing.
     For each step, an adapted nucleotide is added with a phosphorescent color, a picture is taken - capturing the color, and the adaption is reversed allowing for the next nucleotide to be bound.
     Each nucleotide (A, C, G, T) has a different color, so the sequence of colors in the images taken can be used to determine the sequence of nucleotides.}
@@ -35,7 +34,7 @@ To alleviate this, and to obtain a stronger signal, Illumina performs the sequen
 Depending on which input DNA is provided, this technology can be used to answer a range of biological questions.
 One can input unfiltered DNA for sequencing and use the resulting reads to deduce as much of the whole genomic sequence as possible. One can also filter the DNA to contain mostly fragments from protein coding parts of the genome, in order to more efficiently find the DNA-sequence of these regions, from which variations can cause differences in protein structure and function.
 
-In addition to deducing the DNA-sequence of a sample, NGS can also be used to deduce where in the genome biochemical processes occur, for instance the binding of proteins to the genomes. Of importance to this thesis are experiments used to find binding sites for transcription factors, described below.
+In addition to deducing the DNA-sequence of a sample, NGS can also be used to deduce where in the genome biochemical processes occur, for instance the binding of proteins to the genomes. Of importance to this thesis are experiments used to find binding sites for transcription factors, described below. For a more thorough introduction to the methods and applications of NGS, see~\cite{ngs}.
 
 \subsection{ChIP-seq}
 \emph{Ch}romatin \emph{I}mmuno\emph{p}resipitation  followed by \emph{seq}uencing (ChIP-seq) is a sequencing experiment that does not aim to determine the genetic variation of the sample, but rather to give insight into where a protein of interest binds to the DNA.

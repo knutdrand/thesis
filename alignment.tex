@@ -39,11 +39,12 @@ Figure~\ref{fig:needle} details the Needleman Wunch algorithm.
   \caption{Figure showing the alignment of two sequences using Needleman-Wunch. Each cell in the matrix corresponds to the edit distance between prefixes of $S$ and $T$. The red path shows the backtracking, resulting in an alignment block where each diagonal arrow gives a symbol from both sequences, while horizontal or vertical arrows give an insertion or deletion.}
   \label{fig:needle}
 \end{figure}
-This algorithm can be adopted in a number of ways in order to solve related problems.
-Notably, by using an affine gap penalty one can reduce the cost of long indels compared to many small indels~\cite{affine}, or one can use positive scores for matches to be able to find subsequences that align well to each other~\cite{smithwaterman}(Smith-Waterman).
 
-An adaption relevant for this thesis, referred to as the \emph{mapping} problem, is to find the a subsequence of one sequence $R$ that minimizes the edit distance to another $Q$.
-I.e find $\min_{k, l}(D(R[k, l], Q))$.
+This algorithm can be adopted in a number of ways in order to solve related problems.
+Notably, by using an affine gap penalty one can reduce the cost of long indels compared to many small indels~\cite{affine}, or one can use positive scores for matches to be able to find substrings that align well to each other~\cite{smithwaterman}(Smith-Waterman).
+
+An adaption relevant for this thesis, referred to as the \emph{mapping} problem, is to find the a substring of one sequence $R$ that minimizes the edit distance to another $Q$.
+I.e find $\min_{k, l}(D(R[k:l], Q))$.
 This can be done by changing just the initial conditions of the Needleman-Wunch algorithm, to remove the cost of gaps at the beginning and end of $R$.
 We set $d_{k0} = 0$ and start the backtracking algorithm at $(m, l)$ where $l=\argmin_i d_{Mi}$.
 Figure~\ref{fig:needlemanmap} shows an example of this algorithm.
@@ -53,7 +54,7 @@ Figure~\ref{fig:needlemanmap} shows an example of this algorithm.
   \end{tikzpicture}
   \caption{
     Figure showing the alignment of a query sequence $Q$ to a reference sequence $R$, 
-    Each cell in the matrix corresponds to the edit distance between a prefix of $S$ and a subsequence of $R$. The red path shows the backtracking, starting at the lowest value of the last column, resulting in an alignment block where each diagonal arrow gives a symbol from both sequences, while horizontal or vertical arrows give an insertion or deletion.}
+    Each cell in the matrix corresponds to the edit distance between a prefix of $S$ and a substring of $R$. The red path shows the backtracking, starting at the lowest value of the last column, resulting in an alignment block where each diagonal arrow gives a symbol from both sequences, while horizontal or vertical arrows give an insertion or deletion.}
   \label{fig:needlemanmap}
 \end{figure}
 This algorithm provides three results: the coordinate $k, l$ of the substring of $R$ most similar to $Q$, the edit distance from that substring to $Q$, and the set of edits contributing to the edit distance.
@@ -62,23 +63,31 @@ In this way it solves in a exact, but slow way the problem of the next chapter, 
 \subsection{Sequence Graph Alignment}
 The framework used to align sequences extends naturally to acyclic sequence graphs \cite{hein, poa}.
 We define the alignment of a sequence $S$ to a sequence graph $G$ as the alignment of $S$ to a sequence $T \in \lang(G)$ in the language of $G$ which yields the lowest edit distance.
-Similarly, the alignment of two sequence graphs $G, H$, is the alignment of a sequence $S \in \lang(G)$ to a sequence $T \in \lang(H)$ that yields the lowest edit distance. 
-
-If we let 
+Similarly, the alignment of two sequence graphs $G=(V, E, \slabel_G), H=(W, F, \slabel_H)$, is the alignment of a sequence $S \in \lang(G)$ to a sequence $T \in \lang(H)$ that yields the lowest edit distance.
+For each pair of nodes, $v_i \in V, w_i \in W$, we can define a distance between the two graphs up to the corresponding nodes as the lowest edit distance between two substrings ending at the given nodes.
 \[
-  d_{ij} = \min_{p_g \in \paths(v_0, v_i), p_h \in \paths(w_0, w_j)}(D(\slabel(p_h), \slabel(p_g)))
-\]  we get a recurrence relation:
+  d_{ij} = \min_{p_g \in \paths(v_0, v_i), p_h \in \paths(w_0, w_j)}(D(G[p_g], H[p_h])))
+\]
+We then get a recurrence relation similar to that of ordinary sequence alignment, except that all predecessor nodes of $v_i$ and $w_j$ have to be considered, not only $i-1$ and $j-1$ as in the linear case:
 \begin{align*}
-  d_{ij} &= \min_{v_k \in \preds{v_i}, w_l \in \preds{w_j}} d^*(i, j, k, l)\\
-  d^*(i, j, k, l) &= \min \begin{cases}
-    d_{il} + 1\\
-    d_{kj} + 1\\
-    d_{kl} + m_{kl}\\
-    \end{cases}    
-    \\
-    m_{kl} &= 1\, \text{if}\, \slabel(v_k) \neq \slabel(w_l)\, \text{else}\, 0\\
+  d_{ij} &= \min \begin{cases}
+    \min_{v_k \in \preds(v_i)} d_{kj} + 1\\
+    \min_{w_l \in \preds(w_i)} d_{il} +1 \\
+    \min_{v_k \in \preds(v_i), w_l \in \preds(w_j)} d_{kj}+m_{kl}\\
+  \end{cases}\\
+\\
+    m_{kl} &= 1\, \text{if}\, \slabel(v_k) \neq \slabel(w_l)\, \text{else}\, 0\\    
 \end{align*}
-This is the same as for ordinary sequence alignment, except that all predecessor nodes of $v_i$ and $w_j$ have to be considered, not only $i-1$ and $j-1$ as in the linear case.
+% \begin{align*}
+%   d_{ij} &= \min_{v_k \in \preds(v_i), w_l \in \preds(w_j)} d^*(i, j, k, l)\\
+%   d^*(i, j, k, l) &= \min \begin{cases}
+%     d_{il} + 1\\
+%     d_{kj} + 1\\
+%     d_{kl} + m_{kl}\\
+%     \end{cases}
+%     \\
+%     m_{kl} &= 1\, \text{if}\, \slabel(v_k) \neq \slabel(w_l)\, \text{else}\, 0\\
+% \end{align*}
 If the graph is acyclic, then all the $d_{ij}$ can be calculated using dynamic programming, without incurring any infinite loops.
 \begin{figure}
   \begin{tikzpicture}

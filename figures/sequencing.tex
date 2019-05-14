@@ -1,20 +1,36 @@
   \matrix (m) [matrix of math nodes, align=center, row sep=0.2em, column sep=0.5em, minimum width=1em, minimum height=1.5em]{
-A & \dT  &A & T   &A & T   &A & T   \\
-C &      &C & \dG &C & G   &C & G   \\
-C &      &C &     &C & \dG &C & G   \\
-T &      &T &     &T &     &T & \dA \\
-G &      &G &     &G &     &G &     \\
+A & \dT  &A & T   &A & T   &A & T   & A & T\\
+C &      &C & \dG &C & G   &C & G   & C & G\\
+C &      &C &     &C & \dG &C & G   & C & G\\
+T &      &T &     &T &     &T & \dA & T & A\\
+G &      &G &     &G &     &G &     & G & \dC\\
 };
 \draw (m-1-1) -- (m-2-1) -- (m-3-1) -- (m-4-1) -- (m-5-1);
 \draw[dotted] (m-1-1) -- (m-1-2);
 \draw (m-1-3) -- (m-2-3) -- (m-3-3) -- (m-4-3) -- (m-5-3);
 \draw[dotted] (m-1-3) -- (m-1-4);
 \draw[dotted] (m-2-3) -- (m-2-4);
+\draw (m-1-4) -- (m-2-4);
 \draw (m-1-5) -- (m-2-5) -- (m-3-5) -- (m-4-5) -- (m-5-5);
 \draw[dotted] (m-1-5) -- (m-1-6);
 \draw[dotted] (m-2-5) -- (m-2-6);
 \draw[dotted] (m-3-5) -- (m-3-6);
+\draw (m-1-6) -- (m-2-6) -- (m-3-6);
 \draw (m-1-7) -- (m-2-7) -- (m-3-7) -- (m-4-7) -- (m-5-7);
 \draw[dotted] (m-1-7) -- (m-1-8);
 \draw[dotted] (m-2-7) -- (m-2-8);
 \draw[dotted] (m-3-7) -- (m-3-8);
+\draw[dotted] (m-4-7) -- (m-4-8);
+\draw (m-1-8) -- (m-2-8) -- (m-3-8) -- (m-4-8);
+\draw (m-1-9) -- (m-2-9) -- (m-3-9) -- (m-4-9) -- (m-5-9);
+\draw[dotted] (m-1-9) -- (m-1-10);
+\draw[dotted] (m-2-9) -- (m-2-10);
+\draw[dotted] (m-3-9) -- (m-3-10);
+\draw[dotted] (m-4-9) -- (m-4-10);
+\draw[dotted] (m-5-9) -- (m-5-10);
+\draw (m-1-10) -- (m-2-10) -- (m-3-10) -- (m-4-10) -- (m-5-10);
+
+%%% Local Variables:
+%%% mode: plain-tex
+%%% TeX-master: t
+%%% End:

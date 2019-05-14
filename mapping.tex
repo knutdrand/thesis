@@ -10,7 +10,7 @@ The following is a brief description of the developments in this field, with foc
 After this we will look at the methods used for graph alignment with focus on \emph{vg}~\cite{vg}, which is also central in our work.
 
 \subsection{Linear Mapping}
-As in Section~\ref{sec:pairwise}, we define the mapping problem as finding the interval $i_R$ for wich the edit distance $D(R[i_R], Q)$ is smallest, and the alignment $A(R[i_R], Q)$. We here introduce some of the heuristics used to solve this problem, with focus on the \emph{seed-and-extend} paradigm. The seed-and-extend paradigm involves using an index to find substrings of the query sequence $Q$ which has an exact match in the reference sequence $R$ (called seeds) and using dynamic programming based methods to align the query sequence to a region around the seeds in the reference sequence. We let $EM(Q, R)$ be the set of all exact matches, represented by the tuples $\buildset{(q, r, l)}{Q[q:q+l]=R[r:r+1]}$. Since the dynamic programming methods can still be computationally expensive, the goal is to make the seeds as small a subset of exact matches as possible, while still making sure that the true alignment covers one of the seeds.
+As in Section~\ref{sec:pairwise}, we define the mapping problem as finding the interval $i_R$ for wich the edit distance $D(R[i_R], Q)$ is smallest. We here introduce some of the heuristics used to solve this problem, with focus on the \emph{seed-and-extend} paradigm. The seed-and-extend paradigm involves using an index to find substrings of the query sequence $Q$ which has an exact match in the reference sequence $R$ (called seeds) and using dynamic programming based methods to align the query sequence to a region around the seeds in the reference sequence. We let $EM(Q, R)$ be the set of all exact matches, represented by the tuples $\buildset{(q, r, l)}{Q[q:q+l]=R[r:r+l]}$. Since the dynamic programming methods can still be computationally expensive, the goal is to make the seeds as small a subset of exact matches as possible, while still making sure that the true alignment covers one of the seeds.
  
 \subsubsection{Indexing}
 An essential tool for quick alignment is to have a searchable index of the reference genome which is capable of returning sets of interval-pairs from the reference and query sequence for which the reference sequence is identical or near identical to the query sequence.
@@ -24,7 +24,7 @@ Variable length indexes usually use a variation of the \emph{full text minute in
 The FM-index uses a succinct representation of the suffix array~\cite{suffixarray} and Burrows-Wheeler transform~\cite{BWT} of the sequence in order to find exact matches of a query string $S$ in $O(\size{S})$ time (see Figure~\ref{fig:FM}).
 Thus if a read has one or more exact matches in the reference sequence it can be found directly using the FM-index.
 For inexact matches, it can also be used to find an exact alignment of $Q$ and $R$ in approximately $O(\size{R}^{0.628}\times\size{Q})$ time~\cite{bwtsw, bwalong}.
-Some algorithms also use the FM-index to finod exact matches for permutations of the query sequence~\cite{bowtie1, bwashort}, but for longer reads the search space gets too big when allowing for indels.
+Some algorithms also use the FM-index to find exact matches for permutations of the query sequence~\cite{bowtie1, bwashort}, but for longer reads the search space gets too big when allowing for indels.
 \begin{figure}
   \tikzpicture
   \input{figures/fmfinish.tex}
@@ -59,7 +59,7 @@ A SMEM is a MEM where the query interval cannot be extended in either direction 
   \label{fig:smem}
 \end{figure}
 
-SMEMs are natural to use as seeds as they cover for each subsequence in $Q$ the longest exact match in $R$.
+SMEMs are natural to use as seeds as they cover for each substring in $Q$ the longest exact match in $R$.
 They are however vulnerable for spurious long matches hiding shorter exact matches.
 To account for this BWA-mem allows an option to split long SMEMs into shorter MEMs if they are longer than a certain threshold.
 Splitting SMEMs like this increases accuracy, since it increases the number of seeds, but can negatively affect performance. 
@@ -75,16 +75,16 @@ Approximately collinear means that $\abs{(q_1-q_2) -(r_1-r_2)}<w$ for some set t
 
 \subsection{Graph Mapping}
 \label{sec:graphmapping}
-Mapping to a graph based reference $G_R$ is similar to the linear case, except that instead of finding a linear interval, the goal is to find a graph interval $i_r$ such that $D(G_R[i_r], Q))$ is minimized.
+Mapping to a graph based reference $G_R$ is similar to the linear case, except that instead of finding a linear interval, the goal is to find a graph interval $i_r$ such that $D(G_R[i_r], Q)$ is minimized.
 It is however deceptively more complicated. 
-Firstly, because the number of subsequences in a sequence graph grows exponentially with the complexity of the graph, and secondly since chaining subsequence-matches is more complicated due to the possible existence of multiple paths between two matches.
+Firstly, because the number of substring in a sequence graph grows exponentially with the complexity of the graph, and secondly since chaining subsequence-matches is more complicated due to the possible existence of multiple paths between two matches.
 \emph{vg}~\cite{vg} has been at the forefront of mapping to a graph reference in company with 7bridges~\cite{7bridges}, showing that it can lead to better mapping accuracy than BWA-mem.
 Below is a brief description of the methodology used by \emph{vg}.
 
 \subsubsection{\emph{vg}}
 \emph{vg} uses much the same methodology as BWA-mem to align reads.
 It uses the GCSA2-index to find SMEMs, uses chaining to filter the SMEMs, and uses a graph adaption of Smith-Waterman to extend the seeds.
-\emph{vg} is able to align reads to more complicated graph structures than the simple directed sequence graphs considered in this thesis.
+\emph{vg} is able to align reads to more complicated graph structures than the  directed acyclic sequence graphs considered in this thesis.
 % For simplicity, the descriptions below will be contained to simple graphs, which entails that the GCSA index described is GCSA1\cite{gcsa1} which is only able to index directed sequence graphs.
 
 \subsubsection{GCSA}

@@ -7,7 +7,7 @@ Since there can be multiple paths betweeen two nodes in a graph, this is not as 
 The article describes two interpretations of intervals on grpahs, single-path intervals and multi-path intervals, and how they should be represented.
 A single-paths intervals is simply a path in the graph, while a multi-path interval are a subset of all paths between two nodes in the graph. 
 
-These consepts are examplified through an analysis of genes annotated on GRCh38 with alternative loci.
+These consepts are examplified through an analysis of genes annotated on the newest human reference genome (GRCh38) which includes alternative loci.
 
 
 \subsection*{Paper II: Graph Peak Caller: Calling ChIP-seq peaks on graph-based reference genomes}
@@ -28,8 +28,9 @@ This path is in turned into a linear reference which is mapped to using a linear
 We show that this approach performs well on reads covering variants while avoiding the loss of accuracy due to mismappings.
 
 \subsection*{Paper IV: Beware the Jaccard: the choice of metric is important and non-trivial in genomic colocalisation analysis}
-Paper IV investigates the properties of different metrics used to measure genomic co-localization of binary tracks.
-We show that the different measures are affected differently by track size, and that the underlying reason for differing track sizes can be used to inform which similarity measure to use.
+Paper IV investigates the properties of different measures of similarity between binary tracks in the setting of genomic colocalization analysis where genomic features are represented as binary tracks.
+We show that commonly used similarity measures are affected differently by track size.
+Specifically, the Jaccard Index tends to yield higher values for larger tracks, while the Forbes index is not biased by track size, but has a higher variance for smaller tracks. We further show that the underlying reason for differing track sizes can be used to inform which similarity measure to use.
 
 %%% Local Variables:
 %%% mode: latex
