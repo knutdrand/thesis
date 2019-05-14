@@ -1,7 +1,7 @@
 The alignment methods described in the previous section do not scale well to large sequences.
 Aligning a read $Q[:m]$ to a reference genome $R[:N]$ will require computing $mN$ values.
 A NGS sequencing experiment typically yields hundreds of thousands of reads of length 30-300 which need to be located in the human reference genome of length 3 billions.
-This would need to calculate $10^{16}$ values, which is intractable even on modern computers.
+This would necessitate the calculation of $10^{16}$ values, which is intractable even on modern computers.
 
 This has led to much progress since the dawn of NGS in developing alignment methods that avoid the complexity of the exact dynamic programming methods.
 This has been achieved mainly by two approaches, creating searchable indexes of the reference genome and using heuristics to limit the search space of possible alignments.
@@ -46,7 +46,7 @@ Maximal Exact Matches are Exact Matches that cannot be extended in either direct
   & (q-1, r-1, l+1) \notin EM \}
 \end{align*}
 BWA-mem furthers this concept to SuperMaximal Exact Matches (SMEM)~\cite{origsmem}.
-A SMEM is a MEM where the query interval cannot be extended in either direction and still yields an Exact Match anywhere on the reference~\ref{fig:smem}.
+A SMEM is a MEM where the query interval cannot be extended in either direction and still yield an Exact Match anywhere on the reference~\ref{fig:smem}.
 \begin{align*}
   SMEM(Q, R) = \{(q, r, l) \in EM \mid \nexists r^*[&(q, r^*, l+1) \in EM \vee\\
     &(q-1, r^*, l+1) \in EM] \}
@@ -59,8 +59,8 @@ A SMEM is a MEM where the query interval cannot be extended in either direction 
   \label{fig:smem}
 \end{figure}
 
-SMEMs are natural to use as seeds as they cover for each substring in $Q$ the longest exact match in $R$.
-They are however vulnerable for spurious long matches hiding shorter exact matches.
+SMEMs are natural to use as seeds as they cover, for each substring in $Q$, the longest exact match in $R$.
+They are, however, vulnerable for spurious long matches hiding shorter exact matches.
 To account for this, BWA-mem allows an option to split long SMEMs into shorter MEMs if they are longer than a certain threshold.
 Splitting SMEMs like this increases accuracy, since it increases the number of seeds, but can negatively affect performance. 
 In order to find SMEMs, an adaption of the FM index is used, the FMD index, where $FMD(R) = FM(R \concat \bar{R})$.
@@ -83,12 +83,12 @@ Below is a brief description of the methodology used by \emph{vg}.
 
 \subsubsection{\emph{vg}}
 \emph{vg} uses much the same methodology as BWA-mem to align reads.
-It uses the GCSA2-index to find SMEMs, uses chaining to filter the SMEMs, and uses a graph adaption of Smith-Waterman to extend the seeds.
-\emph{vg} is able to align reads to more complicated graph structures than the  directed acyclic sequence graphs considered in this thesis.
+It uses the GCSA2-index~\cite{gcsa1, gcsa2} to find SMEMs, uses chaining to filter the SMEMs, and uses a graph adaption of Smith-Waterman to extend the seeds.
+\emph{vg} is able to align reads to more complicated graph structures than the directed acyclic sequence graphs considered in this thesis.
 % For simplicity, the descriptions below will be contained to simple graphs, which entails that the GCSA index described is GCSA1\cite{gcsa1} which is only able to index directed sequence graphs.
 
 \subsubsection{GCSA}
-The \emph{Generalized compressed suffix array} (GCSA)-index~\cite{gcsa1, gcsa2} is a generalization of the FM-index, where arbitrary-length sequences can be looked up in a sequence graph.
+The \emph{Generalized compressed suffix array} (GCSA)-index is a generalization of the FM-index, where arbitrary-length sequences can be looked up in a sequence graph.
 Originally constructed to work on acyclic sequence graphs, version two of GCSA extends the functionality to general variation graphs.
 For simplicity we will here focus on acyclic graphs.
 

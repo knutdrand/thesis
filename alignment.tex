@@ -8,9 +8,9 @@ The process of finding these estimates is called \emph{sequence alignment} and i
 Firstly, it is one of the earliest and most intuitive applications of sequence graphs, and secondly, it is an important part of \emph{mapping} which will be covered in the next section. 
 
 In the following we will refer to the edit distance between two sequences, $S$ and $T$, as $D(S, T)$, here meaning the Levenshtein distance unless specifically mentioned.
-The concepts discussed are however generalisable to other (weighted) edit distances and similarity measures by small changes.
+The concepts discussed are however generalizable to other (weighted) edit distances and similarity measures by small changes.
 
-The set of edits between two sequences can be represented with an \emph{alignment block} where ``-'' symbols are inserted into the sequences to represent insertions and deletions (indels), (see Figure~\ref{fig:needle}).
+The set of edits between two sequences can be represented with an \emph{alignment block} where ``-'' symbols are inserted into the sequences to represent insertions and deletions (indels) (see Figure~\ref{fig:needle}).
 
 \subsection{Pairwise Sequence Alignment}
 \label{sec:pairwise}
@@ -19,15 +19,18 @@ It is merely the process of counting the number of mismatches between them.
 Indels introduce a dependency since an insertion at position $i$ affects the pairings of all the symbols after position $i$.
 The number of meaningful combinations of insertions and deletions grow exponentially with sequence length, so exploring all of them is not a viable solution even for short sequences.
 The problem is however tractable since the best alignment of two sequences $S[:M], T[:N]$ is either the best alignment of $S[:M-1], T[:N]$ with an insertion at the end, or of $S[:M], T[:N-1]$ with a deletion at the end, or of $S[:M-1], T[:N-1]$ with a match or substitution at the end. 
-Letting $d_{i,j} = D(S[:i], T[:j])$ and $m_{i,j}$ be zero if $S[i]=T[j]$ else $1$, we can write this as the recurrence relation:
+Letting $d_{i,j} = D(S[:i], T[:j])$, we can write this as the recurrence relation:
 \begin{align*}
-  d_{k,l} = min\begin{cases}
+  d_{k,l} &= min\begin{cases}
   &d_{k-1,l-1}+m_{k-1, l-1}\quad \text{(match/substitution)}\\
   &d_{k-1,l}+1 \quad \text{(insertion)}\\
   &d_{k, l-1}+1 \quad \text{(deletion)}\\
 \end{cases}
+  \\
+  &\text{where}\\
+  m_{k, l} &= 1\, \text{if}\, S[i] \neq T[j]\, \text{else}\, 0\\
 \end{align*}
-The fact that the edit distance to an empty string is just the sequence length gives the initial conditions $d_{k, 0}=k,\,d_{0,l}=l$.
+The initial conditions are given by $d_{k, 0}=k$ and $d_{0,l}=l$ since the edit distance to an empty string is just the sequence length.
 The Needleman-Wunch algorithm~\cite{needlemanwunch} uses dynamic programming to calculate the matrix of edit distances $d_{kl}$, where $d_{MN}$ is the edit distance between $S[:M]$ and $T[:N]$.
 In order to find the specific edits, a backtracking algorithm is used that starts at the $(i, j) = (M, N)$ corner and finds out which of the possible predecessors $(i-1, j), (i-1, j-1), (i, j-1)$ contributed to the $(i, j)$ edit distance.
 Then repeating this until the $(0, 0)$ corner is reached. Each of these steps corresponds to a column in the alignment block.
@@ -40,13 +43,13 @@ Figure~\ref{fig:needle} details the Needleman Wunch algorithm.
   \label{fig:needle}
 \end{figure}
 
-This algorithm can be adopted in a number of ways in order to solve related problems.
+This algorithm can be adapted in a number of ways in order to solve related problems.
 Notably, by using an affine gap penalty one can reduce the cost of long indels compared to many small indels~\cite{affine}, or one can use positive scores for matches to be able to find substrings that align well to each other~\cite{smithwaterman}(Smith-Waterman).
 
 An adaption relevant for this thesis, referred to as the \emph{mapping} problem, is to find the a substring of one sequence $R$ that minimizes the edit distance to another $Q$.
 I.e find $\min_{k, l}(D(R[k:l], Q))$.
 This can be done by changing just the initial conditions of the Needleman-Wunch algorithm, to remove the cost of gaps at the beginning and end of $R$.
-We set $d_{k0} = 0$ and start the backtracking algorithm at $(m, l)$ where $l=\argmin_i d_{Mi}$.
+We set $d_{k0} = 0$ and start the backtracking algorithm at $(M, l)$ where $l=\argmin_i d_{Mi}$.
 Figure~\ref{fig:needlemanmap} shows an example of this algorithm.
 \begin{figure}
   \begin{tikzpicture}
@@ -64,6 +67,7 @@ In this way it solves in an exact, but slow, way the problem of the next chapter
 The framework used to align sequences extends naturally to acyclic sequence graphs \cite{hein, poa}.
 We define the alignment of a sequence $S$ to a sequence graph $G$ as the alignment of $S$ to a sequence $T \in \lang(G)$ in the language of $G$ which yields the lowest edit distance.
 Similarly, the alignment of two sequence graphs $G=(V, E, \slabel_G), H=(W, F, \slabel_H)$, is the alignment of a sequence $S \in \lang(G)$ to a sequence $T \in \lang(H)$ that yields the lowest edit distance.
+
 For each pair of nodes, $v_i \in V, w_i \in W$, we can define a distance between the two graphs up to the corresponding nodes as the lowest edit distance between two substrings ending at the given nodes.
 \[
   d_{ij} = \min_{p_g \in \paths(v_0, v_i), p_h \in \paths(w_0, w_j)} D(G[p_g], H[p_h])
@@ -101,11 +105,11 @@ If the graph is acyclic, then all the $d_{ij}$ can be calculated using dynamic p
     \label{fig:seqgrapha}
 \end{figure}
 
-An alignment between two sequences $S, T$ can be represented by a sequence graph in a meaningful manner in that one can construct a sequence graph $AG(S, T)$ from the alignment of the sequences in such a way that 
+The alignment between two sequences $S, T$ can be represented by a sequence graph in a meaningful manner in that one can construct a sequence graph $AG(S, T)$ from the alignment of the sequences in such a way that 
 \[
 \forall (R \in \lang(AG(S, T)))\left[D(S, R)+D(R, T) =  D(S, T)\right].
 \]
-For an optimal alignment, this means that all sequences recognized by the sequence graph have the property that the sum of the distance to the original sequences is as low as it can be.
+This means that all sequences recognized by the alignment graph have the property that the sum of the distances to the original sequences is as low as it can be.
 These sequences thus represent combinations of $S$ and $T$ that are natural estimates of an ancestor of the two sequences.
 Thus aligning a sequence $S$ to an alignment graph $AG(T, R)$  can be seen as aligning $S$ to the best fitting ancestor sequence of $T$ and $R$.
 Similarly, aligning two alignment graphs can be seen as finding the ancestors of two pairs of sequences that fit best together~\cite{treealign, poa2}.
