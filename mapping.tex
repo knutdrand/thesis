@@ -10,7 +10,7 @@ The following is a brief description of the developments in this field, with foc
 After this we will look at the methods used for graph alignment with focus on \emph{vg}~\cite{vg}, which is also central in our work.
 
 \subsection{Linear Mapping}
-As in Section~\ref{sec:pairwise}, we define the mapping problem as finding the interval $i_R$ for wich the edit distance $D(R[i_R], Q)$ is smallest. We here introduce some of the heuristics used to solve this problem, with focus on the \emph{seed-and-extend} paradigm. The seed-and-extend paradigm involves using an index to find substrings of the query sequence $Q$ which has an exact match in the reference sequence $R$ (called seeds) and using dynamic programming based methods to align the query sequence to a region around the seeds in the reference sequence. We let $EM(Q, R)$ be the set of all exact matches, represented by the tuples:
+As in Section~\ref{sec:pairwise}, we define the mapping problem as finding the interval $i_R$ for wich the edit distance $D(R[i_R], Q)$ is smallest. We here introduce some of the heuristics used to solve this problem, with focus on the \emph{seed-and-extend} paradigm. The seed-and-extend paradigm involves using an index to find substrings of the query sequence $Q$ which has an exact match in the reference sequence $R$ (called seeds) and using dynamic programming based methods to align the query sequence to a region around the seeds in the reference sequence. We let $EM(Q, R)$ be the set of all exact matches, represented by the tuples
 \[EM(Q, R) = \buildset{(q, r, l)}{Q[q:q+l]=R[r:r+l]}.\]
 Since the dynamic programming methods can still be computationally expensive, the goal is to make the seeds as small a subset of exact matches as possible, while still making sure that the true alignment covers one of the seeds.
  
@@ -28,6 +28,7 @@ Thus if a read has one or more exact matches in the reference sequence, it can b
 For inexact matches, it can also be used to find an exact alignment of $Q$ and $R$ in approximately $O(\size{R}^{0.628}\times\size{Q})$ time~\cite{bwtsw, bwalong}.
 Some algorithms also use the FM-index to find exact matches for permutations of the query sequence~\cite{bowtie1, bwashort}, but for longer reads the search space gets too big when allowing for indels.
 \begin{figure}
+  \centering
   \tikzpicture
   \input{figures/fmfinish.tex}
   \endtikzpicture
@@ -48,12 +49,13 @@ Maximal Exact Matches are Exact Matches that cannot be extended in either direct
   & (q-1, r-1, l+1) \notin EM \}.
 \end{align*}
 BWA-mem furthers this concept to SuperMaximal Exact Matches (SMEM)~\cite{origsmem}.
-A SMEM is a MEM where the query interval cannot be extended in either direction and still yield an Exact Match anywhere on the reference~\ref{fig:smem}.
+A SMEM is a MEM where no extension of the query interval has an Exact Match anywhere on the reference~\ref{fig:smem}.
 \begin{align*}
   SMEM(Q, R) = \{(q, r, l) \in EM \mid \nexists r^*[&(q, r^*, l+1) \in EM \vee\\
     &(q-1, r^*, l+1) \in EM] \}.
 \end{align*}
 \begin{figure}
+  \centering
   \tikzpicture
   \input{figures/memfig}
   \endtikzpicture
@@ -105,6 +107,7 @@ This means that not all possible sequences in the graph gets indexed.
 Even after pruning, this procedure is costly and makes the GCSA index significantly slower to create, and more memory consuming than the FM-index.
 
 \begin{figure}
+  \centering
   \tikzpicture
   \input{figures/gcsafigb}
   \endtikzpicture

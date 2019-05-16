@@ -14,6 +14,7 @@ Sanger sequencing uses this by combining a small amount of adapted nucleotides w
 Illumina sequencing further evolves this concept by also being able to reverse these adaptions so that synthesis can continue~\cite{reversiblechain}.
 Thus it can, step-by-step, synthesize one adapted nucleotide to the single DNA-strand, find out which nucleotide was included, then reverse the adaption and synthesize a new adapted nucleotide(see Figure~\ref{fig:illumina}).
 \begin{figure}
+  \centering
   \tikzpicture
   \input{figures/sequencing}
   \endtikzpicture
@@ -44,6 +45,7 @@ In order to do this, the binding of the protein to DNA is strengthened in order 
 Antibodies for the protein of interest are then used to retrieve DNA-fragments with the protein attached.
 These DNA-fragments can then be sequenced, yielding reads that tend to come from the vicinity of a binding site (Figure~\ref{fig:chipseq}). The process of analyzing these reads is covered in Section~\ref{sec:peakcalling}.
 \begin{figure}
+\centering
 \input{figures/chipseqtikz}
 \caption{
   Figure showing the main steps of a CHiP-seq experiment. a) A protein of interest (CTCF) binds to the DNA; b) the DNA is cut up into fragments, from which the ones with proteins bound to it are kept; c) these fragments are then sequenced, yielding reads that are from the vicinity of protein binding sites.}

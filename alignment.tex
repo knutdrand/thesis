@@ -19,7 +19,7 @@ It is merely the process of counting the number of mismatches between them.
 Indels introduce a dependency since an insertion at position $i$ affects the pairings of all the symbols after position $i$.
 The number of meaningful combinations of insertions and deletions grow exponentially with sequence length, so exploring all of them is not a viable solution even for short sequences.
 The problem is however tractable since the best alignment of two sequences $S[:M], T[:N]$ is either the best alignment of $S[:M-1], T[:N]$ with an insertion at the end, or of $S[:M], T[:N-1]$ with a deletion at the end, or of $S[:M-1], T[:N-1]$ with a match or substitution at the end. 
-Letting $d_{i,j} = D(S[:i], T[:j])$, we can write this as the recurrence relation:
+Letting $d_{i,j} = D(S[:i], T[:j])$, we can write this as the recurrence relation
 \begin{align*}
   d_{k,l} &= min\begin{cases}
   &d_{k-1,l-1}+m_{k-1, l-1}\quad \text{(match/substitution)}\\
@@ -29,8 +29,8 @@ Letting $d_{i,j} = D(S[:i], T[:j])$, we can write this as the recurrence relatio
   \\
   &\text{where}\\
   m_{k, l} &= \begin{cases} &1 \, \text{if}\, S[i] \neq T[j]\\
-                           &0 \, \text{otherwise}\\
-                           \end{cases}.
+                           &0 \, \text{otherwise}.\\
+                           \end{cases}
 \end{align*}
 The initial conditions are given by $d_{k, 0}=k$ and $d_{0,l}=l$ since the edit distance to an empty string is just the sequence length.
 The Needleman-Wunch algorithm~\cite{needlemanwunch} uses dynamic programming to calculate the matrix of edit distances $d_{kl}$, where $d_{MN}$ is the edit distance between $S[:M]$ and $T[:N]$.
@@ -38,6 +38,7 @@ In order to find the specific edits, a backtracking algorithm is used that start
 Then repeating this until the $(0, 0)$ corner is reached. Each of these steps corresponds to a column in the alignment block.
 Figure~\ref{fig:needle} details the Needleman Wunch algorithm.
 \begin{figure}
+  \centering
   \begin{tikzpicture}
     \input{figures/needleman_a}
   \end{tikzpicture}
@@ -54,6 +55,7 @@ This can be done by changing just the initial conditions of the Needleman-Wunch 
 We set $d_{k0} = 0$ and start the backtracking algorithm at $(M, l)$ where $l=\argmin_i d_{Mi}$.
 Figure~\ref{fig:needlemanmap} shows an example of this algorithm.
 \begin{figure}
+  \centering
   \begin{tikzpicture}
     \input{figures/needleman_b}
   \end{tikzpicture}
@@ -84,11 +86,12 @@ We then get a recurrence relation similar to that of ordinary sequence alignment
 \\
   m_{kl} &= \begin{cases}
     &1\, \text{if}\, \slabel(v_k) \neq \slabel(w_l)\\
-    &0\, \text{otherwise}\\
-    \end{cases}.
+    &0\, \text{otherwise}.\\
+    \end{cases}
 \end{align*}
 If the graph is acyclic, then all the $d_{ij}$ can be calculated using dynamic programming, without incurring any infinite loops.
 \begin{figure}
+  \centering
   \begin{tikzpicture}
     \input{figures/seqgraph_a}
   \end{tikzpicture}
@@ -111,8 +114,9 @@ Similarly, aligning two alignment graphs can be seen as finding the ancestors of
 This is illustrated in Figure~\ref{fig:treealign}.
 
 \begin{figure}
+  \centering
   %\input{figures/msa_standalone}
-  \includegraphics[width=\textwidth]{figures/graph_msa}
+  \includegraphics[width=0.95\textwidth]{figures/graph_msa}
 
   \caption{
     Iterative sequence graph alignments of four sequences evolved in two generations from $S=\emph{ACGTACGTACGT}$.
