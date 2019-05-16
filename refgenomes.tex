@@ -1,4 +1,4 @@
-When it can be assumed that the genomic DNA-sequences from individuals of the same population is highly similar, it is possible to use one DNA-sequence as a \emph{reference genome} for the population.
+When it can be assumed that the genomic DNA-sequences from individuals of the same population are highly similar, it is possible to use one DNA-sequence as a \emph{reference genome} for the population.
 Such reference genomes serve two main purposes;
 they make the deduction of the DNA-sequence from a sample a simpler problem through mapping (see Section~\ref{sec:mapping}), and they make it possible to represent the outcome of a range of biological experiments as intervals or coordinates on the coordinate system induced by the reference genome. 
 
@@ -25,10 +25,10 @@ This enables answering questions like whether variants associated with \emph{Mul
 Paper IV in this thesis discusses how the choice of similarity measures between sets of genomic intervals can affect the outcome of such genome wide colocalization analyses.
 
 \subsection{Graph Based References}
-Both mapping of reads and any subsequent analysis of the predicted genomic features is affected by the reference genome used.
+Both mapping of reads and any subsequent analysis of the predicted genomic features are affected by the reference genome used.
 The more the sample genome deviates from the reference, the less accurate the analyses become.
 In this light the inclusion of known common variants into the reference can be beneficial as the reference would then represent the population more accurately.
-Representing the reference as a sequence graph where different paths represents different variants is one way to achieve this~\cite{genomegraphs}.
+Representing the reference as a sequence graph where different paths represent different variants is one way to achieve this~\cite{genomegraphs}.
 The first three papers of this thesis discuss various facets of a change from linear reference sequences to reference sequence graphs; Paper I discusses the representation of genomic intervals on sequence graphs, Paper II introduces a method for analyzing ChIP-seq data on reference graphs and Paper III discusses aspects of mapping reads to a reference graph.
 The central concepts of mapping and aligning reads to a sequence graph are more thoroughly introduced in Sections~\ref{sec:alignment} and \ref{sec:mapping}.
 

@@ -4,7 +4,7 @@ Sequences are important in this thesis as they are the means to represent DNA-se
 We will here formally work with an alphabet $\alphabet_{DNA} = \set{A, C, G, T}$ and say that a \emph{sequence} of length $n$ over that alphabet is a tuple in the set $\alphabet_{DNA}^n$.
 The set of all sequences of any length over $\alphabet_{DNA} = \set{A, C, G, T}$ is  represented by $\alphabet_{DNA}^*$.
 The length of a sequence $S \in \alphabet_{DNA}^*$ is notated $\size{S}$.
-The $i$th symbol in a sequence $s$ is notated $S[i]$ and a substring of $S$ starting at the $i$th symbol (inclusive) and ending at the $j$th symbol (exclusive) is denoted $S[i:j]$.
+The $i$th symbol in a sequence $S$ is notated $S[i]$ and a substring of $S$ starting at the $i$th symbol (inclusive) and ending at the $j$th symbol (exclusive) is denoted $S[i:j]$.
 A \emph{prefix} of $S$, i.e. a substring of $S$ starting from the first symbol, of length $k$ is denoted $S[:k]$, while a \emph{suffix} of $S$ starting at the $k$th symbol is denoted $S[k:]$.
 A \emph{kmer} of a sequence $S$ is any substring of $S$ of length $k$.
 
@@ -31,7 +31,7 @@ We refer to the label of a path $\slabel((v_1, e_1, v_2,,,e_{n-1}v_n))$ as the c
 The sequence graphs we look at here will have start and end nodes that are clearly defined, which will be denoted $v_s$ and $v_e$. If this were not the case, dummy nodes ($\#, \$$) can be inserted to the graph to make the start and end unambiguous.
 The \emph{language} recognized by a sequence graph $\lang((G, \slabel))$ is the label of each path going from the start node to the end node, i.e:
 \[
-  \lang((G, \slabel)) = \buildset{ \slabel(p)}{p \in \paths(v_s, v_e)}
+  \lang((G, \slabel)) = \buildset{ \slabel(p)}{p \in \paths(v_s, v_e)}.
 \]
 A \emph{graph interval} is a path in the graph, and for a graph interval $i_G$, the notation  $SG[i_G]$ will mean the label of that path, i.e. $\slabel(i_G)$.
 

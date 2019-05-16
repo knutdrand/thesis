@@ -10,7 +10,9 @@ The following is a brief description of the developments in this field, with foc
 After this we will look at the methods used for graph alignment with focus on \emph{vg}~\cite{vg}, which is also central in our work.
 
 \subsection{Linear Mapping}
-As in Section~\ref{sec:pairwise}, we define the mapping problem as finding the interval $i_R$ for wich the edit distance $D(R[i_R], Q)$ is smallest. We here introduce some of the heuristics used to solve this problem, with focus on the \emph{seed-and-extend} paradigm. The seed-and-extend paradigm involves using an index to find substrings of the query sequence $Q$ which has an exact match in the reference sequence $R$ (called seeds) and using dynamic programming based methods to align the query sequence to a region around the seeds in the reference sequence. We let $EM(Q, R)$ be the set of all exact matches, represented by the tuples $\buildset{(q, r, l)}{Q[q:q+l]=R[r:r+l]}$. Since the dynamic programming methods can still be computationally expensive, the goal is to make the seeds as small a subset of exact matches as possible, while still making sure that the true alignment covers one of the seeds.
+As in Section~\ref{sec:pairwise}, we define the mapping problem as finding the interval $i_R$ for wich the edit distance $D(R[i_R], Q)$ is smallest. We here introduce some of the heuristics used to solve this problem, with focus on the \emph{seed-and-extend} paradigm. The seed-and-extend paradigm involves using an index to find substrings of the query sequence $Q$ which has an exact match in the reference sequence $R$ (called seeds) and using dynamic programming based methods to align the query sequence to a region around the seeds in the reference sequence. We let $EM(Q, R)$ be the set of all exact matches, represented by the tuples:
+\[EM(Q, R) = \buildset{(q, r, l)}{Q[q:q+l]=R[r:r+l]}.\]
+Since the dynamic programming methods can still be computationally expensive, the goal is to make the seeds as small a subset of exact matches as possible, while still making sure that the true alignment covers one of the seeds.
  
 \subsubsection{Indexing}
 An essential tool for quick alignment is to have a searchable index of the reference genome which is capable of returning sets of interval-pairs from the reference and query sequence for which the reference sequence is identical or near identical to the query sequence.
@@ -43,13 +45,13 @@ One way of finding seeds is to find Maximal Exact Matches (MEM)~\cite{longmem}.
 Maximal Exact Matches are Exact Matches that cannot be extended in either direction, ie. 
 \begin{align*}
   MEM(Q, R) = \{(q, r, l) \in EM \mid &(q, r, l+1) \notin EM \wedge \\
-  & (q-1, r-1, l+1) \notin EM \}
+  & (q-1, r-1, l+1) \notin EM \}.
 \end{align*}
 BWA-mem furthers this concept to SuperMaximal Exact Matches (SMEM)~\cite{origsmem}.
 A SMEM is a MEM where the query interval cannot be extended in either direction and still yield an Exact Match anywhere on the reference~\ref{fig:smem}.
 \begin{align*}
   SMEM(Q, R) = \{(q, r, l) \in EM \mid \nexists r^*[&(q, r^*, l+1) \in EM \vee\\
-    &(q-1, r^*, l+1) \in EM] \}
+    &(q-1, r^*, l+1) \in EM] \}.
 \end{align*}
 \begin{figure}
   \tikzpicture
@@ -78,7 +80,7 @@ Approximately collinear means that $\abs{(q_1-q_2) -(r_1-r_2)}<w$ for some set t
 Mapping to a graph based reference $G_R$ is similar to the linear case, except that instead of finding a linear interval, the goal is to find a graph interval $i_r$ such that $D(G_R[i_r], Q)$ is minimized.
 It is however deceptively more complicated. 
 Firstly, because the number of substring in a sequence graph grows exponentially with the complexity of the graph, and secondly, since chaining subsequence-matches is more complicated due to the possible existence of multiple paths between two matches.
-\emph{vg}~\cite{vg} has been at the forefront of mapping to a graph reference in company with \emph{seven bridges}~\cite{7bridges}, showing that it can lead to better mapping accuracy than BWA-mem.
+The tool \emph{vg}~\cite{vg} has been at the forefront of mapping to a graph reference in company with \emph{seven bridges}~\cite{7bridges}, showing that it can lead to better mapping accuracy than BWA-mem.
 Below is a brief description of the methodology used by \emph{vg}.
 
 \subsubsection{\emph{vg}}
