@@ -12,7 +12,9 @@
 \usepackage{xcolor, soul}
 \usepackage{mathtools}
 \usepackage[section]{placeins}
+\usepackage[round]{natbib}
 \usepackage{titlesec}
+\usepackage{breakcites}
 \usetikzlibrary{matrix, positioning, fit, decorations.pathmorphing, shapes}
 \definecolor{dkgreen}{rgb}{0,0.6,0}
 \definecolor{gray}{rgb}{0.5,0.5,0.5}
@@ -37,6 +39,7 @@ tabsize=3
 
 
 \renewcommand{\vec}[1]{\mathbf{#1}}
+\renewcommand{\cite}[1]{\citep{#1}}
 \newcommand{\concat}[0]{*}
 \newcommand{\code}[1]{\lstinline{#1}}
 \newcommand{\seq}[1]{\emph{#1}}
